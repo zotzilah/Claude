@@ -48,6 +48,9 @@ export default function CatalogueScreen() {
           <Text style={styles.book}>{list.settings.title.toUpperCase()}</Text>
           <View style={styles.headActions}>
             {kid && <Text style={styles.kidChip}>🔒 KID MODE</Text>}
+            <Pressable onPress={() => router.navigate('/search')} accessibilityRole="button" accessibilityLabel="Search" hitSlop={10}>
+              <Text style={styles.sound}>🔍</Text>
+            </Pressable>
             <Pressable
               onPress={() => setSoundEnabled(!soundOn)}
               accessibilityRole="switch"

@@ -34,6 +34,16 @@ export default function KidHome() {
         </Pressable>
       </View>
 
+      <Pressable
+        accessibilityRole="search"
+        accessibilityLabel="Find something"
+        onPress={() => router.navigate('/search')}
+        style={({ pressed }) => [styles.searchBar, pressed && { transform: [{ translateY: 3 }] }]}
+      >
+        <Text style={styles.searchIcon}>🔍</Text>
+        <Text style={styles.searchText}>Find something…</Text>
+      </Pressable>
+
       <View style={styles.tiles}>
         {categories.map((c, i) => (
           <Pressable
@@ -61,6 +71,20 @@ const styles = StyleSheet.create({
   hello: { fontFamily: fonts.display, fontSize: 30, lineHeight: 32, color: colors.ink, flexShrink: 1 },
   grownups: { backgroundColor: colors.ink, borderRadius: radius.pill, paddingVertical: 6, paddingHorizontal: space.md },
   grownupsText: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.yellow },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    backgroundColor: colors.paper,
+    borderWidth: 3,
+    borderColor: colors.ink,
+    borderRadius: 18,
+    paddingVertical: space.lg,
+    paddingHorizontal: space.lg,
+    boxShadow: `0 4px 0 ${colors.ink}`,
+  },
+  searchIcon: { fontSize: 28 },
+  searchText: { fontFamily: fonts.display, fontSize: 22, color: colors.inkSoft },
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
   tile: {
     flexBasis: '46%',
