@@ -26,28 +26,43 @@ Scan the QR code: on iPhone use the Camera app, on Android use Expo Go. Your pho
 | `npm run lint` | ESLint |
 | `npx expo export -p web` | Production web build into `dist/` |
 | `npm run sounds` | Regenerate the sound effects in `assets/sounds/` |
+| `npm run icons` | Regenerate the app icon and splash (needs Playwright's Chromium) |
 
 ## What's where
 
 ```
 src/
-  app/              Screens (every file is a route)
-    index.tsx         The catalogue: category pages, circling, running total
-    kid.tsx           Kid Mode home: picture tiles
-    slip.tsx          The order slip
-    l/[listId].tsx    The Giver web link, e.g. /l/ellie-xmas-26
-  audio/            Sound effects player and mute setting
-  components/       Product card, biro ring, page turner, price sticker, running total, big button
-  domain/           Pure logic with unit tests: stars, totals, catalogue numbers, wobbly circles
-  data/             Sample catalogue (made-up products for development)
-  state/            List state (in memory for now; Supabase in weeks 3–4)
-  theme/            Colours, fonts and spacing
+  app/                Screens (every file is a route)
+    setup.tsx           List setup wizard (first launch, and Settings)
+    index.tsx           The catalogue: category pages, circling, running total
+    kid.tsx             Kid Mode home: search bar, picture tiles, Send to Mum & Dad
+    pin.tsx             The grown-ups' PIN gate (create, or unlock Kid Mode)
+    search.tsx          Search by name or catalogue number
+    add.tsx             Paste a shop link to add any product
+    slip.tsx            The order slip
+    l/[listId].tsx      The Giver link: claims, surprise mode, group gifts
+  audio/              Sound effects player and mute setting
+  components/         Product card, biro ring, page turner, PIN pad, Giver item…
+  domain/             Pure logic with unit tests: list reducer, claims, search,
+                      catalogue numbers, product-page parsing, order slip email…
+  data/               Sample catalogue (made-up products for development)
+  state/              The saved list, PIN storage, page fetching
+  theme/              Colours, fonts and spacing
+scripts/              Sound and icon generators
 ```
 
 ## Status
 
-- **Done:** catalogue pages, circling and stars, running total, Kid Mode tiles, order slip and a read-only Giver list.
-- **Feel:** circles draw on like a pen stroke. Pages turn round the spine when you swipe or tap the arrows. The slip prints out of the till. There are sounds for every action (scribble, tick, rub-out, page rustle, cash register), a mute button and haptics. All of it respects the phone's silent switch and the reduce-motion setting.
-- **Next:** voice search, the Kid Mode PIN, then the backend, claims and notifications. See the roadmap in the brief.
+Working on one device (no backend yet):
+- **List setup:** occasion, who's circling, who's buying, budget and surprise mode
+- **Catalogue:** page turns, circling with stars, running total, sounds and haptics. Lists are saved on the device.
+- **Kid Mode:** picture tiles and big search, locked behind a parent PIN, Face ID or fingerprint
+- **Search:** forgiving name search and catalogue numbers
+- **Paste a link** from any shop to add it to "Your Finds"
+- **Giver link:** claims with a 48-hour hold, "I've bought it", surprise mode and group gift pledges
+- **Order slip:** an animated printout, plus an email template (sent once the backend exists)
+- **Icon and splash** in Biro style
+
+**Next, needing free accounts:** the backend (Supabase) so lists are shared between phones, and a development build (Expo account) for voice search and the share-sheet button. See the issues on GitHub.
 
 The sounds are synthesised placeholders from `scripts/generate-sounds.mjs`. To swap in recorded ones later, replace the files in `assets/sounds/` and keep the same names.
