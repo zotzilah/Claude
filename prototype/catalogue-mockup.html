@@ -1,0 +1,691 @@
+<title>Project Biro Catalogue</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:wght@400;600;700&family=Courier+Prime:wght@400;700&family=Gochi+Hand&display=swap">
+<style>
+/* Layout: a phone running the app sits on a royal-blue "shop counter"; prototype notes sit beside it (stacked on phones).
+   Single look by choice: a glossy white catalogue page, the same in light and dark hosts. */
+:root {
+  color-scheme: light;
+  --red: #d8141c;
+  --red-deep: #a80d14;
+  --blue: #0b3c9c;
+  --blue-deep: #072a6e;
+  --yellow: #ffd200;
+  --paper: #ffffff;
+  --paper-2: #f3f5fa;
+  --ink: #15161a;
+  --ink-soft: #4a4f5c;
+  --rule: #d9deea;
+  --biro: #1d3fc4;
+  --good: #11804a;
+  --slip: #fbfaf4;
+
+  --f-display: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Archivo Narrow", "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+  --f-hand: "Gochi Hand", "Comic Sans MS", "Marker Felt", cursive;
+  --f-till: "Courier Prime", "Courier New", Courier, monospace;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--blue-deep);
+  background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+  background-size: 14px 14px;
+  color: var(--paper);
+  font-family: var(--f-body);
+  font-size: 15px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+
+/* ---------- Top bar ---------- */
+.top { max-width: 1060px; margin: 0 auto 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.brand h1 { font-family: var(--f-display); font-size: 26px; letter-spacing: .5px; margin: 0; color: var(--paper); }
+.brand h1 span { color: var(--yellow); }
+.brand p { margin: 0; color: #b9c8ee; font-size: 14px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.tab { background: transparent; border: 2px solid rgba(255,255,255,.35); color: var(--paper); border-radius: 999px; padding: 6px 14px; font-weight: 700; letter-spacing: .3px; }
+.tab[aria-selected="true"] { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+.mute { background: var(--red); border: 0; border-radius: 999px; padding: 6px 14px; font-weight: 700; color: var(--paper); }
+
+/* ---------- Layout ---------- */
+.layout { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 36px; align-items: start; }
+@media (max-width: 880px) { .layout { grid-template-columns: minmax(0, 1fr); justify-items: center; } .notes { max-width: 420px; } }
+
+.phone { width: 400px; max-width: 100%; height: 780px; background: #0d0f14; border-radius: 46px; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,.45), inset 0 0 0 2px #2a2e38; }
+.screen { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: var(--paper); color: var(--ink); display: flex; flex-direction: column; }
+@media (max-width: 460px) {
+  .phone { height: 740px; border-radius: 30px; padding: 6px; }
+  .screen { border-radius: 25px; }
+}
+
+.notes { color: #dfe6fb; }
+.notes h2 { font-family: var(--f-display); font-size: 30px; line-height: 1.05; color: var(--paper); margin: 4px 0 6px; text-wrap: balance; }
+.notes .kicker { display: inline-block; background: var(--red); color: var(--paper); font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; font-size: 12px; padding: 3px 8px; }
+.notes p { font-size: 17px; line-height: 1.5; max-width: 60ch; }
+.notes ul { padding-left: 20px; margin: 0; display: grid; gap: 8px; font-size: 16px; line-height: 1.45; max-width: 60ch; }
+.notes li::marker { color: var(--yellow); }
+.notes .try { margin-top: 18px; background: rgba(255,255,255,.08); border-left: 4px solid var(--yellow); padding: 10px 14px; font-size: 15px; }
+.notes .try b { color: var(--yellow); }
+.disclaim { margin-top: 18px; font-size: 13px; color: #9fb0dc; }
+
+/* ---------- Status bar (inside phone) ---------- */
+.status { flex: none; height: 30px; display: flex; justify-content: space-between; align-items: center; padding: 0 26px; font-size: 13px; font-weight: 700; background: var(--red); color: var(--paper); }
+.status.s-kid { background: var(--yellow); color: var(--ink); }
+.status.s-web { background: var(--paper-2); color: var(--ink); }
+.status.s-till { background: var(--blue-deep); }
+
+/* ---------- Catalogue ---------- */
+.cat-head { flex: none; background: var(--red); color: var(--paper); padding: 6px 16px 12px; position: relative; }
+.cat-head .book { font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; opacity: .9; display: flex; justify-content: space-between; gap: 8px; }
+.cat-head h3 { font-family: var(--f-display); font-size: 27px; line-height: 1; margin: 6px 0 0; letter-spacing: .2px; }
+.pg { position: absolute; right: 0; bottom: -14px; background: var(--yellow); color: var(--ink); font-family: var(--f-display); font-size: 13px; padding: 4px 10px 4px 12px; border-radius: 6px 0 0 6px; z-index: 3; }
+.kidchip { background: var(--ink); color: var(--yellow); border-radius: 4px; padding: 1px 6px; letter-spacing: .6px; }
+
+.stage { position: relative; flex: 1; perspective: 1400px; touch-action: pan-y; overflow: hidden; background: var(--paper-2); }
+.page { position: absolute; inset: 0; background: var(--paper); padding: 22px 14px 14px; overflow-y: auto; transform-origin: left center; backface-visibility: hidden; }
+.page.flip { pointer-events: none; z-index: 5; box-shadow: 8px 0 24px rgba(0,0,0,.25); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; }
+
+.card { position: relative; display: flex; flex-direction: column; align-items: flex-start; text-align: left; background: none; border: 0; padding: 6px 6px 8px; border-radius: 4px; }
+.card .photo { width: 100%; aspect-ratio: 1 / .82; max-width: 100%; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule); font-size: 54px; line-height: 1; }
+.card .cno { font-family: var(--f-display); font-size: 12.5px; margin-top: 6px; letter-spacing: .4px; color: var(--blue); font-variant-numeric: tabular-nums; }
+.card .name { font-size: 14px; line-height: 1.15; font-weight: 600; margin-top: 2px; min-height: 2.3em; }
+.card .shop { font-size: 12px; color: var(--ink-soft); margin-top: 1px; }
+.sticker { position: absolute; right: 2px; top: 52%; transform: rotate(-8deg); background: var(--yellow); color: var(--red-deep); font-family: var(--f-display); font-size: 16px; padding: 7px 8px 6px; line-height: 1; clip-path: polygon(50% 0, 61% 12%, 77% 6%, 80% 22%, 96% 26%, 89% 41%, 100% 54%, 87% 64%, 92% 81%, 75% 82%, 66% 98%, 52% 88%, 37% 100%, 30% 84%, 12% 88%, 14% 71%, 0 61%, 11% 48%, 3% 33%, 19% 27%, 21% 10%, 37% 13%); }
+.sticker small { font-size: 11px; vertical-align: top; }
+.ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.ring path { fill: none; stroke: var(--biro); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.stars { position: absolute; left: 4px; top: -8px; font-family: var(--f-hand); color: var(--biro); font-size: 26px; line-height: 1; transform: rotate(-9deg); pointer-events: none; letter-spacing: -2px; }
+
+.pager { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 14px; background: var(--paper); border-top: 1px solid var(--rule); }
+.pager button { background: var(--blue); color: var(--paper); border: 0; border-radius: 999px; width: 40px; height: 40px; font-size: 18px; font-weight: 700; }
+.pager button:disabled { opacity: .3; cursor: default; }
+.dots { display: flex; gap: 6px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
+.dots i.on { background: var(--red); }
+.hint { font-family: var(--f-hand); color: var(--biro); font-size: 17px; text-align: center; }
+
+.total { flex: none; background: var(--blue); color: var(--paper); padding: 10px 16px 14px; }
+.total .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.total .lbl { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; opacity: .85; }
+.total .amt { font-family: var(--f-display); font-size: 24px; font-variant-numeric: tabular-nums; }
+.bar { height: 8px; background: rgba(255,255,255,.2); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+.bar b { display: block; height: 100%; background: var(--yellow); border-radius: 4px; transition: width .3s; }
+.total.over { background: var(--red); }
+.total.over .bar b { background: var(--paper); }
+.total .msg { font-size: 13px; margin-top: 5px; }
+
+.sendbar { flex: none; padding: 10px 14px 14px; background: var(--paper); border-top: 1px solid var(--rule); display: flex; gap: 8px; }
+.big { flex: 1; border: 0; border-radius: 16px; font-family: var(--f-display); font-size: 19px; padding: 14px 10px; background: var(--red); color: var(--paper); box-shadow: 0 4px 0 var(--red-deep); }
+.big:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--red-deep); }
+.big.alt { flex: none; background: var(--yellow); color: var(--ink); box-shadow: 0 4px 0 #c9a400; font-size: 15px; padding: 14px 14px; }
+
+/* ---------- Kid mode home ---------- */
+.kid { flex: 1; overflow-y: auto; background: var(--yellow); padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.kid-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.kid h3 { font-family: var(--f-display); font-size: 30px; line-height: 1; margin: 0; color: var(--ink); text-wrap: balance; }
+.grownup { background: var(--ink); color: var(--yellow); border: 0; border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 13px; flex: none; }
+.mic-wrap { display: grid; justify-items: center; gap: 8px; padding: 6px 0; }
+.mic { position: relative; width: 132px; height: 132px; border-radius: 50%; border: 0; background: var(--red); box-shadow: 0 6px 0 var(--red-deep); display: grid; place-items: center; }
+.mic svg { width: 58px; height: 58px; }
+.mic.listening::before, .mic.listening::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 4px solid var(--red); animation: pulse 1.2s ease-out infinite; }
+.mic.listening::after { animation-delay: .6s; }
+@keyframes pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(1.45); opacity: 0; } }
+.mic-label { font-family: var(--f-display); font-size: 18px; color: var(--ink); }
+.heard { font-family: var(--f-hand); font-size: 30px; color: var(--biro); text-align: center; margin: -4px 0 0; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile { background: var(--paper); border: 3px solid var(--ink); border-radius: 18px; padding: 12px 8px 10px; display: grid; justify-items: center; gap: 4px; box-shadow: 0 4px 0 var(--ink); }
+.tile span { font-size: 50px; line-height: 1; }
+.tile b { font-family: var(--f-display); font-size: 20px; color: var(--ink); }
+.results { background: var(--paper); border-radius: 18px; padding: 14px 10px 10px; }
+.results .grid { grid-template-columns: 1fr 1fr; }
+.demo { font-size: 12px; color: var(--ink-soft); text-align: center; }
+
+.pin { position: absolute; inset: 0; background: rgba(7,42,110,.94); color: var(--paper); display: grid; place-content: center; justify-items: center; gap: 14px; z-index: 20; padding: 20px; }
+.pin h4 { font-family: var(--f-display); font-size: 22px; margin: 0; text-align: center; }
+.pin .pdots { display: flex; gap: 12px; }
+.pin .pdots i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--paper); }
+.pin .pdots i.f { background: var(--yellow); border-color: var(--yellow); }
+.pin .pdots.err { animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+.keys { display: grid; grid-template-columns: repeat(3, 64px); gap: 10px; }
+.keys button { height: 56px; border-radius: 14px; border: 0; background: rgba(255,255,255,.15); font-family: var(--f-display); font-size: 22px; }
+.pin small { color: #b9c8ee; }
+
+/* ---------- Order slip ---------- */
+.till { flex: 1; background: var(--blue-deep); display: flex; flex-direction: column; align-items: center; padding: 18px 16px 16px; overflow: hidden; }
+.till-top { width: 100%; background: #20242e; border-radius: 14px 14px 4px 4px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 -4px 0 #111; position: relative; z-index: 2; }
+.till-top .lcd { font-family: var(--f-till); background: #9fd36b; color: #17310a; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums; }
+.till-top span { color: #cfd6e6; font-weight: 700; font-size: 13px; letter-spacing: 1px; }
+.slot { width: 86%; height: 8px; background: #000; border-radius: 0 0 6px 6px; position: relative; z-index: 2; }
+.receipt-wrap { width: 82%; flex: 1; overflow: hidden; position: relative; margin-top: -4px; }
+.receipt { background: var(--slip); color: #222; font-family: var(--f-till); font-size: 13.5px; line-height: 1.35; padding: 16px 14px 18px; position: relative; filter: drop-shadow(0 6px 10px rgba(0,0,0,.35)); max-height: 100%; overflow-y: auto; }
+.receipt.print { animation: printout 2.4s steps(16) both; }
+@keyframes printout { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+.receipt h4 { font-family: var(--f-display); font-size: 18px; text-align: center; margin: 0; letter-spacing: 1px; color: var(--red); }
+.receipt .c { text-align: center; }
+.receipt hr { border: 0; border-top: 2px dashed #9aa0aa; margin: 8px 0; }
+.receipt .ln { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 6px; font-variant-numeric: tabular-nums; }
+.receipt .ln .st { color: var(--biro); font-family: var(--f-hand); font-size: 17px; line-height: 1; }
+.receipt .tot { display: flex; justify-content: space-between; font-weight: 700; font-size: 15px; }
+.queue { margin-top: 8px; border: 3px solid var(--ink); text-align: center; padding: 8px 6px; }
+.queue b { display: block; font-family: var(--f-display); font-size: 40px; line-height: 1; color: var(--red); }
+.emailed { margin-top: 10px; text-align: center; color: var(--good); font-weight: 700; }
+.till-actions { width: 100%; display: flex; gap: 8px; margin-top: 12px; }
+
+/* ---------- Giver web link ---------- */
+.web { flex: 1; overflow-y: auto; background: var(--paper-2); }
+.url { margin: 8px 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 7px 12px; font-size: 13px; color: var(--ink-soft); display: flex; gap: 6px; align-items: center; }
+.g-head { background: var(--blue); color: var(--paper); padding: 14px 16px; }
+.g-head h3 { font-family: var(--f-display); font-size: 23px; line-height: 1.05; margin: 0; text-wrap: balance; }
+.g-head p { margin: 4px 0 0; font-size: 14px; opacity: .9; }
+.surprise { margin: 10px 12px 0; background: var(--yellow); color: var(--ink); border-radius: 10px; padding: 8px 12px; font-size: 13.5px; font-weight: 600; }
+.sum { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 12px; }
+.sum div { background: var(--paper); border-radius: 10px; padding: 8px 10px; border: 1px solid var(--rule); }
+.sum b { display: block; font-family: var(--f-display); font-size: 17px; font-variant-numeric: tabular-nums; }
+.sum span { font-size: 12px; color: var(--ink-soft); }
+.items { display: grid; gap: 10px; margin: 0 12px 16px; }
+.item { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 10px; display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 4px 10px; }
+.item .th { grid-row: span 2; width: 58px; height: 58px; display: grid; place-items: center; font-size: 34px; border: 1px solid var(--rule); border-radius: 8px; }
+.item .t { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; min-width: 0; }
+.item .t b { font-weight: 700; font-size: 15px; line-height: 1.2; }
+.item .t .p { font-family: var(--f-display); font-size: 15px; color: var(--red); white-space: nowrap; }
+.item .meta { font-size: 12.5px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.item .meta .st { color: var(--biro); font-family: var(--f-hand); font-size: 18px; line-height: 1; }
+.item .meta .lnk { color: var(--blue); font-weight: 700; text-decoration: underline; }
+.item .act { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
+.pill { font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 4px 10px; }
+.pill.held { background: #fff3c2; color: #6b5200; }
+.pill.bought { background: #dff3e8; color: var(--good); }
+.btn { border: 0; border-radius: 8px; padding: 7px 12px; font-weight: 700; font-size: 13.5px; background: var(--blue); color: var(--paper); }
+.btn.ghost { background: transparent; color: var(--blue); border: 2px solid var(--blue); padding: 5px 10px; }
+.btn.go { background: var(--good); }
+.gg { grid-column: 1 / -1; background: var(--paper-2); border-radius: 8px; padding: 8px 10px; margin-top: 4px; font-size: 13px; }
+.gg .bar { background: var(--rule); }
+.gg .bar b { background: var(--good); }
+.gg .who { color: var(--ink-soft); margin-top: 4px; }
+.sharebar { position: sticky; bottom: 0; background: var(--paper); border-top: 1px solid var(--rule); padding: 10px 12px 12px; display: flex; gap: 8px; }
+.sharebar .btn { flex: 1; padding: 10px; }
+.wa { background: #1a8f4c; }
+
+.toast { position: absolute; left: 50%; bottom: 90px; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 9px 14px; border-radius: 10px; font-size: 13.5px; width: max-content; max-width: 86%; text-align: center; z-index: 30; }
+
+@media (prefers-reduced-motion: reduce) {
+  .receipt.print, .mic.listening::before, .mic.listening::after, .pin .pdots.err { animation: none; }
+  .bar b { transition: none; }
+}
+</style>
+
+<header class="top">
+  <div class="brand">
+    <h1>PROJECT <span>BIRO</span></h1>
+    <p>Clickable mockup · Ellie's Christmas 2026</p>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Prototype screens">
+    <button class="tab" role="tab" data-go="catalogue" id="t-catalogue">Catalogue</button>
+    <button class="tab" role="tab" data-go="kid" id="t-kid">Kid Mode</button>
+    <button class="tab" role="tab" data-go="slip" id="t-slip">Order slip</button>
+    <button class="tab" role="tab" data-go="giver" id="t-giver">Giver link</button>
+  </nav>
+  <button class="mute" id="mute" aria-pressed="false">🔊 Sound on</button>
+</header>
+
+<main class="layout">
+  <div class="phone"><div class="screen" id="screen"></div></div>
+  <section class="notes" id="notes" aria-live="polite"></section>
+</main>
+
+<script>
+(() => {
+  // ---------- Data (example items, not real listings) ----------
+  const PAGES = [
+    { key: 'bricks',  title: 'Building & Bricks', no: 214, kid: 'Bricks',  icon: '🧱' },
+    { key: 'art',     title: 'Arts & Crafts',     no: 318, kid: 'Art',     icon: '🎨' },
+    { key: 'outdoor', title: 'Outdoor Fun',       no: 482, kid: 'Outside', icon: '🚲' },
+    { key: 'games',   title: 'Games & Gadgets',   no: 527, kid: 'Games',   icon: '🎮' },
+  ];
+  const P = [
+    ['p1','bricks','214/0031','Space Station Brick Set, 780 pcs',44.99,'🚀','ToyTown'],
+    ['p2','bricks','214/0047','Dino Dig Excavation Kit',12.99,'🦕','BigBox'],
+    ['p3','bricks','214/0052','Mega Marble Run, 120 pcs',34.99,'🎢','ToyTown'],
+    ['p4','bricks','214/0068','Build-a-Bot Robot Kit',29.99,'🤖','GadgetHut'],
+    ['p5','bricks','214/0071','Knights Castle Playset',39.99,'🏰','BigBox'],
+    ['p6','bricks','214/0093','Wooden Train Set, 60 pcs',54.99,'🚂','ToyTown'],
+    ['p7','art','318/0102','Big Paint Set & Easel',14.99,'🎨','CraftCo'],
+    ['p8','art','318/0115','Craft Treasure Box',9.99,'✂️','CraftCo'],
+    ['p9','art','318/0120','Learn-to-Knit Kit',11.99,'🧶','CraftCo'],
+    ['p10','art','318/0134','Mega Crayon Tub, 200',6.99,'🖍️','BigBox'],
+    ['p11','art','318/0141','Sketch & Doodle Book',4.99,'📓','BookNook'],
+    ['p12','art','318/0157','Junior Bake Set',19.99,'🧁','HomeStore'],
+    ['p13','outdoor','482/1102','16" Kids Bike, Blue',149.99,'🚲','CycleWorld'],
+    ['p14','outdoor','482/1190','Light-Up Scooter',39.99,'🛴','BigBox'],
+    ['p15','outdoor','482/1204','Pop-Up Football Goal',24.99,'⚽','SportZone'],
+    ['p16','outdoor','482/1218','Rainbow Stunt Kite',8.99,'🪁','ToyTown'],
+    ['p17','outdoor','482/1223','Garden Play Tent',29.99,'🏕️','HomeStore'],
+    ['p18','outdoor','482/1239','Dino Paddling Pool',24.99,'🦖','BigBox'],
+    ['p19','games','527/0301','Handheld Games Console',199.99,'🕹️','GadgetHut'],
+    ['p20','games','527/0318','Kids Instant Camera',59.99,'📷','GadgetHut'],
+    ['p21','games','527/0322','Volume-Safe Headphones',19.99,'🎧','GadgetHut'],
+    ['p22','games','527/0337','Dinosaur Roar Torch',7.99,'🔦','ToyTown'],
+    ['p23','games','527/0345','Family Board Game Night',17.99,'🎲','BigBox'],
+    ['p24','games','527/0359','Under-the-Sea Jigsaw, 500',12.99,'🧩','BookNook'],
+  ].map(([id, cat, no, name, price, emoji, shop]) => ({ id, cat, no, name, price, emoji, shop }));
+  const byId = Object.fromEntries(P.map(p => [p.id, p]));
+  const BUDGET = 150;
+  const H = 3600 * 1000;
+
+  const S = {
+    screen: 'catalogue', page: 0, kid: false, muted: false,
+    marks: { p2: 3, p4: 2, p7: 1, p13: 3, p14: 2, p20: 1 },
+    claims: { p2: { by: 'Nan', status: 'held', until: Date.now() + 31 * H }, p4: { by: 'Uncle Raj', status: 'bought' } },
+    group: { p13: { organiser: 'Dave', pledges: [['Dave', 50], ['Auntie Sue', 25]] } },
+    heard: null, listening: false, pin: null,
+  };
+
+  const $ = (s, el = document) => el.querySelector(s);
+  const screen = $('#screen');
+  const money = n => '£' + n.toFixed(2);
+  const stars = n => '★'.repeat(n);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const circled = () => Object.keys(S.marks).filter(id => S.marks[id] > 0).map(id => byId[id]);
+  const total = () => circled().reduce((s, p) => s + p.price, 0);
+
+  // ---------- Sound (synthesised with Web Audio) ----------
+  let ac = null;
+  function ctx() {
+    if (S.muted) return null;
+    try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); } catch (e) { return null; }
+    return ac;
+  }
+  function noise(a, dur) {
+    const b = a.createBuffer(1, Math.ceil(a.sampleRate * dur), a.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const s = a.createBufferSource(); s.buffer = b; return s;
+  }
+  function burst(a, t, dur, type, freq, q, gain) {
+    const s = noise(a, dur), f = a.createBiquadFilter(), g = a.createGain();
+    f.type = type; f.frequency.value = freq; f.Q.value = q;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f).connect(g).connect(a.destination); s.start(t); s.stop(t + dur);
+  }
+  function tone(a, t, freq, dur, gain, type = 'sine') {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur);
+  }
+  const sfx = {
+    scribble() { const a = ctx(); if (!a) return; const t = a.currentTime; for (let i = 0; i < 7; i++) burst(a, t + i * 0.055, 0.07, 'bandpass', 2400 + Math.random() * 1800, 1.4, 0.22); },
+    tick() { const a = ctx(); if (!a) return; burst(a, a.currentTime, 0.05, 'bandpass', 3800, 3, 0.25); },
+    rub() { const a = ctx(); if (!a) return; burst(a, a.currentTime, 0.25, 'lowpass', 900, 0.8, 0.18); },
+    rustle() { const a = ctx(); if (!a) return; const t = a.currentTime; burst(a, t, 0.32, 'highpass', 2600, 0.6, 0.16); burst(a, t + 0.12, 0.22, 'bandpass', 5200, 0.8, 0.1); },
+    beep() { const a = ctx(); if (!a) return; tone(a, a.currentTime, 880, 0.12, 0.15); tone(a, a.currentTime + 0.13, 1320, 0.14, 0.15); },
+    till() {
+      const a = ctx(); if (!a) return; const t = a.currentTime;
+      burst(a, t, 0.12, 'lowpass', 500, 1, 0.6); tone(a, t, 90, 0.18, 0.5, 'triangle');
+      burst(a, t + 0.18, 0.08, 'bandpass', 1500, 2, 0.35);
+      [2093, 2637, 3136].forEach((f, i) => tone(a, t + 0.32, f, 1.4 - i * 0.3, 0.12 / (i + 1)));
+      for (let i = 0; i < 22; i++) burst(a, t + 0.7 + i * 0.075, 0.035, 'bandpass', 1800 + (i % 3) * 400, 4, 0.2);
+      burst(a, t + 2.45, 0.09, 'highpass', 3000, 1, 0.3);
+    },
+  };
+  const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
+
+  // ---------- Wobbly biro circle ----------
+  function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function hash(s) { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h; }
+  function wobblyPath(w, h, seed) {
+    const r = rng(seed);
+    const cx = w / 2 + (r() - .5) * 6, cy = h / 2 + (r() - .5) * 6;
+    const rx = w * .5, ry = h * .49;
+    const start = -2.3 + (r() - .5) * .6, over = .35 + r() * .45, span = Math.PI * 2 + over;
+    const p1 = r() * 6.28, p2 = r() * 6.28, drift = .03 + r() * .04, N = 90;
+    let d = '';
+    for (let i = 0; i <= N; i++) {
+      const u = i / N, a = start + u * span;
+      const k = .97 + .03 * Math.sin(2 * a + p1) + .018 * Math.sin(3 * a + p2) + drift * (u - .5);
+      const x = cx + Math.cos(a) * rx * k, y = cy + Math.sin(a) * ry * k;
+      d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    return d;
+  }
+  function drawRing(card, animate) {
+    const id = card.dataset.id, n = S.marks[id] || 0;
+    const svg = $('.ring', card), st = $('.stars', card);
+    st.textContent = n ? stars(n) : '';
+    if (!n) { svg.innerHTML = ''; return; }
+    const w = card.offsetWidth, h = card.offsetHeight;
+    if (!w) return;
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    if (svg.dataset.drawn === `${w}x${h}` && svg.firstChild) return;
+    svg.innerHTML = `<path d="${wobblyPath(w, h, hash(id))}"/>`;
+    svg.dataset.drawn = `${w}x${h}`;
+    const path = svg.firstChild;
+    if (animate && !reduce) {
+      const L = path.getTotalLength();
+      path.style.strokeDasharray = L; path.style.strokeDashoffset = L;
+      path.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 420, easing: 'cubic-bezier(.3,.6,.4,1)', fill: 'forwards' });
+    }
+  }
+  const drawRings = (root, animate = false) => root.querySelectorAll('.card[data-id]').forEach(c => drawRing(c, animate));
+
+  // ---------- Card ----------
+  function cardHTML(p) {
+    const [pounds, pence] = p.price.toFixed(2).split('.');
+    return `<button class="card" data-id="${p.id}" aria-label="${esc(p.name)}, ${money(p.price)}, catalogue number ${p.no}">
+      <div class="photo" aria-hidden="true">${p.emoji}</div>
+      <div class="cno">${p.no}</div>
+      <div class="name">${esc(p.name)}</div>
+      <div class="shop">${esc(p.shop)}</div>
+      <div class="sticker">£${pounds}<small>.${pence}</small></div>
+      <svg class="ring" aria-hidden="true"></svg>
+      <div class="stars" aria-hidden="true"></div>
+    </button>`;
+  }
+  function onCard(card) {
+    const id = card.dataset.id, cur = S.marks[id] || 0, next = cur >= 3 ? 0 : cur + 1;
+    S.marks[id] = next;
+    if (!next) { delete S.marks[id]; sfx.rub(); buzz(8); }
+    else if (cur === 0) { sfx.scribble(); buzz(18); }
+    else { sfx.tick(); buzz(10); }
+    const svg = $('.ring', card);
+    if (cur === 0) svg.dataset.drawn = '';
+    drawRing(card, cur === 0);
+    updateTotal();
+  }
+
+  // ---------- Screens ----------
+  function status(cls = '') {
+    return `<div class="status ${cls}"><span>9:41</span><span>●●●● 5G ▮</span></div>`;
+  }
+  function pageHTML(i) {
+    const pg = PAGES[i];
+    return `<div class="grid">${P.filter(p => p.cat === pg.key).map(cardHTML).join('')}</div>
+      <p class="hint">${S.kid ? 'Tap to circle it! Tap again for more stars ★' : 'Tap to circle · tap again for ★★ · ★★★ · 4th tap rubs it out'}</p>`;
+  }
+  function renderCatalogue() {
+    const pg = PAGES[S.page];
+    screen.innerHTML = `${status()}
+      <div class="cat-head">
+        <div class="book"><span>Ellie's Christmas Book 2026</span>${S.kid ? '<span class="kidchip">🔒 KID MODE</span>' : '<span>Index ▸</span>'}</div>
+        <h3>${pg.title}</h3>
+        <div class="pg">PAGE ${pg.no}</div>
+      </div>
+      <div class="stage" id="stage"><div class="page" id="page">${pageHTML(S.page)}</div></div>
+      <div class="pager">
+        <button id="prev" aria-label="Previous page" ${S.page === 0 ? 'disabled' : ''}>◀</button>
+        <div class="dots">${PAGES.map((_, i) => `<i class="${i === S.page ? 'on' : ''}"></i>`).join('')}</div>
+        <button id="next" aria-label="Next page" ${S.page === PAGES.length - 1 ? 'disabled' : ''}>▶</button>
+      </div>
+      ${S.kid
+        ? `<div class="sendbar"><button class="big alt" data-go="kid">◀ Pictures</button><button class="big" data-go="slip">Send to Mum &amp; Dad</button></div>`
+        : `<div class="total" id="total"></div>`}`;
+    requestAnimationFrame(() => drawRings($('#page')));
+    updateTotal();
+    bindSwipe();
+    $('#prev').onclick = () => turn(-1);
+    $('#next').onclick = () => turn(1);
+  }
+  function updateTotal() {
+    const el = $('#total'); if (!el) return;
+    const t = total(), n = circled().length, over = t > BUDGET;
+    el.className = 'total' + (over ? ' over' : '');
+    el.innerHTML = `<div class="row"><span class="lbl">Running total · ${n} circled</span><span class="amt">${money(t)}</span></div>
+      <div class="bar"><b style="width:${Math.min(100, t / BUDGET * 100)}%"></b></div>
+      <div class="msg">${over ? `${money(t - BUDGET)} over the ${money(BUDGET)} budget. The bike could be a group gift.` : `${money(BUDGET - t)} left in the ${money(BUDGET)} budget`}</div>`;
+  }
+
+  let busy = false;
+  function turn(dir) {
+    const next = S.page + dir;
+    if (busy || next < 0 || next >= PAGES.length) return;
+    sfx.rustle();
+    const stage = $('#stage'), base = $('#page');
+    const finish = () => { busy = false; renderCatalogue(); };
+    if (reduce) { S.page = next; finish(); return; }
+    busy = true;
+    if (dir > 0) {
+      const clone = base.cloneNode(true); clone.id = ''; clone.classList.add('flip');
+      stage.appendChild(clone);
+      base.innerHTML = pageHTML(next);
+      drawRings(base);
+      S.page = next;
+      clone.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-105deg)', opacity: .6 }], { duration: 480, easing: 'cubic-bezier(.45,.05,.55,.95)' }).onfinish = finish;
+    } else {
+      const ov = document.createElement('div'); ov.className = 'page flip'; ov.innerHTML = pageHTML(next);
+      stage.appendChild(ov); drawRings(ov);
+      S.page = next;
+      ov.animate([{ transform: 'rotateY(-105deg)', opacity: .6 }, { transform: 'rotateY(0deg)', opacity: 1 }], { duration: 480, easing: 'cubic-bezier(.45,.05,.55,.95)' }).onfinish = finish;
+    }
+    // keep the header in step with the page underneath
+    $('.cat-head h3').textContent = PAGES[next].title;
+    $('.pg').textContent = 'PAGE ' + PAGES[next].no;
+  }
+  let swipeX = null, swiped = false;
+  function bindSwipe() {
+    const stage = $('#stage');
+    stage.addEventListener('pointerdown', e => { swipeX = e.clientX; swiped = false; });
+    stage.addEventListener('pointerup', e => {
+      if (swipeX === null) return;
+      const dx = e.clientX - swipeX; swipeX = null;
+      if (Math.abs(dx) > 50) { swiped = true; turn(dx < 0 ? 1 : -1); }
+    });
+  }
+
+  function renderKid() {
+    const res = S.heard ? P.filter(p => /dino/i.test(p.name) || p.emoji === '🦕' || p.emoji === '🦖') : [];
+    screen.innerHTML = `${status('s-kid')}
+      <div class="kid">
+        <div class="kid-top"><h3>Hi Ellie!<br>What do you want?</h3><button class="grownup" id="grownup">🔒 Grown-ups</button></div>
+        <div class="mic-wrap">
+          <button class="mic ${S.listening ? 'listening' : ''}" id="mic" aria-label="Tap and say what you want">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          </button>
+          <div class="mic-label">${S.listening ? 'Listening…' : 'Tap and say it!'}</div>
+          ${S.heard ? `<p class="heard">“${S.heard}”</p>` : ''}
+        </div>
+        ${res.length ? `<div class="results"><div class="grid">${res.map(cardHTML).join('')}</div><p class="demo">Voice search is simulated in this mockup</p></div>` : ''}
+        <div class="tiles">${PAGES.map((pg, i) => `<button class="tile" data-kidpage="${i}"><span aria-hidden="true">${pg.icon}</span><b>${pg.kid}</b></button>`).join('')}</div>
+        <button class="big" data-go="slip">Send to Mum &amp; Dad</button>
+      </div>
+      ${S.pin !== null ? pinHTML() : ''}`;
+    requestAnimationFrame(() => drawRings(screen));
+    $('#mic').onclick = listen;
+    $('#grownup').onclick = () => { S.pin = ''; renderKid(); };
+    screen.querySelectorAll('[data-kidpage]').forEach(b => b.onclick = () => { S.page = +b.dataset.kidpage; sfx.rustle(); go('catalogue'); });
+    bindPin();
+  }
+  function listen() {
+    if (S.listening) return;
+    S.listening = true; S.heard = null; sfx.beep(); renderKid();
+    setTimeout(() => { S.listening = false; S.heard = 'dinosaurs!'; renderKid(); }, 1700);
+  }
+  function pinHTML() {
+    return `<div class="pin" role="dialog" aria-label="Grown-up PIN">
+      <h4>Grown-ups only</h4><div class="pdots" id="pdots">${[0,1,2,3].map(i => `<i class="${i < S.pin.length ? 'f' : ''}"></i>`).join('')}</div>
+      <div class="keys">${[1,2,3,4,5,6,7,8,9,'✕',0,'⌫'].map(k => `<button data-key="${k}">${k}</button>`).join('')}</div>
+      <small>Demo PIN: 1234</small></div>`;
+  }
+  function bindPin() {
+    screen.querySelectorAll('[data-key]').forEach(b => b.onclick = () => {
+      const k = b.dataset.key;
+      if (k === '✕') { S.pin = null; renderKid(); return; }
+      if (k === '⌫') S.pin = S.pin.slice(0, -1); else if (S.pin.length < 4) S.pin += k;
+      sfx.tick();
+      if (S.pin.length === 4) {
+        if (S.pin === '1234') { S.pin = null; S.kid = false; go('catalogue'); return; }
+        S.pin = ''; renderKid(); $('#pdots').classList.add('err'); buzz([30, 40, 30]); return;
+      }
+      renderKid();
+    });
+  }
+
+  function renderSlip() {
+    const items = circled().sort((a, b) => S.marks[b.id] - S.marks[a.id] || b.price - a.price);
+    const d = new Date(2026, 9, 28, 18, 4);
+    screen.innerHTML = `${status('s-till')}
+      <div class="till">
+        <div class="till-top"><span>COUNTER 3</span><span class="lcd">${money(total())}</span></div>
+        <div class="slot"></div>
+        <div class="receipt-wrap"><div class="receipt print" id="receipt">
+          <h4>ORDER SLIP</h4>
+          <div class="c">Ellie's Christmas Book 2026<br>${d.toLocaleDateString('en-GB')} 18:04</div>
+          <hr>
+          ${items.length ? items.map(p => `<div class="ln"><span>${p.no}</span><span>${esc(p.name)} <span class="st">${stars(S.marks[p.id])}</span></span><span>${p.price.toFixed(2)}</span></div>`).join('') : '<div class="c">Nothing circled yet!</div>'}
+          <hr>
+          <div class="tot"><span>${items.length} ITEMS</span><span>${money(total())}</span></div>
+          <div class="queue">YOUR NUMBER IS<b>47</b>PLEASE WAIT FOR CHRISTMAS</div>
+          <div class="emailed">✓ Emailed to sam@example.com</div>
+        </div></div>
+        <div class="till-actions"><button class="big alt" data-go="kid">◀ Back</button><button class="big" id="reprint">Print again</button></div>
+      </div>`;
+    sfx.till(); buzz([20, 60, 20]);
+    $('#reprint').onclick = () => { const r = $('#receipt'); r.classList.remove('print'); void r.offsetWidth; r.classList.add('print'); sfx.till(); };
+  }
+
+  function renderGiver() {
+    const items = circled().sort((a, b) => S.marks[b.id] - S.marks[a.id] || b.price - a.price);
+    const t = total();
+    const taken = items.filter(p => S.claims[p.id]).reduce((s, p) => s + p.price, 0);
+    const scrollTop = $('.web') ? $('.web').scrollTop : 0;
+    screen.innerHTML = `${status('s-web')}
+      <div class="web">
+        <div class="url">🔒 example.com/l/ellie-xmas-26</div>
+        <div class="g-head"><h3>Ellie's Christmas List 2026</h3><p>Shared by Sam · 7 Givers · no app needed</p></div>
+        <div class="surprise">🤫 Surprise mode is on. Ellie and Sam can't see who's buying what.</div>
+        <div class="sum">
+          <div><b>${items.length}</b><span>wishes</span></div>
+          <div><b>${money(t)}</b><span>list total</span></div>
+          <div><b>${money(t - taken)}</b><span>still to get</span></div>
+        </div>
+        <div class="items">${items.map(itemHTML).join('')}</div>
+        <div class="sharebar"><button class="btn wa" id="wa">Share on WhatsApp</button><button class="btn ghost" id="copy">Copy link</button></div>
+      </div>
+      <div class="toast" id="toast" hidden></div>`;
+    $('.web').scrollTop = scrollTop;
+    screen.querySelectorAll('[data-act]').forEach(b => b.onclick = () => act(b.dataset.act, b.dataset.id));
+    $('#wa').onclick = () => toast('In the app this opens WhatsApp with a list preview card');
+    $('#copy').onclick = () => {
+      const link = 'https://example.com/l/ellie-xmas-26';
+      try { navigator.clipboard.writeText(link).then(() => toast('Link copied'), () => toast(link)); } catch (e) { toast(link); }
+    };
+    tickTimers();
+  }
+  function itemHTML(p) {
+    const c = S.claims[p.id], g = S.group[p.id];
+    let act = '';
+    if (g) {
+      const got = g.pledges.reduce((s, x) => s + x[1], 0), mine = g.pledges.some(x => x[0] === 'You');
+      act = `<div class="gg"><b>Group gift</b> · organised by ${g.organiser}
+        <div class="bar"><b style="width:${Math.min(100, got / p.price * 100)}%"></b></div>
+        <div class="who">${money(got)} of ${money(p.price)} pledged · ${g.pledges.map(x => `${x[0]} ${money(x[1])}`).join(' · ')}</div>
+        <div class="act">${mine ? '<span class="pill bought">You pledged £25.00</span>' : `<button class="btn" data-act="pledge" data-id="${p.id}">Pledge £25</button>`}<span class="meta">Pay ${g.organiser} directly</span></div></div>`;
+    } else if (!c) {
+      act = `<div class="act"><button class="btn" data-act="claim" data-id="${p.id}">Claim it</button><span class="meta">Held for you for 48 hours</span></div>`;
+    } else if (c.status === 'held' && c.by === 'You') {
+      act = `<div class="act"><span class="pill held">Held by you · <span data-until="${c.until}"></span> left</span><button class="btn go" data-act="bought" data-id="${p.id}">I've bought it ✓</button><button class="btn ghost" data-act="release" data-id="${p.id}">Release</button></div>`;
+    } else if (c.status === 'held') {
+      act = `<div class="act"><span class="pill held">Claimed by ${c.by} · <span data-until="${c.until}"></span> left</span></div>`;
+    } else {
+      act = `<div class="act"><span class="pill bought">Bought ✓ by ${c.by}</span></div>`;
+    }
+    return `<div class="item">
+      <div class="th" aria-hidden="true">${p.emoji}</div>
+      <div class="t"><b>${esc(p.name)}</b><span class="p">${money(p.price)}</span></div>
+      <div class="meta"><span class="st" aria-label="${S.marks[p.id]} stars">${stars(S.marks[p.id])}</span><span>${p.no}</span><span class="lnk" title="Opens the seller's page">View at ${esc(p.shop)} ↗</span></div>
+      ${act}</div>`;
+  }
+  function act(a, id) {
+    if (a === 'claim') { S.claims[id] = { by: 'You', status: 'held', until: Date.now() + 48 * H }; sfx.tick(); toast('Claimed. Nobody else can claim it for 48 hours'); }
+    if (a === 'bought') { S.claims[id].status = 'bought'; sfx.till(); toast('Marked as bought. Thank you!'); }
+    if (a === 'release') { delete S.claims[id]; sfx.rub(); toast('Released back to the list'); }
+    if (a === 'pledge') { S.group[id].pledges.push(['You', 25]); sfx.tick(); toast(`Pledged £25. Pay ${S.group[id].organiser} directly`); }
+    const msg = $('#toast') && !$('#toast').hidden ? $('#toast').textContent : null;
+    renderGiver();
+    if (msg) toast(msg);
+  }
+  let toastT;
+  function toast(m) { const t = $('#toast'); if (!t) return; t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600); }
+  function tickTimers() {
+    document.querySelectorAll('[data-until]').forEach(el => {
+      const ms = Math.max(0, +el.dataset.until - Date.now());
+      const h = Math.floor(ms / H), m = Math.floor(ms % H / 60000), s = Math.floor(ms % 60000 / 1000);
+      el.textContent = `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    });
+  }
+  setInterval(tickTimers, 1000);
+
+  // ---------- Notes beside the phone ----------
+  const NOTES = {
+    catalogue: ['The catalogue', 'Ellie\'s own book, built from the Christmas template', [
+      'Swipe or tap ◀ ▶ to turn pages. Each page is one category spread, with a paper-rustle sound.',
+      'Every product has a catalogue number like <b>482/1190</b>, searchable across the whole Product Library.',
+      'Tap once to circle (★), again for ★★, again for ★★★, and a 4th tap rubs it out. No two circles are the same shape.',
+      'The running total tracks the budget and goes red when it\'s over. It is a per-list toggle, off by default for weddings.',
+    ], 'Turn to <b>Outdoor Fun</b> and circle the scooter. Watch the total go red.'],
+    kid: ['Kid Mode', 'Handed over on the parent\'s phone, locked down', [
+      'Search and circle only. No prices to tap, no shop links, no settings.',
+      'Voice search first: a giant mic for kids who can\'t spell "Playmobil" yet.',
+      'Picture tiles with one big word each. Tapping one opens that catalogue page in Kid Mode.',
+      'A parent PIN (or Face ID) is the only way out.',
+    ], 'Tap the <b>mic</b>, then try <b>🔒 Grown-ups</b> with PIN 1234.'],
+    slip: ['The "done" moment', 'Send to Mum & Dad', [
+      'Cash register clunk, ding and receipt-printer chatter as the slip prints.',
+      'The slip lists catalogue numbers, stars and prices, with the total on the till display.',
+      '"Your number is 47. Please wait for Christmas."',
+      'A copy is emailed to the account holder as a confirmation receipt.',
+    ], 'Turn the sound on and press <b>Print again</b>.'],
+    giver: ['The Giver link', 'Nan, Dave and Auntie Sue, with no download', [
+      'Opens in any browser from WhatsApp, a text or a QR code.',
+      'Claim holds an item for 48 hours. Then it\'s "I\'ve bought it" (honour system) or it goes back on the list.',
+      'Surprise mode hides who bought what from Ellie and the list owner.',
+      'Group gifts: one organiser buys and collects money directly. The app only tracks pledges.',
+    ], '<b>Claim</b> the paint set, then mark it bought. <b>Pledge</b> towards the bike.'],
+  };
+  function renderNotes() {
+    const [h, k, list, tryIt] = NOTES[S.screen];
+    $('#notes').innerHTML = `<span class="kicker">${k}</span><h2>${h}</h2>
+      <ul>${list.map(l => `<li>${l}</li>`).join('')}</ul>
+      <div class="try"><b>Try it:</b> ${tryIt}</div>
+      <p class="disclaim">All products, prices and shops here are made-up examples. Real lists use live retailer prices and link out to the seller.</p>`;
+  }
+
+  // ---------- Routing ----------
+  const RENDER = { catalogue: renderCatalogue, kid: renderKid, slip: renderSlip, giver: renderGiver };
+  function go(name, fromTab) {
+    if (!RENDER[name]) name = 'catalogue';
+    if (name === 'kid') S.kid = true;
+    if (fromTab && name !== 'kid' && name !== 'catalogue') S.pin = null;
+    if (fromTab && name === 'catalogue') S.kid = false;
+    S.screen = name;
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.go === name)));
+    RENDER[name]();
+    renderNotes();
+    if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
+  }
+
+  document.addEventListener('click', e => {
+    const card = e.target.closest('.card[data-id]');
+    if (card) { if (swiped) { swiped = false; return; } onCard(card); return; }
+    const g = e.target.closest('[data-go]');
+    if (g) go(g.dataset.go, g.classList.contains('tab'));
+  });
+  $('#mute').onclick = () => {
+    S.muted = !S.muted;
+    $('#mute').textContent = S.muted ? '🔇 Sound off' : '🔊 Sound on';
+    $('#mute').setAttribute('aria-pressed', String(S.muted));
+  };
+  addEventListener('resize', () => drawRings(screen));
+  addEventListener('hashchange', () => { const h = location.hash.slice(1); if (h && h !== S.screen) go(h, true); });
+
+  go(location.hash.slice(1) || 'catalogue', true);
+})();
+</script>
