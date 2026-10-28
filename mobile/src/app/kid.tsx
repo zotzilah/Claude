@@ -8,8 +8,8 @@ import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
 /**
- * Kid Mode home: picture tiles and one big button.
- * Still to come (week 1–2): voice search, and the parent PIN on the Grown-ups button.
+ * Kid Mode home: picture tiles and one big button. Leaving needs the parent PIN.
+ * Voice search arrives with the first development build.
  */
 export default function KidHome() {
   const insets = useSafeAreaInsets();
@@ -28,11 +28,7 @@ export default function KidHome() {
           accessibilityRole="button"
           accessibilityLabel="Grown-ups: leave Kid Mode"
           style={styles.grownups}
-          onPress={() => {
-            // TODO(week 1–2): require the parent PIN / Face ID before leaving Kid Mode.
-            list.setKidMode(false);
-            router.navigate('/');
-          }}
+          onPress={() => router.push('/pin')}
         >
           <Text style={styles.grownupsText}>🔒 Grown-ups</Text>
         </Pressable>

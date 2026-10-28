@@ -9,6 +9,7 @@ import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
 import { categories, productsIn } from '@/data/sample-catalogue';
+import { hasPin } from '@/state/parent-pin';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -100,7 +101,12 @@ export default function CatalogueScreen() {
               {list.settings.circler === 'child' && (
                 <DevLink
                   label={`Hand to ${list.settings.circlerName}`}
-                  onPress={() => {
+                  onPress={async () => {
+                    // First hand-over: choose a PIN, which then switches Kid Mode on.
+                    if (!(await hasPin())) {
+                      router.navigate({ pathname: '/pin', params: { mode: 'create' } });
+                      return;
+                    }
                     list.setKidMode(true);
                     router.navigate('/kid');
                   }}

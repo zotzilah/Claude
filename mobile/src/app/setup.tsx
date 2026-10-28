@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,6 +32,9 @@ export default function Setup() {
     setTried(false);
   };
   const set = (patch: Partial<ListSettings>) => setDraft((d) => ({ ...d, ...patch }));
+
+  // Settings are for grown-ups: Kid Mode can't reach them.
+  if (list.kidMode) return <Redirect href="/kid" />;
 
   const last = step === STEPS.length - 1;
   const problem = last ? setupProblem(draft) : stepProblem(step, draft);

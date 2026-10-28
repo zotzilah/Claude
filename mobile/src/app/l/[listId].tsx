@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Redirect, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -15,6 +15,9 @@ export default function GiverList() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+
+  // The Giver view shows who's buying what, so it must never be reachable from Kid Mode.
+  if (list.kidMode) return <Redirect href="/kid" />;
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={{ paddingBottom: insets.bottom + space.lg }}>
