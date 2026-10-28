@@ -55,7 +55,8 @@
     "lint": "expo lint",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "sounds": "node scripts/generate-sounds.mjs"
+    "sounds": "node scripts/generate-sounds.mjs",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "private": true,
   "jest": {
