@@ -13,6 +13,9 @@ export const categories: Category[] = [
   { key: 'games', title: 'Games & Gadgets', kidLabel: 'Games', icon: '🎮', familyCode: 527 },
 ];
 
+/** The page for products a family added themselves (pasted links). Only shown once there are some. */
+export const yourFinds: Category = { key: 'yours', title: 'Your Finds', kidLabel: 'Yours', icon: '⭐', familyCode: 900 };
+
 type Row = [id: string, category: string, sequence: number, title: string, priceMinor: number, emoji: string, retailer: string];
 
 const rows: Row[] = [

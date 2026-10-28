@@ -2,7 +2,6 @@ import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { categories } from '@/data/sample-catalogue';
 import { BigButton } from '@/components/big-button';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -45,7 +44,7 @@ export default function KidHome() {
       </Pressable>
 
       <View style={styles.tiles}>
-        {categories.map((c, i) => (
+        {list.pages.map((c, i) => (
           <Pressable
             key={c.key}
             accessibilityRole="button"

@@ -4,7 +4,6 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ProductCard } from '@/components/product-card';
-import { categories } from '@/data/sample-catalogue';
 import { search } from '@/domain/search';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -18,7 +17,7 @@ export default function SearchScreen() {
   const kid = list.kidMode;
   const [query, setQuery] = useState('');
   const products = useMemo(() => Object.values(list.products), [list.products]);
-  const outcome = useMemo(() => search(query, products, categories), [query, products]);
+  const outcome = useMemo(() => search(query, products, list.pages), [query, products, list.pages]);
 
   const close = () => (router.canGoBack() ? router.back() : router.replace(kid ? '/kid' : '/'));
 

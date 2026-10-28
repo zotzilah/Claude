@@ -1,4 +1,5 @@
 import * as Haptics from 'expo-haptics';
+import { Image } from 'expo-image';
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 
@@ -55,10 +56,14 @@ export function ProductCard({ product, stars, onTap, kid = false, covered = fals
       accessibilityHint={stars === null ? 'Circles this item' : `Circled, ${STAR_WORDS[stars]}. Tap to change.`}
     >
       <View style={styles.photo}>
-        <Text style={styles.emoji}>{product.emoji}</Text>
+        {product.imageUrl ? (
+          <Image source={product.imageUrl} style={styles.image} contentFit="contain" accessibilityIgnoresInvertColors />
+        ) : (
+          <Text style={styles.emoji}>{product.emoji}</Text>
+        )}
         {covered && <Text style={styles.covered}>TAKEN CARE OF ✓</Text>}
       </View>
-      <Text style={styles.cno}>{product.catalogueNo}</Text>
+      <Text style={styles.cno}>{product.catalogueNo || 'YOUR FIND'}</Text>
       <Text style={styles.title} numberOfLines={2}>
         {product.title}
       </Text>
@@ -87,6 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emoji: { fontSize: 52 },
+  image: { width: '90%', height: '90%' },
   covered: {
     position: 'absolute',
     top: 8,

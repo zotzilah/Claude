@@ -8,7 +8,6 @@ import { BigButton } from '@/components/big-button';
 import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
-import { categories, productsIn } from '@/data/sample-catalogue';
 import { hasPin } from '@/state/parent-pin';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -18,28 +17,34 @@ export default function CatalogueScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ page?: string }>();
   // The page lives in the URL (?page=N), so Kid Mode tiles and shared links can open any page.
-  const page = clampPage(Number(params.page ?? 0));
-  const setPage = (n: number) => router.setParams({ page: String(n) });
   const list = useWishlist();
-  const category = categories[page];
+  const pages = list.pages;
+  const page = clampPage(Number(params.page ?? 0), pages.length);
+  const setPage = (n: number) => router.setParams({ page: String(n) });
+  const category = pages[page];
   const kid = list.kidMode;
   const soundOn = useSoundEnabled();
   const turner = useRef<PageTurnerHandle>(null);
 
   if (!list.list.setupComplete) return <Redirect href="/setup" />;
 
-  const renderPage = (index: number) => (
-    <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
-      {productsIn(categories[index].key).map((p) => (
-        <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} covered={list.coveredFor(p.id)} />
-      ))}
-      <Text style={styles.hint}>
-        {kid
-          ? 'Tap to circle it! Tap again for more stars ★'
-          : 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page'}
-      </Text>
-    </ScrollView>
-  );
+  const renderPage = (index: number) => {
+    const onPage = list.productsFor(pages[index].key);
+    return (
+      <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
+        {onPage.map((p) => (
+          <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} covered={list.coveredFor(p.id)} />
+        ))}
+        {/* Keeps a lone last product at half width instead of stretching across the page. */}
+        {onPage.length % 2 === 1 && <View style={styles.spacer} />}
+        <Text style={styles.hint}>
+          {kid
+            ? 'Tap to circle it! Tap again for more stars ★'
+            : 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page'}
+        </Text>
+      </ScrollView>
+    );
+  };
 
   return (
     <View style={styles.screen}>
@@ -71,7 +76,7 @@ export default function CatalogueScreen() {
       <PageTurner
         ref={turner}
         page={page}
-        pageCount={categories.length}
+        pageCount={pages.length}
         renderPage={renderPage}
         onChangePage={setPage}
       />
@@ -79,14 +84,14 @@ export default function CatalogueScreen() {
       <View style={styles.pager}>
         <PagerButton label="◀" a11y="Previous page" disabled={page === 0} onPress={() => turner.current?.turn(-1)} />
         <View style={styles.dots}>
-          {categories.map((c, i) => (
+          {pages.map((c, i) => (
             <View key={c.key} style={[styles.dot, i === page && styles.dotOn]} />
           ))}
         </View>
         <PagerButton
           label="▶"
           a11y="Next page"
-          disabled={page === categories.length - 1}
+          disabled={page === pages.length - 1}
           onPress={() => turner.current?.turn(1)}
         />
       </View>
@@ -118,6 +123,7 @@ export default function CatalogueScreen() {
               {list.features.giverLink && (
                 <DevLink label="Giver link" onPress={() => router.navigate(`/l/${list.list.id}`)} />
               )}
+              <DevLink label="＋ Add from a link" onPress={() => router.navigate('/add')} />
               <DevLink label="Settings" onPress={() => router.navigate('/setup')} />
             </View>
           </>
@@ -127,8 +133,8 @@ export default function CatalogueScreen() {
   );
 }
 
-function clampPage(n: number) {
-  return Number.isInteger(n) && n >= 0 && n < categories.length ? n : 0;
+function clampPage(n: number, count: number) {
+  return Number.isInteger(n) && n >= 0 && n < count ? n : 0;
 }
 
 function PagerButton(props: { label: string; a11y: string; disabled: boolean; onPress: () => void }) {
@@ -155,7 +161,8 @@ function DevLink({ label, onPress }: { label: string; onPress: () => void }) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
-  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.md },
+  // Above the page stage, so the yellow page tab can overlap the page.
+  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.md, zIndex: 2 },
   bookRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
   headActions: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   sound: { fontSize: 18 },
@@ -180,6 +187,7 @@ const styles = StyleSheet.create({
   },
   page: { flex: 1, backgroundColor: colors.paper },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingHorizontal: 14, paddingTop: 24, paddingBottom: space.lg },
+  spacer: { flexBasis: '47%', flexGrow: 1 },
   hint: { width: '100%', textAlign: 'center', fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
   pager: {
     flexDirection: 'row',

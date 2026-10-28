@@ -68,7 +68,7 @@ export default function OrderSlip() {
             {list.wishes.length === 0 && <Text style={[styles.mono, styles.center]}>Nothing circled yet!</Text>}
             {list.wishes.map(({ product, stars }) => (
               <View key={product.id} style={styles.line}>
-                <Text style={[styles.mono, styles.no]}>{product.catalogueNo}</Text>
+                <Text style={[styles.mono, styles.no]}>{product.catalogueNo || 'YOURS'}</Text>
                 <Text style={[styles.mono, styles.name]}>
                   {product.title} <Text style={styles.stars}>{'★'.repeat(stars)}</Text>
                 </Text>

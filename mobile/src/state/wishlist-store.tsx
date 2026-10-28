@@ -6,11 +6,11 @@
 import { randomUUID } from 'expo-crypto';
 import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
 
-import { productsById as catalogueById } from '@/data/sample-catalogue';
+import { categories, productsById as catalogueById, productsIn, yourFinds } from '@/data/sample-catalogue';
 import { ownerView, pruneExpired } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
 import { featuresFor } from '@/domain/settings';
-import type { ListSettings, Product } from '@/domain/types';
+import type { Category, ListSettings, Product } from '@/domain/types';
 import { budgetStatus, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
 
 import { loadList, saveList } from './storage';
@@ -38,6 +38,8 @@ function useWishlistValue() {
 
   return useMemo(() => {
     const products: Record<string, Product> = { ...catalogueById, ...state.customProducts };
+    const finds = Object.values(state.customProducts);
+    const pages: Category[] = finds.length ? [...categories, yourFinds] : categories;
     const totalMinor = runningTotalMinor(state.marks, products);
     return {
       ready,
@@ -46,6 +48,9 @@ function useWishlistValue() {
       features: featuresFor(state.settings.buyers),
       kidMode: state.kidMode,
       products,
+      /** Catalogue pages, with "Your Finds" at the back once the family has added something. */
+      pages,
+      productsFor: (categoryKey: string) => (categoryKey === yourFinds.key ? finds : productsIn(categoryKey)),
       budget: budgetStatus(totalMinor, state.settings.budgetMinor),
       wishes: sortedWishes(state.marks, products),
       starsFor: (productId: string) => state.marks[productId]?.stars ?? null,
