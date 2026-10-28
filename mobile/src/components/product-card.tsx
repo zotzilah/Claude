@@ -2,6 +2,7 @@ import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 
+import { playSfx } from '@/audio/sfx';
 import type { Product, Stars } from '@/domain/types';
 import { formatMoney } from '@/domain/wishlist';
 import { colors, fonts, space } from '@/theme/tokens';
@@ -21,11 +22,19 @@ const STAR_WORDS = { 1: 'would like', 2: 'really want', 3: 'the big one' } as co
 
 export function ProductCard({ product, stars, onTap, kid = false }: Props) {
   const [size, setSize] = useState({ width: 0, height: 0 });
+  // Only a circle drawn by a tap on this card animates; circles shown on page load just appear.
+  const [justCircled, setJustCircled] = useState(false);
   const onLayout = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
     setSize({ width, height });
   };
   const press = () => {
+    if (stars === null) {
+      playSfx('scribble');
+      setJustCircled(true);
+    } else {
+      playSfx(stars === 3 ? 'rub' : 'tick');
+    }
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(stars === null ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light);
     }
@@ -55,7 +64,7 @@ export function ProductCard({ product, stars, onTap, kid = false }: Props) {
       </View>
       {stars !== null && (
         <>
-          <BiroRing width={size.width} height={size.height} seedKey={product.id} />
+          <BiroRing width={size.width} height={size.height} seedKey={product.id} animate={justCircled} />
           <Text style={styles.stars}>{'★'.repeat(stars)}</Text>
         </>
       )}

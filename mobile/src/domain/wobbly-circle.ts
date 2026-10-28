@@ -30,6 +30,8 @@ export interface WobblyCircle {
   d: string;
   /** Points along the stroke, in drawing order. */
   points: [number, number][];
+  /** Total stroke length, for the draw-on animation. */
+  length: number;
 }
 
 /** Draws a wobbly circle that fits a `width` × `height` box. */
@@ -56,5 +58,9 @@ export function wobblyCircle(width: number, height: number, seed: number, steps 
     points.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
   }
   const d = points.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join('');
-  return { d, points };
+  let length = 0;
+  for (let i = 1; i < points.length; i++) {
+    length += Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]);
+  }
+  return { d, points, length };
 }

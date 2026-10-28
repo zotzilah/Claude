@@ -20,6 +20,17 @@ describe('wobblyCircle', () => {
     }
   });
 
+  it('measures a stroke a bit longer than one lap of the ellipse', () => {
+    // Ramanujan's approximation of an ellipse's perimeter.
+    const a = 80, b = 220 * 0.49;
+    const lap = Math.PI * (3 * (a + b) - Math.sqrt((3 * a + b) * (a + 3 * b)));
+    for (let seed = 0; seed < 20; seed++) {
+      const { length } = wobblyCircle(160, 220, seed);
+      expect(length).toBeGreaterThan(lap * 0.95);
+      expect(length).toBeLessThan(lap * 1.25);
+    }
+  });
+
   it('stays roughly within its box', () => {
     for (let seed = 0; seed < 50; seed++) {
       for (const [x, y] of wobblyCircle(160, 220, seed).points) {

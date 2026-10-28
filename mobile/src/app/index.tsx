@@ -1,8 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import { useRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { setSoundEnabled, useSoundEnabled } from '@/audio/sfx';
 import { BigButton } from '@/components/big-button';
+import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
 import { categories, productsIn } from '@/data/sample-catalogue';
@@ -19,13 +22,39 @@ export default function CatalogueScreen() {
   const list = useWishlist();
   const category = categories[page];
   const kid = list.kidMode;
+  const soundOn = useSoundEnabled();
+  const turner = useRef<PageTurnerHandle>(null);
+
+  const renderPage = (index: number) => (
+    <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
+      {productsIn(categories[index].key).map((p) => (
+        <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} />
+      ))}
+      <Text style={styles.hint}>
+        {kid
+          ? 'Tap to circle it! Tap again for more stars ★'
+          : 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page'}
+      </Text>
+    </ScrollView>
+  );
 
   return (
     <View style={styles.screen}>
       <View style={[styles.head, { paddingTop: insets.top + space.sm }]}>
         <View style={styles.bookRow}>
           <Text style={styles.book}>{list.title.toUpperCase()}</Text>
-          {kid && <Text style={styles.kidChip}>🔒 KID MODE</Text>}
+          <View style={styles.headActions}>
+            {kid && <Text style={styles.kidChip}>🔒 KID MODE</Text>}
+            <Pressable
+              onPress={() => setSoundEnabled(!soundOn)}
+              accessibilityRole="switch"
+              accessibilityLabel="Sound effects"
+              accessibilityState={{ checked: soundOn }}
+              hitSlop={10}
+            >
+              <Text style={styles.sound}>{soundOn ? '🔊' : '🔇'}</Text>
+            </Pressable>
+          </View>
         </View>
         <Text style={styles.pageTitle} accessibilityRole="header">
           {category.title}
@@ -33,17 +62,16 @@ export default function CatalogueScreen() {
         <Text style={styles.pageNo}>PAGE {category.familyCode}</Text>
       </View>
 
-      <ScrollView style={styles.page} contentContainerStyle={styles.grid}>
-        {productsIn(category.key).map((p) => (
-          <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} />
-        ))}
-        <Text style={styles.hint}>
-          {kid ? 'Tap to circle it! Tap again for more stars ★' : 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out'}
-        </Text>
-      </ScrollView>
+      <PageTurner
+        ref={turner}
+        page={page}
+        pageCount={categories.length}
+        renderPage={renderPage}
+        onChangePage={setPage}
+      />
 
       <View style={styles.pager}>
-        <PagerButton label="◀" a11y="Previous page" disabled={page === 0} onPress={() => setPage(page - 1)} />
+        <PagerButton label="◀" a11y="Previous page" disabled={page === 0} onPress={() => turner.current?.turn(-1)} />
         <View style={styles.dots}>
           {categories.map((c, i) => (
             <View key={c.key} style={[styles.dot, i === page && styles.dotOn]} />
@@ -53,7 +81,7 @@ export default function CatalogueScreen() {
           label="▶"
           a11y="Next page"
           disabled={page === categories.length - 1}
-          onPress={() => setPage(page + 1)}
+          onPress={() => turner.current?.turn(1)}
         />
       </View>
 
@@ -106,7 +134,9 @@ function DevLink({ label, onPress }: { label: string; onPress: () => void }) {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
   head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.md },
-  bookRow: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
+  bookRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
+  headActions: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  sound: { fontSize: 18 },
   book: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, opacity: 0.9, flexShrink: 1 },
   kidChip: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.yellow, backgroundColor: colors.ink, paddingHorizontal: 6, borderRadius: radius.sm, overflow: 'hidden' },
   pageTitle: { fontFamily: fonts.display, fontSize: 27, color: colors.paper, marginTop: 6 },
@@ -126,7 +156,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 6,
     overflow: 'hidden',
   },
-  page: { flex: 1 },
+  page: { flex: 1, backgroundColor: colors.paper },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingHorizontal: 14, paddingTop: 24, paddingBottom: space.lg },
   hint: { width: '100%', textAlign: 'center', fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
   pager: {

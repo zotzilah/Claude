@@ -25,6 +25,7 @@ Scan the QR code: on iPhone use the Camera app, on Android use Expo Go. Your pho
 | `npm run typecheck` | TypeScript check |
 | `npm run lint` | ESLint |
 | `npx expo export -p web` | Production web build into `dist/` |
+| `npm run sounds` | Regenerate the sound effects in `assets/sounds/` |
 
 ## What's where
 
@@ -35,7 +36,8 @@ src/
     kid.tsx           Kid Mode home: picture tiles
     slip.tsx          The order slip
     l/[listId].tsx    The Giver web link, e.g. /l/ellie-xmas-26
-  components/       Product card, biro ring, price sticker, running total, big button
+  audio/            Sound effects player and mute setting
+  components/       Product card, biro ring, page turner, price sticker, running total, big button
   domain/           Pure logic with unit tests: stars, totals, catalogue numbers, wobbly circles
   data/             Sample catalogue (made-up products for development)
   state/            List state (in memory for now; Supabase in weeks 3–4)
@@ -44,6 +46,8 @@ src/
 
 ## Status
 
-Week 1 foundations: done. The catalogue renders, tapping circles and stars items, and the running total, Kid Mode tiles, order slip and Giver list all read the same list state.
+- **Done:** catalogue pages, circling and stars, running total, Kid Mode tiles, order slip and a read-only Giver list.
+- **Feel:** circles draw on like a pen stroke. Pages turn round the spine when you swipe or tap the arrows. The slip prints out of the till. There are sounds for every action (scribble, tick, rub-out, page rustle, cash register), a mute button and haptics. All of it respects the phone's silent switch and the reduce-motion setting.
+- **Next:** voice search, the Kid Mode PIN, then the backend, claims and notifications. See the roadmap in the brief.
 
-Still placeholders: the page-turn animation, circle draw-on animation, sounds, voice search, the Kid Mode PIN, the backend, claims and notifications. See the roadmap in the brief.
+The sounds are synthesised placeholders from `scripts/generate-sounds.mjs`. To swap in recorded ones later, replace the files in `assets/sounds/` and keep the same names.

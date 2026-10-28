@@ -10,7 +10,9 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { preloadSfx } from '@/audio/sfx';
 import { WishlistProvider } from '@/state/wishlist-store';
 import { colors } from '@/theme/tokens';
 
@@ -31,13 +33,19 @@ export default function RootLayout() {
     if (loaded || error) SplashScreen.hide();
   }, [loaded, error]);
 
+  useEffect(() => {
+    preloadSfx();
+  }, []);
+
   // If fonts fail, carry on with system fonts rather than leaving a blank screen.
   if (!loaded && !error) return null;
 
   return (
-    <WishlistProvider>
-      <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />
-    </WishlistProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <WishlistProvider>
+        <StatusBar style="light" />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />
+      </WishlistProvider>
+    </GestureHandlerRootView>
   );
 }
