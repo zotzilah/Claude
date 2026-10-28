@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,6 +24,8 @@ export default function CatalogueScreen() {
   const kid = list.kidMode;
   const soundOn = useSoundEnabled();
   const turner = useRef<PageTurnerHandle>(null);
+
+  if (!list.list.setupComplete) return <Redirect href="/setup" />;
 
   const renderPage = (index: number) => (
     <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
@@ -95,8 +97,19 @@ export default function CatalogueScreen() {
           <>
             {list.settings.runningTotalOn && <RunningTotal budget={list.budget} count={list.wishes.length} />}
             <View style={styles.devLinks}>
-              <DevLink label="Hand to Ellie (Kid Mode)" onPress={() => { list.setKidMode(true); router.navigate('/kid'); }} />
-              <DevLink label="Giver link" onPress={() => router.navigate('/l/ellie-xmas-26')} />
+              {list.settings.circler === 'child' && (
+                <DevLink
+                  label={`Hand to ${list.settings.circlerName}`}
+                  onPress={() => {
+                    list.setKidMode(true);
+                    router.navigate('/kid');
+                  }}
+                />
+              )}
+              {list.features.giverLink && (
+                <DevLink label="Giver link" onPress={() => router.navigate(`/l/${list.list.id}`)} />
+              )}
+              <DevLink label="Settings" onPress={() => router.navigate('/setup')} />
             </View>
           </>
         )}
@@ -175,7 +188,7 @@ const styles = StyleSheet.create({
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.rule },
   dotOn: { backgroundColor: colors.red },
   sendBar: { flexDirection: 'row', gap: space.sm, padding: 14, borderTopWidth: 1, borderTopColor: colors.rule },
-  devLinks: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: space.lg, paddingBottom: space.sm },
+  devLinks: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: space.lg, paddingHorizontal: space.lg, paddingBottom: space.sm },
   devLink: { paddingVertical: 6 },
   devLinkText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.yellow },
 });
