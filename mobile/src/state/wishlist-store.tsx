@@ -1,57 +1,73 @@
 /**
- * In-memory list state for the current list. This becomes a Supabase-backed store
- * (with realtime claims) in weeks 3–4; screens only talk to this hook, so they won't change.
+ * The current list, saved on the device. Every change goes through the pure
+ * `listReducer`; this hook adds loading, saving and convenient derived values.
+ * In weeks 3–4 the backend syncs the same actions; screens won't need to change.
  */
-import { createContext, useContext, useMemo, useReducer, type ReactNode } from 'react';
+import { randomUUID } from 'expo-crypto';
+import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
 
-import { productsById } from '@/data/sample-catalogue';
-import type { CircleMark } from '@/domain/types';
-import { budgetStatus, runningTotalMinor, sortedWishes, tapProduct } from '@/domain/wishlist';
+import { productsById as catalogueById } from '@/data/sample-catalogue';
+import { pruneExpired } from '@/domain/claims';
+import { createList, listReducer } from '@/domain/list-reducer';
+import { featuresFor } from '@/domain/settings';
+import type { ListSettings, Product } from '@/domain/types';
+import { budgetStatus, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
 
-interface WishlistState {
-  title: string;
-  circlerName: string;
-  budgetMinor: number;
-  runningTotalOn: boolean;
-  kidMode: boolean;
-  marks: Record<string, CircleMark>;
-}
-
-type Action =
-  | { type: 'tap'; productId: string; now: number }
-  | { type: 'setKidMode'; on: boolean };
-
-function reducer(state: WishlistState, action: Action): WishlistState {
-  switch (action.type) {
-    case 'tap':
-      return { ...state, marks: tapProduct(state.marks, action.productId, action.now) };
-    case 'setKidMode':
-      return { ...state, kidMode: action.on };
-  }
-}
-
-const initialState: WishlistState = {
-  title: "Ellie's Christmas Book 2026",
-  circlerName: 'Ellie',
-  budgetMinor: 15000,
-  runningTotalOn: true,
-  kidMode: false,
-  marks: {},
-};
+import { loadList, saveList } from './storage';
 
 function useWishlistValue() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(listReducer, undefined, () => createList(randomUUID()));
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadList().then((saved) => {
+      if (cancelled) return;
+      if (saved) dispatch({ type: 'hydrate', state: { ...saved, claims: pruneExpired(saved.claims, Date.now()) } });
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Save after every change, but never before the saved list has loaded (or we'd overwrite it).
+  useEffect(() => {
+    if (ready) saveList(state);
+  }, [ready, state]);
+
   return useMemo(() => {
-    const totalMinor = runningTotalMinor(state.marks, productsById);
+    const products: Record<string, Product> = { ...catalogueById, ...state.customProducts };
+    const totalMinor = runningTotalMinor(state.marks, products);
     return {
-      ...state,
-      budget: budgetStatus(totalMinor, state.budgetMinor),
-      wishes: sortedWishes(state.marks, productsById),
+      ready,
+      list: state,
+      settings: state.settings,
+      features: featuresFor(state.settings.buyers),
+      kidMode: state.kidMode,
+      products,
+      budget: budgetStatus(totalMinor, state.settings.budgetMinor),
+      wishes: sortedWishes(state.marks, products),
       starsFor: (productId: string) => state.marks[productId]?.stars ?? null,
+
       tap: (productId: string) => dispatch({ type: 'tap', productId, now: Date.now() }),
       setKidMode: (on: boolean) => dispatch({ type: 'setKidMode', on }),
+      updateSettings: (patch: Partial<ListSettings>) => dispatch({ type: 'updateSettings', patch }),
+      completeSetup: (settings: ListSettings) => dispatch({ type: 'completeSetup', settings }),
+      claim: (productId: string, giverName: string) => dispatch({ type: 'claim', productId, giverName, now: Date.now() }),
+      markBought: (productId: string, giverName: string) =>
+        dispatch({ type: 'markBought', productId, giverName, now: Date.now() }),
+      release: (productId: string, giverName: string) =>
+        dispatch({ type: 'release', productId, giverName, now: Date.now() }),
+      startGroupGift: (productId: string, organiserName: string) =>
+        dispatch({ type: 'startGroupGift', productId, organiserName }),
+      pledge: (productId: string, giverName: string, amountMinor: number) =>
+        dispatch({ type: 'pledge', productId, giverName, amountMinor }),
+      addCustomProduct: (product: Product) => dispatch({ type: 'addCustomProduct', product, now: Date.now() }),
+      /** Starts a brand-new list (the old one is replaced). */
+      reset: () => dispatch({ type: 'hydrate', state: createList(randomUUID()) }),
     };
-  }, [state]);
+  }, [state, ready]);
 }
 
 type Wishlist = ReturnType<typeof useWishlistValue>;
@@ -60,6 +76,8 @@ const WishlistContext = createContext<Wishlist | null>(null);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const value = useWishlistValue();
+  // Wait for the saved list (a few milliseconds) so screens never flash an empty list.
+  if (!value.ready) return null;
   return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>;
 }
 

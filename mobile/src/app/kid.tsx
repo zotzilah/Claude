@@ -22,7 +22,7 @@ export default function KidHome() {
     >
       <View style={styles.top}>
         <Text style={styles.hello} accessibilityRole="header">
-          Hi {list.circlerName}!{'\n'}What do you want?
+          Hi {list.settings.circlerName}!{'\n'}What do you want?
         </Text>
         <Pressable
           accessibilityRole="button"

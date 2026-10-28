@@ -63,7 +63,7 @@ export default function OrderSlip() {
         <Animated.View style={[styles.paper, paperStyle]} onLayout={onPaperLayout}>
           <ScrollView contentContainerStyle={styles.receipt}>
             <Text style={styles.title}>ORDER SLIP</Text>
-            <Text style={[styles.mono, styles.center]}>{list.title}</Text>
+            <Text style={[styles.mono, styles.center]}>{list.settings.title}</Text>
             <Text style={styles.rule}>- - - - - - - - - - - - - - - -</Text>
             {list.wishes.length === 0 && <Text style={[styles.mono, styles.center]}>Nothing circled yet!</Text>}
             {list.wishes.map(({ product, stars }) => (

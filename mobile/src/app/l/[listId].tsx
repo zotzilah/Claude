@@ -20,7 +20,7 @@ export default function GiverList() {
     <ScrollView style={styles.screen} contentContainerStyle={{ paddingBottom: insets.bottom + space.lg }}>
       <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
         <Text style={styles.title} accessibilityRole="header">
-          {list.title.replace('Book', 'List')}
+          {list.settings.title.replace('Book', 'List')}
         </Text>
         <Text style={styles.sub}>List {listId} · no app needed</Text>
       </View>

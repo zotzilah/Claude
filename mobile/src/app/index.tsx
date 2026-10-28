@@ -42,7 +42,7 @@ export default function CatalogueScreen() {
     <View style={styles.screen}>
       <View style={[styles.head, { paddingTop: insets.top + space.sm }]}>
         <View style={styles.bookRow}>
-          <Text style={styles.book}>{list.title.toUpperCase()}</Text>
+          <Text style={styles.book}>{list.settings.title.toUpperCase()}</Text>
           <View style={styles.headActions}>
             {kid && <Text style={styles.kidChip}>🔒 KID MODE</Text>}
             <Pressable
@@ -93,7 +93,7 @@ export default function CatalogueScreen() {
           </View>
         ) : (
           <>
-            {list.runningTotalOn && <RunningTotal budget={list.budget} count={list.wishes.length} />}
+            {list.settings.runningTotalOn && <RunningTotal budget={list.budget} count={list.wishes.length} />}
             <View style={styles.devLinks}>
               <DevLink label="Hand to Ellie (Kid Mode)" onPress={() => { list.setKidMode(true); router.navigate('/kid'); }} />
               <DevLink label="Giver link" onPress={() => router.navigate('/l/ellie-xmas-26')} />

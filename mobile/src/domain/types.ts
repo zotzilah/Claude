@@ -33,6 +33,8 @@ export interface Product {
   url: string;
   /** Placeholder artwork until real product images arrive from feeds. */
   emoji: string;
+  /** Product photo, when we have one (e.g. from a pasted link). */
+  imageUrl?: string;
 }
 
 /** A circled product on a list, with its star rating. */
@@ -40,4 +42,74 @@ export interface CircleMark {
   productId: string;
   stars: Stars;
   circledAt: number;
+}
+
+// ---------- List setup (brief §4) ----------
+
+export type Template = 'christmas' | 'birthday' | 'custom';
+
+/** Who's circling: drives Kid Mode. */
+export type Circler = 'child' | 'adult';
+
+export type AgeBand = '3-5' | '6-8' | '9-12';
+
+/** Who's buying: drives which Giver features show. */
+export type Buyers = 'just-me' | 'partner' | 'family';
+
+/**
+ * What the list owner and Circler can see about purchases.
+ * `hide-all`: nothing. `taken-care-of`: that someone has it covered, never who.
+ */
+export type SurpriseMode = 'hide-all' | 'taken-care-of';
+
+export interface ListSettings {
+  title: string;
+  template: Template;
+  circler: Circler;
+  circlerName: string;
+  ageBand: AgeBand | null;
+  buyers: Buyers;
+  budgetMinor: number;
+  currency: string;
+  runningTotalOn: boolean;
+  surpriseMode: SurpriseMode;
+}
+
+// ---------- Givers (brief §7) ----------
+
+export type ClaimStatus = 'held' | 'bought';
+
+export interface Claim {
+  productId: string;
+  giverName: string;
+  status: ClaimStatus;
+  claimedAt: number;
+  /** When a `held` claim expires. Irrelevant once bought. */
+  heldUntil: number;
+}
+
+export interface Pledge {
+  giverName: string;
+  amountMinor: number;
+}
+
+export interface GroupGift {
+  productId: string;
+  organiserName: string;
+  pledges: Pledge[];
+}
+
+// ---------- The whole list ----------
+
+export interface ListState {
+  id: string;
+  settings: ListSettings;
+  /** False until the parent has finished list setup. */
+  setupComplete: boolean;
+  kidMode: boolean;
+  marks: Record<string, CircleMark>;
+  /** Products added by pasting a link: private to this list. */
+  customProducts: Record<string, Product>;
+  claims: Record<string, Claim>;
+  groupGifts: Record<string, GroupGift>;
 }
