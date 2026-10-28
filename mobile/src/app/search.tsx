@@ -60,7 +60,13 @@ export default function SearchScreen() {
             <>
               <Text style={styles.message}>Catalogue number {outcome.catalogueNo}</Text>
               <View style={styles.grid}>
-                <ProductCard product={outcome.product} stars={list.starsFor(outcome.product.id)} onTap={list.tap} kid={kid} />
+                <ProductCard
+                  product={outcome.product}
+                  stars={list.starsFor(outcome.product.id)}
+                  onTap={list.tap}
+                  kid={kid}
+                  covered={list.coveredFor(outcome.product.id)}
+                />
                 <View style={styles.gridSpacer} />
               </View>
             </>
@@ -76,7 +82,14 @@ export default function SearchScreen() {
               </Text>
               <View style={styles.grid}>
                 {outcome.results.map(({ product }) => (
-                  <ProductCard key={product.id} product={product} stars={list.starsFor(product.id)} onTap={list.tap} kid={kid} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    stars={list.starsFor(product.id)}
+                    onTap={list.tap}
+                    kid={kid}
+                    covered={list.coveredFor(product.id)}
+                  />
                 ))}
                 {outcome.results.length % 2 === 1 && <View style={styles.gridSpacer} />}
               </View>

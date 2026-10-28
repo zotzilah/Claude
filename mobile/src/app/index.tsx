@@ -31,7 +31,7 @@ export default function CatalogueScreen() {
   const renderPage = (index: number) => (
     <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
       {productsIn(categories[index].key).map((p) => (
-        <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} />
+        <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} covered={list.coveredFor(p.id)} />
       ))}
       <Text style={styles.hint}>
         {kid

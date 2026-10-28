@@ -1,54 +1,143 @@
 import { Redirect, useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { GiverItem } from '@/components/giver-item';
+import { giverSummary } from '@/domain/claims';
 import { formatMoney } from '@/domain/wishlist';
+import { loadGiverName, saveGiverName } from '@/state/giver-name';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
 /**
- * The Giver web link (no app download needed), e.g. /l/ellie-xmas-26.
- * Read-only for now and backed by local state; claims, surprise mode and
- * group gifts arrive with the backend in weeks 3–4.
+ * The Giver web link (no app download needed), e.g. /l/<list id>.
+ * Claims, surprise mode and group gifts work on this device now; with the backend
+ * (weeks 3–4) everyone opening the link sees the same live list.
  */
 export default function GiverList() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const [me, setMe] = useState('');
+  const [nameDraft, setNameDraft] = useState('');
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    loadGiverName().then((name) => {
+      setMe(name);
+      setNameDraft(name);
+    });
+  }, []);
+
+  // Keep the 48-hour countdowns fresh.
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30 * 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // The Giver view shows who's buying what, so it must never be reachable from Kid Mode.
   if (list.kidMode) return <Redirect href="/kid" />;
 
+  const { settings, features } = list;
+  const summary = giverSummary(list.wishes, list.list.claims, now);
+  const listTitle = settings.title.replace('Book', 'List');
+
+  // Every action refreshes the clock too, so a fresh claim reads "48h 00m", not a stale time.
+  const act = (fn: () => void) => () => {
+    setNow(Date.now());
+    fn();
+  };
+
+  const rememberName = async () => {
+    const name = nameDraft.trim();
+    if (!name) return;
+    await saveGiverName(name);
+    setMe(name);
+  };
+
+  const share = () =>
+    Share.share({ message: `${listTitle}: claim a present here https://biro.example/l/${listId}` }).catch(() => undefined);
+
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={{ paddingBottom: insets.bottom + space.lg }}>
-      <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
-        <Text style={styles.title} accessibilityRole="header">
-          {list.settings.title.replace('Book', 'List')}
-        </Text>
-        <Text style={styles.sub}>List {listId} · no app needed</Text>
-      </View>
-      <View style={styles.summary}>
-        <Stat value={String(list.wishes.length)} label="wishes" />
-        <Stat value={formatMoney(list.budget.totalMinor)} label="list total" />
-      </View>
-      <View style={styles.items}>
-        {list.wishes.length === 0 && <Text style={styles.empty}>No wishes circled yet.</Text>}
-        {list.wishes.map(({ product, stars }) => (
-          <View key={product.id} style={styles.item}>
-            <Text style={styles.thumb}>{product.emoji}</Text>
-            <View style={styles.itemBody}>
-              <View style={styles.itemTop}>
-                <Text style={styles.itemTitle}>{product.title}</Text>
-                <Text style={styles.price}>{formatMoney(product.priceMinor, product.currency)}</Text>
-              </View>
-              <Text style={styles.meta}>
-                <Text style={styles.stars}>{'★'.repeat(stars)}</Text> {product.catalogueNo} · {product.retailer}
-              </Text>
+    <View style={styles.screen}>
+      <ScrollView contentContainerStyle={{ paddingBottom: space.lg }} keyboardShouldPersistTaps="handled">
+        <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
+          <Text style={styles.title} accessibilityRole="header">
+            {listTitle}
+          </Text>
+          <Text style={styles.sub}>
+            Circled by {settings.circlerName || 'them'} · no app needed
+          </Text>
+        </View>
+
+        {features.claiming && (
+          <Text style={styles.surprise}>
+            {`🤫 Surprise mode is on. ${settings.circlerName || 'They'} can't see who's buying what.`}
+          </Text>
+        )}
+
+        {features.claiming && !me && (
+          <View style={styles.nameCard}>
+            <Text style={styles.nameTitle}>{"Hello! Who's buying?"}</Text>
+            <Text style={styles.nameHint}>{"So everyone knows who's claimed what. No account needed."}</Text>
+            <View style={styles.nameRow}>
+              <TextInput
+                value={nameDraft}
+                onChangeText={setNameDraft}
+                onSubmitEditing={rememberName}
+                placeholder="e.g. Nan"
+                placeholderTextColor={colors.inkSoft}
+                autoCapitalize="words"
+                maxLength={30}
+                style={styles.nameInput}
+                accessibilityLabel="Your name"
+              />
+              <Pressable onPress={rememberName} accessibilityRole="button" style={styles.nameButton}>
+                <Text style={styles.nameButtonText}>{"That's me"}</Text>
+              </Pressable>
             </View>
           </View>
-        ))}
-      </View>
-    </ScrollView>
+        )}
+        {features.claiming && me ? <Text style={styles.signedIn}>Buying as {me}</Text> : null}
+
+        <View style={styles.summary}>
+          <Stat value={String(summary.wishCount)} label="wishes" />
+          <Stat value={formatMoney(summary.totalMinor)} label="list total" />
+          {features.claiming && <Stat value={formatMoney(summary.remainingMinor)} label="still to get" />}
+        </View>
+
+        <View style={styles.items}>
+          {list.wishes.length === 0 && <Text style={styles.empty}>Nothing circled yet. Check back soon!</Text>}
+          {list.wishes.map(({ product, stars }) => (
+            <GiverItem
+              key={product.id}
+              product={product}
+              stars={stars}
+              claim={list.list.claims[product.id]}
+              groupGift={list.list.groupGifts[product.id]}
+              me={me}
+              now={now}
+              claimingOn={features.claiming}
+              groupGiftsOn={features.groupGifts}
+              onClaim={act(() => list.claim(product.id, me))}
+              onBought={act(() => list.markBought(product.id, me))}
+              onRelease={act(() => list.release(product.id, me))}
+              onStartGroupGift={act(() => list.startGroupGift(product.id, me))}
+              onPledge={(amount) => act(() => list.pledge(product.id, me, amount))()}
+            />
+          ))}
+        </View>
+      </ScrollView>
+
+      {features.giverLink && (
+        <View style={[styles.shareBar, { paddingBottom: insets.bottom + space.md }]}>
+          <Pressable onPress={share} accessibilityRole="button" style={styles.shareButton}>
+            <Text style={styles.shareText}>Share this list</Text>
+          </Pressable>
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -66,18 +155,53 @@ const styles = StyleSheet.create({
   head: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingBottom: 14 },
   title: { fontFamily: fonts.display, fontSize: 23, color: colors.paper },
   sub: { fontFamily: fonts.body, fontSize: 14, color: colors.paper, opacity: 0.9, marginTop: 4 },
+  surprise: {
+    marginHorizontal: space.md,
+    marginTop: space.md,
+    backgroundColor: colors.yellow,
+    borderRadius: radius.md,
+    paddingVertical: space.sm,
+    paddingHorizontal: space.md,
+    fontFamily: fonts.bodySemi,
+    fontSize: 14,
+    color: colors.ink,
+    overflow: 'hidden',
+  },
+  nameCard: {
+    margin: space.md,
+    marginBottom: 0,
+    backgroundColor: colors.paper,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: colors.blue,
+    padding: space.md,
+    gap: 6,
+  },
+  nameTitle: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
+  nameHint: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
+  nameRow: { flexDirection: 'row', gap: space.sm, marginTop: 4 },
+  nameInput: {
+    flex: 1,
+    minWidth: 0,
+    borderWidth: 2,
+    borderColor: colors.ink,
+    borderRadius: radius.md,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm,
+    fontFamily: fonts.bodySemi,
+    fontSize: 16,
+    color: colors.ink,
+  },
+  nameButton: { backgroundColor: colors.blue, borderRadius: radius.md, paddingHorizontal: space.lg, justifyContent: 'center' },
+  nameButtonText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.paper },
+  signedIn: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.inkSoft, marginHorizontal: space.md, marginTop: space.sm },
   summary: { flexDirection: 'row', gap: space.sm, margin: space.md },
   stat: { flex: 1, backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: 1, borderColor: colors.rule, padding: 10 },
-  statValue: { fontFamily: fonts.display, fontSize: 17, color: colors.ink },
+  statValue: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums'] },
   statLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft },
   items: { gap: 10, marginHorizontal: space.md },
   empty: { fontFamily: fonts.body, fontSize: 15, color: colors.inkSoft, textAlign: 'center', padding: space.lg },
-  item: { flexDirection: 'row', gap: 10, backgroundColor: colors.paper, borderRadius: 12, borderWidth: 1, borderColor: colors.rule, padding: 10 },
-  thumb: { width: 58, height: 58, fontSize: 34, textAlign: 'center', lineHeight: 58, borderWidth: 1, borderColor: colors.rule, borderRadius: 8 },
-  itemBody: { flex: 1, gap: 4 },
-  itemTop: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
-  itemTitle: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.ink, flexShrink: 1 },
-  price: { fontFamily: fonts.display, fontSize: 15, color: colors.red },
-  meta: { fontFamily: fonts.body, fontSize: 12.5, color: colors.inkSoft },
-  stars: { fontFamily: fonts.hand, fontSize: 18, color: colors.biro },
+  shareBar: { backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule, paddingHorizontal: space.md, paddingTop: space.md },
+  shareButton: { backgroundColor: colors.good, borderRadius: radius.md, paddingVertical: space.md, alignItems: 'center' },
+  shareText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.paper },
 });

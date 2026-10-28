@@ -16,11 +16,13 @@ interface Props {
   onTap: (productId: string) => void;
   /** Kid Mode hides the retailer name. */
   kid?: boolean;
+  /** Someone has this covered (surprise mode shows that much, never who). */
+  covered?: boolean;
 }
 
 const STAR_WORDS = { 1: 'would like', 2: 'really want', 3: 'the big one' } as const;
 
-export function ProductCard({ product, stars, onTap, kid = false }: Props) {
+export function ProductCard({ product, stars, onTap, kid = false, covered = false }: Props) {
   const [size, setSize] = useState({ width: 0, height: 0 });
   // Only a circle drawn by a tap on this card animates; circles shown on page load just appear.
   const [justCircled, setJustCircled] = useState(false);
@@ -49,10 +51,12 @@ export function ProductCard({ product, stars, onTap, kid = false }: Props) {
       accessibilityRole="button"
       accessibilityLabel={`${product.title}, ${formatMoney(product.priceMinor, product.currency)}, catalogue number ${product.catalogueNo}`}
       accessibilityState={{ selected: stars !== null }}
+      accessibilityValue={covered ? { text: 'Taken care of' } : undefined}
       accessibilityHint={stars === null ? 'Circles this item' : `Circled, ${STAR_WORDS[stars]}. Tap to change.`}
     >
       <View style={styles.photo}>
         <Text style={styles.emoji}>{product.emoji}</Text>
+        {covered && <Text style={styles.covered}>TAKEN CARE OF ✓</Text>}
       </View>
       <Text style={styles.cno}>{product.catalogueNo}</Text>
       <Text style={styles.title} numberOfLines={2}>
@@ -83,6 +87,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emoji: { fontSize: 52 },
+  covered: {
+    position: 'absolute',
+    top: 8,
+    left: 6,
+    transform: [{ rotate: '-6deg' }],
+    borderWidth: 2,
+    borderColor: colors.good,
+    color: colors.good,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    fontFamily: fonts.display,
+    fontSize: 10,
+    letterSpacing: 0.5,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+  },
   cno: { fontFamily: fonts.display, fontSize: 12.5, color: colors.blue, marginTop: 6, letterSpacing: 0.4 },
   title: { fontFamily: fonts.bodySemi, fontSize: 14, lineHeight: 16, color: colors.ink, marginTop: 2, minHeight: 32 },
   retailer: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft, marginTop: 1 },

@@ -111,3 +111,24 @@ export function pledge(
 export function pledgedMinor(gift: GroupGift): number {
   return gift.pledges.reduce((sum, p) => sum + p.amountMinor, 0);
 }
+
+export interface GiverSummary {
+  wishCount: number;
+  totalMinor: number;
+  /** Claimed or bought items. */
+  coveredMinor: number;
+  remainingMinor: number;
+}
+
+/** The numbers at the top of the Giver page. Expired holds don't count as covered. */
+export function giverSummary(
+  wishes: { product: { id: string; priceMinor: number } }[],
+  claims: Record<string, Claim>,
+  now: number,
+): GiverSummary {
+  const totalMinor = wishes.reduce((sum, w) => sum + w.product.priceMinor, 0);
+  const coveredMinor = wishes
+    .filter((w) => activeClaim(claims[w.product.id], now))
+    .reduce((sum, w) => sum + w.product.priceMinor, 0);
+  return { wishCount: wishes.length, totalMinor, coveredMinor, remainingMinor: totalMinor - coveredMinor };
+}

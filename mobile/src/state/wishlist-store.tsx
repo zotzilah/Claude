@@ -7,7 +7,7 @@ import { randomUUID } from 'expo-crypto';
 import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
 
 import { productsById as catalogueById } from '@/data/sample-catalogue';
-import { pruneExpired } from '@/domain/claims';
+import { ownerView, pruneExpired } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
 import { featuresFor } from '@/domain/settings';
 import type { ListSettings, Product } from '@/domain/types';
@@ -49,6 +49,10 @@ function useWishlistValue() {
       budget: budgetStatus(totalMinor, state.settings.budgetMinor),
       wishes: sortedWishes(state.marks, products),
       starsFor: (productId: string) => state.marks[productId]?.stars ?? null,
+      /** Surprise mode: whether the list side may see that someone has this covered (never who). */
+      coveredFor: (productId: string) =>
+        featuresFor(state.settings.buyers).claiming &&
+        ownerView(state.claims[productId], state.settings.surpriseMode, Date.now()) === 'taken-care-of',
 
       tap: (productId: string) => dispatch({ type: 'tap', productId, now: Date.now() }),
       setKidMode: (on: boolean) => dispatch({ type: 'setKidMode', on }),

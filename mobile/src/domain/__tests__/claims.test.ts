@@ -5,6 +5,7 @@ import {
   CLAIM_HOLD_MS,
   claim,
   formatCountdown,
+  giverSummary,
   markBought,
   ownerView,
   pledge,
@@ -112,5 +113,25 @@ describe('group gifts', () => {
     const gifts = startGroupGift({}, 'bike', 'Dave');
     expect(startGroupGift(gifts, 'bike', 'Sue').bike.organiserName).toBe('Dave');
     expect(pledge(gifts, 'kite', 'Sue', 100)).toBe(gifts);
+  });
+});
+
+describe('giverSummary', () => {
+  const wishes = [
+    { product: { id: 'bike', priceMinor: 14999 } },
+    { product: { id: 'kite', priceMinor: 899 } },
+  ];
+
+  it('counts claimed and bought items as covered', () => {
+    expect(giverSummary(wishes, claimed(), T0)).toEqual({
+      wishCount: 2,
+      totalMinor: 15898,
+      coveredMinor: 14999,
+      remainingMinor: 899,
+    });
+  });
+
+  it('stops counting a hold once it expires', () => {
+    expect(giverSummary(wishes, claimed(), T0 + CLAIM_HOLD_MS).coveredMinor).toBe(0);
   });
 });
