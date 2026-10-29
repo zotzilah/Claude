@@ -61,6 +61,15 @@ export default function CatalogueScreen() {
           <Text style={styles.book}>{list.settings.title.toUpperCase()}</Text>
           <View style={styles.headActions}>
             {kid && <Text style={styles.kidChip}>🔒 KID MODE</Text>}
+            <Pressable
+              onPress={() => router.navigate('/catalogue-index')}
+              accessibilityRole="button"
+              accessibilityLabel="A to Z index"
+              hitSlop={10}
+              style={styles.azButton}
+            >
+              <Text style={styles.azText}>A–Z</Text>
+            </Pressable>
             <Pressable onPress={() => router.navigate('/search')} accessibilityRole="button" accessibilityLabel="Search" hitSlop={10}>
               <Text style={styles.sound}>🔍</Text>
             </Pressable>
@@ -174,6 +183,8 @@ const styles = StyleSheet.create({
   bookRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
   headActions: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   sound: { fontSize: 18 },
+  azButton: { backgroundColor: colors.yellow, borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 1 },
+  azText: { fontFamily: fonts.display, fontSize: 12, color: colors.ink },
   book: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, opacity: 0.9, flexShrink: 1 },
   kidChip: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.yellow, backgroundColor: colors.ink, paddingHorizontal: 6, borderRadius: radius.sm, overflow: 'hidden' },
   pageTitle: { fontFamily: fonts.display, fontSize: 27, color: colors.paper, marginTop: 6 },
