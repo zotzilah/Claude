@@ -71,7 +71,7 @@ export default function GiverList() {
           </Text>
         </View>
 
-        {features.claiming && (
+        {features.claiming && settings.surpriseMode !== 'off' && (
           <Text style={styles.surprise}>
             {`🤫 Surprise mode is on. ${settings.circlerName || 'They'} can't see who's buying what.`}
           </Text>

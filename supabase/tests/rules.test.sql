@@ -164,6 +164,25 @@ select tests.login('00000000-0000-0000-0000-00000000000b');
 select tests.eq((select giver_id from public.claim_item('10000000-0000-0000-0000-000000000001', 'p16')), '00000000-0000-0000-0000-00000000000b'::uuid,
   'after 48 hours someone else can claim it');
 
+-- ---------- Surprise off (the default): the owner sees the buying side and can claim ----------
+reset role;
+update public.lists set settings = settings - 'surpriseMode'; -- no setting means surprise is off
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-00000000000a');
+select tests.eq((select count(*) from public.claims)::int, 2, 'with surprise off, the owner can read claims');
+select tests.eq((select count(*) from public.givers)::int, 2, 'with surprise off, the owner sees who the givers are');
+select tests.eq(public.join_list(:'token', 'Mum'), '10000000-0000-0000-0000-000000000001'::uuid, 'with surprise off, the owner can join as a giver');
+select tests.eq((select status from public.claim_item('10000000-0000-0000-0000-000000000001', 'p13')), 'held', 'and claim a gift herself');
+
+-- Turning surprise back on shuts the door, even though she has already joined as a giver.
+update public.lists set settings = settings || '{"surpriseMode": "taken-care-of"}';
+select tests.eq((select count(*) from public.claims)::int, 0, 'surprise back on: the owner can''t read claims again');
+select tests.eq((select count(*) from public.givers)::int, 0, 'surprise back on: the owner can''t see givers again');
+select tests.fails($$select public.release_claim('10000000-0000-0000-0000-000000000001', 'p13')$$,
+  'not-a-giver', 'surprise back on: the owner can''t act as a giver');
+select tests.eq((select count(*) from public.covered_products('10000000-0000-0000-0000-000000000001'))::int, 3,
+  'surprise back on: the owner still sees "taken care of"');
+
 -- ---------- The waitlist ----------
 reset role;
 set role anon;

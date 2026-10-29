@@ -70,7 +70,7 @@ function parseSettings(raw: unknown): ListSettings {
     budgetMinor: minor(raw.budgetMinor) ?? d.budgetMinor,
     currency: str(raw.currency) ?? d.currency,
     runningTotalOn: typeof raw.runningTotalOn === 'boolean' ? raw.runningTotalOn : d.runningTotalOn,
-    surpriseMode: oneOf<SurpriseMode>(raw.surpriseMode, ['hide-all', 'taken-care-of']) ?? d.surpriseMode,
+    surpriseMode: oneOf<SurpriseMode>(raw.surpriseMode, ['off', 'taken-care-of', 'hide-all']) ?? d.surpriseMode,
     // Lists saved before this setting existed get the age-based default.
     kidPricesShown: typeof raw.kidPricesShown === 'boolean' ? raw.kidPricesShown : defaultKidPricesShown(ageBand),
   };

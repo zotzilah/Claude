@@ -74,13 +74,21 @@ export function formatCountdown(ms: number): string {
 /** Reminder points before a hold expires (brief §7.2). */
 export const REMINDERS_MS = [24 * 60 * 60 * 1000, 6 * 60 * 60 * 1000];
 
+export type ListSideView =
+  | { kind: 'covered' }
+  | { kind: 'claimed' | 'bought'; by: string };
+
 /**
- * What the list owner or Circler sees for an item, respecting surprise mode.
- * They never learn who bought what.
+ * What the list side sees for a wish (brief §7.3, made optional by the founder):
+ * with surprise off the owner sees who has it; with "taken care of" only that it's covered;
+ * with "hide everything" nothing. Kid Mode never learns who, whatever the setting.
  */
-export function ownerView(claim: Claim | undefined, mode: SurpriseMode, now: number): 'taken-care-of' | null {
-  if (mode === 'hide-all') return null;
-  return activeClaim(claim, now) ? 'taken-care-of' : null;
+export function listSideView(claim: Claim | undefined, mode: SurpriseMode, now: number, kidMode: boolean): ListSideView | null {
+  const active = activeClaim(claim, now);
+  if (!active || mode === 'hide-all') return null;
+  if (kidMode) return mode === 'taken-care-of' ? { kind: 'covered' } : null;
+  if (mode === 'taken-care-of') return { kind: 'covered' };
+  return { kind: active.status === 'bought' ? 'bought' : 'claimed', by: active.giverName };
 }
 
 // ---------- Group gifts ----------

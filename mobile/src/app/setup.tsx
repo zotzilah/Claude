@@ -195,17 +195,27 @@ export default function Setup() {
                 <Text style={styles.label}>Surprise mode</Text>
                 <ChoiceCard
                   compact
-                  label={`${draft.circler === 'child' ? childName : 'You'} can see "taken care of"`}
+                  label="Off: I'll see who's buying what"
+                  selected={draft.surpriseMode === 'off'}
+                  onPress={() => set({ surpriseMode: 'off' })}
+                />
+                <ChoiceCard
+                  compact
+                  label={`On: just show "taken care of"`}
                   selected={draft.surpriseMode === 'taken-care-of'}
                   onPress={() => set({ surpriseMode: 'taken-care-of' })}
                 />
                 <ChoiceCard
                   compact
-                  label="Hide everything"
+                  label="On: hide everything"
                   selected={draft.surpriseMode === 'hide-all'}
                   onPress={() => set({ surpriseMode: 'hide-all' })}
                 />
-                <Text style={styles.note}>Nobody on the list side ever sees who bought what.</Text>
+                <Text style={styles.note}>
+                  {draft.surpriseMode === 'off'
+                    ? `You can claim gifts too. ${draft.circler === 'child' ? `Kid Mode still never shows ${childName} who's buying.` : ''}`
+                    : "You won't see who bought what, so the surprise stays a surprise."}
+                </Text>
               </>
             )}
             {draft.budgetMinor > 0 && (

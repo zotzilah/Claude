@@ -32,7 +32,8 @@ export function defaultSettings(): ListSettings {
     budgetMinor: 15000,
     currency: 'GBP',
     runningTotalOn: true,
-    surpriseMode: 'taken-care-of',
+    // Surprise is opt-in: by default the parent sees who's buying what.
+    surpriseMode: 'off',
     kidPricesShown: false,
   };
 }

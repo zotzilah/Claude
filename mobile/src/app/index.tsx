@@ -39,7 +39,7 @@ export default function CatalogueScreen() {
             stars={list.starsFor(p.id)}
             onTap={list.tap}
             kid={kid}
-            covered={list.coveredFor(p.id)}
+            listSide={list.listSideFor(p.id)}
             hidePrice={list.hidePrices}
           />
         ))}

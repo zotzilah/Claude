@@ -7,7 +7,7 @@ import {
   formatCountdown,
   giverSummary,
   markBought,
-  ownerView,
+  listSideView,
   pledge,
   pledgedMinor,
   pruneExpired,
@@ -78,13 +78,32 @@ describe('claiming', () => {
   });
 });
 
-describe('surprise mode', () => {
-  it('never tells the owner who, and hides everything in hide-all', () => {
+describe('what the list side sees', () => {
+  it('with surprise off, shows the owner who has it', () => {
     const claims = claimed();
-    expect(ownerView(claims.bike, 'taken-care-of', T0)).toBe('taken-care-of');
-    expect(ownerView(claims.bike, 'hide-all', T0)).toBeNull();
-    expect(ownerView(undefined, 'taken-care-of', T0)).toBeNull();
-    expect(ownerView(claims.bike, 'taken-care-of', T0 + CLAIM_HOLD_MS)).toBeNull();
+    expect(listSideView(claims.bike, 'off', T0, false)).toEqual({ kind: 'claimed', by: 'Nan' });
+    const bought = markBought(claims, 'bike', 'Nan', T0);
+    if (typeof bought === 'string') throw new Error(bought);
+    expect(listSideView(bought.bike, 'off', T0, false)).toEqual({ kind: 'bought', by: 'Nan' });
+  });
+
+  it('with "taken care of", never says who', () => {
+    expect(listSideView(claimed().bike, 'taken-care-of', T0, false)).toEqual({ kind: 'covered' });
+  });
+
+  it('with "hide everything", shows nothing', () => {
+    expect(listSideView(claimed().bike, 'hide-all', T0, false)).toBeNull();
+  });
+
+  it('never tells Kid Mode who is buying, even with surprise off', () => {
+    expect(listSideView(claimed().bike, 'off', T0, true)).toBeNull();
+    expect(listSideView(claimed().bike, 'taken-care-of', T0, true)).toEqual({ kind: 'covered' });
+    expect(listSideView(claimed().bike, 'hide-all', T0, true)).toBeNull();
+  });
+
+  it('shows nothing for unclaimed or expired items', () => {
+    expect(listSideView(undefined, 'off', T0, false)).toBeNull();
+    expect(listSideView(claimed().bike, 'off', T0 + CLAIM_HOLD_MS, false)).toBeNull();
   });
 });
 

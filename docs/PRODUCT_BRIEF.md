@@ -62,7 +62,7 @@ During setup the owner answers two quick questions, and the interface adapts:
 | Running total | On by default | On by default | Off by default (toggle) |
 | Budget cap | Optional | Optional | n/a |
 | Claiming | Hidden (only one buyer) | On | On |
-| Surprise mode | n/a | On | On |
+| Surprise mode | n/a | Optional (off by default) | Optional (off by default) |
 | Group gifts | n/a | On | On |
 | Group chat invite | n/a | Optional | Optional |
 
@@ -135,9 +135,14 @@ The owner sets up the list, then hands over the device.
 - If they don't, they get reminders at 24h and 6h. After 48h the claim **expires** and the item goes back on the list.
 - Nobody else can claim a held item, which prevents duplicates.
 
-### 7.3 Surprise mode
-- On by default. The List Owner or Circler sees that an item is "taken care of" at most, and never who bought it. They can choose to hide even that.
-- Givers see everything: claimed, bought and by whom (within the family or guest group).
+### 7.3 Surprise mode (optional)
+- **Off by default** (founder decision, 29 Oct 2026). The list owner sees who has claimed and bought what, and can claim gifts too, which suits a parent who is also buying.
+- **Owners who want the surprise switch it on**, choosing either:
+  - **"Taken care of":** the owner and child see that an item is covered, never who
+  - **"Hide everything":** they see nothing at all
+- **Kid Mode never shows the child who is buying**, whatever the setting.
+- The database enforces this, not just the app. While surprise is on, the owner can't read claims or act as a giver, even if they joined as one earlier.
+- Givers always see everything: claimed, bought and by whom (within the family or guest group).
 
 ### 7.4 Group gifts
 - Any item can be marked as a **group gift** (suggested automatically above a price threshold, e.g. £100).
@@ -309,7 +314,7 @@ Today is **28 Oct 2026**, so Christmas 2026 is about 8 weeks away. App store rev
 | Roles | One list, two sides: Circler and Giver |
 | Running total | A per-list toggle; on for kid lists, off for weddings |
 | Claims | Honour system, with a 48-hour hold |
-| Surprise mode | Yes |
+| Surprise mode | Yes, optional and off by default (updated 29 Oct 2026); Kid Mode never shows who's buying |
 | Group gifts | One Organiser buys and collects money outside the app; the app tracks pledges |
 | Kid Mode | Search and circle only; voice search essential; pictures and big buttons |
 | Moderation | Private-to-list first; auto checks plus human review before going public |

@@ -64,7 +64,7 @@ export default function SearchScreen() {
                   stars={list.starsFor(outcome.product.id)}
                   onTap={list.tap}
                   kid={kid}
-                  covered={list.coveredFor(outcome.product.id)}
+                  listSide={list.listSideFor(outcome.product.id)}
                   hidePrice={list.hidePrices}
                 />
                 <View style={styles.gridSpacer} />
@@ -88,7 +88,7 @@ export default function SearchScreen() {
                     stars={list.starsFor(product.id)}
                     onTap={list.tap}
                     kid={kid}
-                    covered={list.coveredFor(product.id)}
+                    listSide={list.listSideFor(product.id)}
                     hidePrice={list.hidePrices}
                   />
                 ))}

@@ -57,10 +57,13 @@ export type AgeBand = '3-5' | '6-8' | '9-12';
 export type Buyers = 'just-me' | 'partner' | 'family';
 
 /**
- * What the list owner and Circler can see about purchases.
- * `hide-all`: nothing. `taken-care-of`: that someone has it covered, never who.
+ * How much the list side sees of the buying. Surprise is optional:
+ * `off`: the list owner sees who's claimed and bought what, and can claim too.
+ * `taken-care-of`: the owner and child see that something is covered, never who.
+ * `hide-all`: they see nothing at all.
+ * Kid Mode never shows who is buying, whatever this says.
  */
-export type SurpriseMode = 'hide-all' | 'taken-care-of';
+export type SurpriseMode = 'off' | 'taken-care-of' | 'hide-all';
 
 export interface ListSettings {
   title: string;

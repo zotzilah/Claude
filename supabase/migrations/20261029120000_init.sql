@@ -5,8 +5,10 @@
 --   * Givers join a list through its share link, usually as anonymous Supabase users (no account).
 --     They read the wishes, and change claims and pledges ONLY through the functions below,
 --     which apply the same rules as mobile/src/domain/claims.ts.
---   * Surprise mode: owners can never read claims, givers or pledges. covered_products()
---     tells them, at most, which items are "taken care of", and nothing if they chose to hide it.
+--   * Surprise mode is optional (settings.surpriseMode). With it OFF (the default), owners
+--     see who claimed and bought what, and may join their own list as a giver. With it ON,
+--     owners can't read claims, givers or pledges at all (even if they joined earlier):
+--     covered_products() tells them at most which items are "taken care of", or nothing.
 --   * The waitlist accepts sign-ups from anyone and can't be read from outside.
 
 create extension if not exists pgcrypto with schema extensions;
@@ -122,6 +124,24 @@ language sql stable security definer set search_path = '' as $$
   select exists (select 1 from public.givers where list_id = p_list and user_id = auth.uid());
 $$;
 
+-- Surprise mode is off unless the owner turned it on.
+create function public.surprise_off(p_list uuid) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select coalesce((select settings ->> 'surpriseMode' from public.lists where id = p_list), 'off') = 'off';
+$$;
+
+-- A giver who may act on claims: any giver, except the owner while surprise is on.
+create function public.acts_as_giver(p_list uuid) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select public.is_list_giver(p_list) and (not public.is_list_owner(p_list) or public.surprise_off(p_list));
+$$;
+
+-- Who may see the buying side (claims, givers, group gifts, pledges).
+create function public.sees_buying(p_list uuid) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select public.acts_as_giver(p_list) or (public.is_list_owner(p_list) and public.surprise_off(p_list));
+$$;
+
 create function public.touch_updated_at() returns trigger
 language plpgsql set search_path = '' as $$
 begin
@@ -163,21 +183,21 @@ create policy products_owner_all on public.custom_products for all to authentica
 create policy products_giver_read on public.custom_products for select to authenticated
   using (public.is_list_giver(list_id));
 
--- Givers see each other (names on claims); nobody else does, owners included.
+-- Givers see each other (names on claims), and so does the owner when surprise is off.
 -- Joining goes through join_list(); leaving deletes your own row.
 create policy givers_read on public.givers for select to authenticated
-  using (public.is_list_giver(list_id));
+  using (public.sees_buying(list_id));
 create policy givers_leave on public.givers for delete to authenticated
   using (user_id = auth.uid());
 
--- Claims, group gifts and pledges: givers of the list may read; all writes go through
--- the functions below. There is deliberately no owner policy: that's surprise mode.
-create policy claims_giver_read on public.claims for select to authenticated
-  using (public.is_list_giver(list_id));
-create policy group_gifts_giver_read on public.group_gifts for select to authenticated
-  using (public.is_list_giver(list_id));
-create policy pledges_giver_read on public.pledges for select to authenticated
-  using (public.is_list_giver(list_id));
+-- Claims, group gifts and pledges: readable by givers, and by the owner only while surprise
+-- is off. All writes go through the functions below.
+create policy claims_read on public.claims for select to authenticated
+  using (public.sees_buying(list_id));
+create policy group_gifts_read on public.group_gifts for select to authenticated
+  using (public.sees_buying(list_id));
+create policy pledges_read on public.pledges for select to authenticated
+  using (public.sees_buying(list_id));
 
 -- Waitlist: anyone may add themselves; nobody may read it through the API.
 create policy waitlist_signup on public.waitlist for insert to anon, authenticated
@@ -208,8 +228,8 @@ begin
   if auth.uid() is null then raise exception 'not-signed-in'; end if;
   select id, owner_id into v_list, v_owner from public.lists where share_token = p_share_token;
   if v_list is null then raise exception 'list-not-found'; end if;
-  -- Surprise mode: the list owner can't join as a giver to peek at claims.
-  if v_owner = auth.uid() then raise exception 'owner-cannot-give'; end if;
+  -- With surprise on, the owner can't join as a giver to peek at claims.
+  if v_owner = auth.uid() and not public.surprise_off(v_list) then raise exception 'owner-cannot-give'; end if;
   insert into public.givers (list_id, user_id, display_name) values (v_list, auth.uid(), v_name)
   on conflict (list_id, user_id) do update set display_name = excluded.display_name;
   return v_list;
@@ -223,7 +243,7 @@ language plpgsql security definer set search_path = '' as $$
 declare
   v_claim public.claims;
 begin
-  if not public.is_list_giver(p_list) then raise exception 'not-a-giver'; end if;
+  if not public.acts_as_giver(p_list) then raise exception 'not-a-giver'; end if;
   if not exists (select 1 from public.circle_marks where list_id = p_list and product_id = p_product) then
     raise exception 'not-on-list';
   end if;
@@ -244,6 +264,7 @@ language plpgsql security definer set search_path = '' as $$
 declare
   v_claim public.claims;
 begin
+  if not public.acts_as_giver(p_list) then raise exception 'not-a-giver'; end if;
   select * into v_claim from public.claims
    where list_id = p_list and product_id = p_product
      and (status = 'bought' or held_until > now());
@@ -261,6 +282,7 @@ language plpgsql security definer set search_path = '' as $$
 declare
   v_giver uuid;
 begin
+  if not public.acts_as_giver(p_list) then raise exception 'not-a-giver'; end if;
   select giver_id into v_giver from public.claims
    where list_id = p_list and product_id = p_product
      and (status = 'bought' or held_until > now());
@@ -273,7 +295,7 @@ $$;
 create function public.start_group_gift(p_list uuid, p_product text) returns void
 language plpgsql security definer set search_path = '' as $$
 begin
-  if not public.is_list_giver(p_list) then raise exception 'not-a-giver'; end if;
+  if not public.acts_as_giver(p_list) then raise exception 'not-a-giver'; end if;
   if not exists (select 1 from public.circle_marks where list_id = p_list and product_id = p_product) then
     raise exception 'not-on-list';
   end if;
@@ -288,7 +310,7 @@ $$;
 create function public.pledge(p_list uuid, p_product text, p_amount_minor integer) returns void
 language plpgsql security definer set search_path = '' as $$
 begin
-  if not public.is_list_giver(p_list) then raise exception 'not-a-giver'; end if;
+  if not public.acts_as_giver(p_list) then raise exception 'not-a-giver'; end if;
   if not exists (select 1 from public.group_gifts where list_id = p_list and product_id = p_product) then
     raise exception 'no-group-gift';
   end if;
@@ -304,8 +326,9 @@ begin
 end;
 $$;
 
--- What the list owner may know (brief §7.3): which wishes are "taken care of", never who.
--- Returns nothing at all when the owner chose to hide everything.
+-- Which wishes are covered, for the owner's catalogue. With surprise on ("taken care of")
+-- this is all they learn; with "hide everything" it returns nothing. (With surprise off
+-- the owner can read claims directly too.)
 create function public.covered_products(p_list uuid) returns setof text
 language sql stable security definer set search_path = '' as $$
   select c.product_id
@@ -313,18 +336,20 @@ language sql stable security definer set search_path = '' as $$
     join public.lists l on l.id = c.list_id
    where c.list_id = p_list
      and l.owner_id = auth.uid()
-     and coalesce(l.settings ->> 'surpriseMode', 'taken-care-of') = 'taken-care-of'
+     and coalesce(l.settings ->> 'surpriseMode', 'off') in ('off', 'taken-care-of')
      and (c.status = 'bought' or c.held_until > now());
 $$;
 
 -- Functions are executable by PUBLIC by default; only signed-in users may call these.
 revoke execute on function
-  public.is_list_owner(uuid), public.is_list_giver(uuid), public.join_list(text, text),
+  public.is_list_owner(uuid), public.is_list_giver(uuid), public.surprise_off(uuid), public.acts_as_giver(uuid),
+  public.sees_buying(uuid), public.join_list(text, text),
   public.claim_item(uuid, text), public.mark_bought(uuid, text), public.release_claim(uuid, text),
   public.start_group_gift(uuid, text), public.pledge(uuid, text, integer), public.covered_products(uuid)
   from public, anon;
 grant execute on function
-  public.is_list_owner(uuid), public.is_list_giver(uuid), public.join_list(text, text),
+  public.is_list_owner(uuid), public.is_list_giver(uuid), public.surprise_off(uuid), public.acts_as_giver(uuid),
+  public.sees_buying(uuid), public.join_list(text, text),
   public.claim_item(uuid, text), public.mark_bought(uuid, text), public.release_claim(uuid, text),
   public.start_group_gift(uuid, text), public.pledge(uuid, text, integer), public.covered_products(uuid)
   to authenticated;

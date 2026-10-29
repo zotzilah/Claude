@@ -5,13 +5,13 @@ The database behind shared lists, live claims and the waitlist. Issue #13.
 ## What's here
 
 - `migrations/`: the schema, its security rules and the Giver functions
-- `tests/`: 45 checks that sign in as the parent, Nan, Dave, a stranger and a signed-out visitor, and prove each can only do what they should. That includes **surprise mode**: the list owner can never read claims, givers or pledges.
+- `tests/`: 53 checks that sign in as the parent, Nan, Dave, a stranger and a signed-out visitor, and prove each can only do what they should. That includes **optional surprise mode**: when it's on, the list owner can't read claims, givers or pledges, and when it's off they can see everything and claim too.
 
 ## How it fits together
 
 | Who | How they sign in | What they can do |
 |---|---|---|
-| **Parent** (list owner) | Email sign-in | Everything on their own lists. Can never read claims, givers or pledges. `covered_products()` tells them at most that an item is "taken care of", and nothing if they chose "hide everything". |
+| **Parent** (list owner) | Email sign-in | Everything on their own lists. **Surprise off (the default):** they also see who's claimed and bought what, and can join as a giver. **Surprise on:** they can't read claims, givers or pledges (even if they joined earlier). `covered_products()` tells them at most "taken care of", or nothing with "hide everything". |
 | **Giver** (Nan, Dave…) | Anonymous: no account, just the share link and a name | Read the wishes. Claim, buy, release and pledge, but only through the checked functions (`claim_item`, `mark_bought`, `release_claim`, `start_group_gift`, `pledge`). |
 | **Website visitor** | Not signed in | Add themselves to the waitlist. Nothing else. |
 

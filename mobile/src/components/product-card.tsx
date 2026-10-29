@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 
 import { playSfx } from '@/audio/sfx';
+import type { ListSideView } from '@/domain/claims';
 import type { Product, Stars } from '@/domain/types';
 import { formatMoney } from '@/domain/wishlist';
 import { colors, fonts, space } from '@/theme/tokens';
@@ -17,15 +18,23 @@ interface Props {
   onTap: (productId: string) => void;
   /** Kid Mode hides the retailer name. */
   kid?: boolean;
-  /** Someone has this covered (surprise mode shows that much, never who). */
-  covered?: boolean;
+  /** What the list side may know about who's buying this (respects surprise mode). */
+  listSide?: ListSideView | null;
   /** Kid Mode for younger children: no price sticker. */
   hidePrice?: boolean;
 }
 
+function stampFor(view: ListSideView | null): { label: string; claimed: boolean } | null {
+  if (!view) return null;
+  if (view.kind === 'covered') return { label: 'TAKEN CARE OF ✓', claimed: false };
+  if (view.kind === 'bought') return { label: `BOUGHT ✓ ${view.by.toUpperCase()}`, claimed: false };
+  return { label: `CLAIMED · ${view.by.toUpperCase()}`, claimed: true };
+}
+
 const STAR_WORDS = { 1: 'would like', 2: 'really want', 3: 'the big one' } as const;
 
-export function ProductCard({ product, stars, onTap, kid = false, covered = false, hidePrice = false }: Props) {
+export function ProductCard({ product, stars, onTap, kid = false, listSide = null, hidePrice = false }: Props) {
+  const stamp = stampFor(listSide);
   const [size, setSize] = useState({ width: 0, height: 0 });
   // Only a circle drawn by a tap on this card animates; circles shown on page load just appear.
   const [justCircled, setJustCircled] = useState(false);
@@ -58,7 +67,7 @@ export function ProductCard({ product, stars, onTap, kid = false, covered = fals
           : `${product.title}, ${formatMoney(product.priceMinor, product.currency)}, catalogue number ${product.catalogueNo}`
       }
       accessibilityState={{ selected: stars !== null }}
-      accessibilityValue={covered ? { text: 'Taken care of' } : undefined}
+      accessibilityValue={stamp ? { text: stamp.label } : undefined}
       accessibilityHint={stars === null ? 'Circles this item' : `Circled, ${STAR_WORDS[stars]}. Tap to change.`}
     >
       <View style={styles.photo}>
@@ -67,7 +76,7 @@ export function ProductCard({ product, stars, onTap, kid = false, covered = fals
         ) : (
           <Text style={styles.emoji}>{product.emoji}</Text>
         )}
-        {covered && <Text style={styles.covered}>TAKEN CARE OF ✓</Text>}
+        {stamp && <Text style={[styles.covered, stamp.claimed && styles.claimedStamp]}>{stamp.label}</Text>}
       </View>
       <Text style={styles.cno}>{product.catalogueNo || 'YOUR FIND'}</Text>
       <Text style={styles.title} numberOfLines={2}>
@@ -115,7 +124,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     paddingHorizontal: 4,
     paddingVertical: 1,
+    maxWidth: '92%',
   },
+  claimedStamp: { borderColor: '#b07d00', color: '#8a6200' },
   cno: { fontFamily: fonts.display, fontSize: 12.5, color: colors.blue, marginTop: 6, letterSpacing: 0.4 },
   title: { fontFamily: fonts.bodySemi, fontSize: 14, lineHeight: 16, color: colors.ink, marginTop: 2, minHeight: 32 },
   retailer: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft, marginTop: 1 },
