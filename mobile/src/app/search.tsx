@@ -1,23 +1,71 @@
-import { router } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ProductCard } from '@/components/product-card';
-import { search } from '@/domain/search';
-import { useStrings } from '@/state/locale';
+import { search, type SearchOutcome } from '@/domain/search';
+import { bestGuess } from '@/domain/voice';
+import { deviceLocale, useStrings } from '@/state/locale';
+import { listen, voiceAvailable, type Listening, type VoiceError } from '@/state/voice';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
-/** Search by name or catalogue number. Bigger and simpler in Kid Mode. */
+const found = (outcome: SearchOutcome) =>
+  outcome.kind === 'results' ? outcome.results.length : outcome.kind === 'catalogue-number' && outcome.product ? 1 : 0;
+
+/**
+ * Search by name or catalogue number, or by saying it (brief §6: voice search is
+ * essential for kids). Bigger and simpler in Kid Mode. `?voice=1` starts listening
+ * straight away, for the mic on the Kid Mode home screen.
+ */
 export default function SearchScreen() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
   const kid = list.kidMode;
+  const { voice } = useLocalSearchParams<{ voice?: string }>();
   const [query, setQuery] = useState('');
+  const [listening, setListening] = useState(false);
+  const [voiceError, setVoiceError] = useState<VoiceError | null>(null);
+  const session = useRef<Listening | null>(null);
   const products = useMemo(() => Object.values(list.products), [list.products]);
   const outcome = useMemo(() => search(query, products, list.pages), [query, products, list.pages]);
+  const canListen = voiceAvailable();
+
+  const startListening = () => {
+    session.current?.stop();
+    setVoiceError(null);
+    const started = listen(
+      {
+        onResult: (alternatives) => {
+          const guess = bestGuess(alternatives, (q) => found(search(q, products, list.pages)));
+          if (guess) setQuery(guess);
+          else setVoiceError('no-speech');
+        },
+        onError: setVoiceError,
+        onEnd: () => {
+          setListening(false);
+          session.current = null;
+        },
+      },
+      deviceLocale.tag,
+    );
+    session.current = started;
+    setListening(started !== null);
+  };
+
+  // Start listening when we arrive from the Kid Mode mic, and stop when leaving.
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (voice === '1' && canListen && !autoStarted.current) {
+      autoStarted.current = true;
+      startListening();
+    }
+    return () => session.current?.stop();
+    // startListening is recreated each render; this should run once on arrival.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const close = () => (router.canGoBack() ? router.back() : router.replace(kid ? '/kid' : '/'));
 
@@ -28,17 +76,33 @@ export default function SearchScreen() {
           <Text style={[styles.backText, kid && styles.backTextKid]}>◀</Text>
         </Pressable>
         <TextInput
-          value={query}
+          value={listening ? '' : query}
           onChangeText={setQuery}
-          autoFocus
-          placeholder={kid ? t.search.placeholderKid : t.search.placeholder}
+          autoFocus={voice !== '1'}
+          placeholder={listening ? t.search.listening : kid ? t.search.placeholderKid : t.search.placeholder}
           placeholderTextColor={colors.inkSoft}
           returnKeyType="search"
           autoCorrect={false}
           style={[styles.input, kid && styles.inputKid]}
           accessibilityLabel={t.common.search}
         />
+        {canListen && (
+          <Pressable
+            onPress={() => (listening ? session.current?.stop() : startListening())}
+            accessibilityRole="button"
+            accessibilityLabel={listening ? t.search.stopListening : t.search.voiceA11y}
+            accessibilityState={{ busy: listening }}
+            style={[styles.mic, kid && styles.micKid, listening && styles.micOn]}
+          >
+            <Text style={[styles.micIcon, kid && styles.micIconKid]}>{t.search.voice}</Text>
+          </Pressable>
+        )}
       </View>
+      {voiceError && (
+        <Text style={[styles.voiceError, kid && styles.messageKid]} accessibilityLiveRegion="assertive">
+          {voiceError === 'denied' ? t.search.voiceDenied : t.search.voiceFailed}
+        </Text>
+      )}
 
       <ScrollView contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + space.xl }]} keyboardShouldPersistTaps="handled">
         {outcome.kind === 'empty' && (
@@ -123,6 +187,19 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: colors.ink,
   },
+  mic: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.paper,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  micKid: { width: 64, height: 64, borderRadius: 32, borderWidth: 3, borderColor: colors.ink },
+  micOn: { backgroundColor: colors.yellow, borderWidth: 3, borderColor: colors.red },
+  micIcon: { fontSize: 22 },
+  micIconKid: { fontSize: 32 },
+  voiceError: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.redDeep, paddingHorizontal: 14, paddingTop: space.sm },
   inputKid: { fontFamily: fonts.display, fontSize: 22, paddingVertical: space.md, borderWidth: 3, borderColor: colors.ink, borderRadius: radius.lg },
   body: { padding: 14, gap: space.md },
   message: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.inkSoft },

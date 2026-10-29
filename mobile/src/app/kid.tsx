@@ -4,12 +4,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
 import { useStrings } from '@/state/locale';
+import { voiceAvailable } from '@/state/voice';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
 /**
- * Kid Mode home: picture tiles and one big button. Leaving needs the parent PIN.
- * Voice search arrives with the first development build.
+ * Kid Mode home: search, a big "say it" mic, picture tiles and one big button.
+ * Leaving needs the parent PIN. The mic shows wherever speech recognition is
+ * available: web browsers today, phones once the development build adds it.
  */
 export default function KidHome() {
   const insets = useSafeAreaInsets();
@@ -44,6 +46,17 @@ export default function KidHome() {
         <Text style={styles.searchIcon}>🔍</Text>
         <Text style={styles.searchText}>{t.kid.find}</Text>
       </Pressable>
+      {voiceAvailable() && (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t.search.voiceA11y}
+          onPress={() => router.navigate({ pathname: '/search', params: { voice: '1' } })}
+          style={({ pressed }) => [styles.bigMic, pressed && { transform: [{ translateY: 3 }] }]}
+        >
+          <Text style={styles.bigMicIcon}>🎤</Text>
+          <Text style={styles.bigMicText}>{t.kid.sayIt}</Text>
+        </Pressable>
+      )}
 
       <View style={styles.tiles}>
         {list.pages.map((c, i) => (
@@ -84,6 +97,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.lg,
     boxShadow: `0 4px 0 ${colors.ink}`,
   },
+  bigMic: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.md,
+    backgroundColor: colors.yellow,
+    borderWidth: 3,
+    borderColor: colors.ink,
+    borderRadius: 18,
+    paddingVertical: space.lg,
+    boxShadow: `0 4px 0 ${colors.ink}`,
+  },
+  bigMicIcon: { fontSize: 34 },
+  bigMicText: { fontFamily: fonts.display, fontSize: 24, color: colors.ink },
   searchIcon: { fontSize: 28 },
   searchText: { fontFamily: fonts.display, fontSize: 22, color: colors.inkSoft },
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },

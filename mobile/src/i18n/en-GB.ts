@@ -126,6 +126,7 @@ export const enGB = {
     grownUpsA11y: 'Grown-ups: leave Kid Mode',
     find: 'Find something…',
     findA11y: 'Find something',
+    sayIt: 'Tap and say it!',
   },
 
   pin: {
@@ -163,6 +164,8 @@ export const enGB = {
     voiceA11y: 'Say it instead of typing',
     listening: 'Listening…',
     voiceFailed: "Sorry, we didn't catch that. Try again, or type it.",
+    voiceDenied: "Biro can't hear you yet. Allow the microphone in your browser's settings, or type instead.",
+    stopListening: 'Stop listening',
   },
 
   add: {
