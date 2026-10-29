@@ -195,5 +195,39 @@ select tests.fails($$insert into public.waitlist (email, age_bands) values ('a@b
 select tests.fails($$select * from public.lists$$, 'permission denied', 'signed-out visitors can''t read lists');
 select tests.fails($$select public.join_list('x', 'y')$$, 'permission denied', 'signed-out visitors can''t call the giver functions');
 
+-- ---------- Account controls (privacy policy promises) ----------
+reset role;
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-00000000000d');
+select tests.fails($$select public.new_share_token('10000000-0000-0000-0000-000000000001')$$,
+  'not-your-list', 'a stranger can''t replace someone else''s share link');
+
+select tests.login('00000000-0000-0000-0000-00000000000a');
+select public.new_share_token('10000000-0000-0000-0000-000000000001') as fresh_token \gset
+select tests.eq((select share_token from public.lists where id = '10000000-0000-0000-0000-000000000001'), :'fresh_token',
+  'the owner can make a new share link');
+select tests.eq((:'fresh_token')::text <> (:'token')::text, true, 'the new link is different');
+
+select tests.login('00000000-0000-0000-0000-00000000000d');
+select tests.fails(format('select public.join_list(%L, %L)', :'token', 'Late Larry'), 'list-not-found',
+  'the old link stops working');
+select tests.eq(public.join_list(:'fresh_token', 'Larry') is not null, true, 'the new link works');
+
+select tests.login('00000000-0000-0000-0000-00000000000b');
+select tests.eq((select count(*) from public.circle_marks)::int > 0, true, 'givers who joined earlier keep access');
+
+-- Deleting an account removes the person and every list they own.
+select tests.login('00000000-0000-0000-0000-00000000000a');
+select public.delete_my_account();
+reset role;
+select tests.eq((select count(*) from auth.users where id = '00000000-0000-0000-0000-00000000000a')::int, 0,
+  'delete my account removes the account');
+select tests.eq((select count(*) from public.lists)::int, 0, 'and every list it owned');
+select tests.eq((select count(*) from public.claims)::int, 0, 'and everything on those lists');
+
+set role anon;
+select set_config('request.jwt.claims', '', false);
+select tests.fails($$select public.delete_my_account()$$, 'permission denied', 'signed-out visitors can''t call it');
+
 reset role;
 select 'ALL RULE TESTS PASSED' as result;

@@ -7,6 +7,7 @@
  * live with the catalogue data instead.
  */
 import { possessive, type SetupProblem } from '../domain/settings';
+import type { SignInError } from '../domain/sign-in';
 import type { Template } from '../domain/types';
 
 const plural = (n: number, one: string, many: string) => (n === 1 ? `1 ${one}` : `${n} ${many}`);
@@ -214,6 +215,41 @@ export const enGB = {
     jumpTo: (letter: string) => `Jump to ${letter === '#' ? 'numbers' : letter}`,
     entryA11y: (label: string, ref: string, stars: number | null) =>
       `${label}, ${ref}${stars ? `, circled with ${plural(stars, 'star', 'stars')}` : ''}`,
+  },
+
+  account: {
+    kicker: 'YOUR ACCOUNT',
+    heading: 'Back up and share',
+    link: 'Account ▸',
+    notSetUp:
+      "Accounts aren't switched on yet. Your list is saved on this phone, and nothing leaves it.",
+    why: 'Sign in to keep your list safe if you lose your phone, and to share it with family.',
+    email: 'Your email',
+    emailExample: 'you@example.com',
+    sendCode: 'Email me a code',
+    sending: 'Sending…',
+    badEmail: "That email doesn't look quite right.",
+    codeSent: (email: string) => `We've sent a code to ${email}. It can take a minute to arrive.`,
+    code: 'Code from the email',
+    signIn: 'Sign in',
+    checking: 'Checking…',
+    resend: 'Send a new code',
+    resendIn: (seconds: number) => `New code in ${seconds}s`,
+    differentEmail: 'Use a different email',
+    signedInAs: (email: string) => `Signed in as ${email}`,
+    signOut: 'Sign out',
+    delete: 'Delete my account',
+    deleteWarning:
+      'This deletes your account and every list on it, for everyone you shared it with. It can’t be undone.',
+    deleteConfirm: 'Yes, delete everything',
+    deleted: 'Your account and lists have been deleted.',
+    errors: {
+      'rate-limited': 'Too many tries. Wait a minute, then try again.',
+      'wrong-code': "That code didn't work. It may have run out, so ask for a new one.",
+      offline: "We couldn't reach Biro. Check you're online.",
+      'not-set-up': "Accounts aren't switched on yet.",
+      unknown: 'Something went wrong. Please try again.',
+    } satisfies Record<SignInError, string>,
   },
 
   giver: {

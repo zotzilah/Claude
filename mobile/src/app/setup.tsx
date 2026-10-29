@@ -1,6 +1,6 @@
 import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
@@ -68,6 +68,11 @@ export default function Setup() {
       </View>
 
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
+        {editing && step === 0 && (
+          <Pressable onPress={() => router.navigate('/account')} accessibilityRole="link" hitSlop={8} style={styles.accountLink}>
+            <Text style={styles.accountLinkText}>{t.account.link}</Text>
+          </Pressable>
+        )}
         {step === 0 &&
           templates.map((tpl) => (
             <ChoiceCard key={tpl.key} icon={tpl.icon} label={t.templates.label[tpl.key]} selected={draft.template === tpl.key} onPress={() => set({ template: tpl.key })} />
@@ -279,6 +284,8 @@ function stepProblem(step: number, draft: ListSettings): SetupProblem | null {
 }
 
 const styles = StyleSheet.create({
+  accountLink: { alignSelf: 'flex-end', minHeight: 44, justifyContent: 'center' },
+  accountLinkText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
   screen: { flex: 1, backgroundColor: colors.paper2 },
   head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
   kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, opacity: 0.9 },

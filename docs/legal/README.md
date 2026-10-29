@@ -31,9 +31,9 @@ Change them if you disagree. Each one is marked **(proposed)** in the text.
 
 The policy describes these features. Some don't exist yet, so they're on the to-do list:
 
-- [ ] **Settings → Delete my account.** Needs the backend. Deletes the account and every list.
-- [ ] **Make a new share link.** Replaces `share_token` so the old link stops working.
+- [x] **Settings → Account → Delete my account.** ✅ Built (`mobile/src/app/account.tsx` plus the `delete_my_account` database function). It switches on once Supabase is set up.
+- [ ] **Make a new share link.** The database side is done (`new_share_token`). The button comes with the backend wiring (#13).
 - [ ] **Export my lists.** The local snapshot format (`mobile/src/domain/snapshot.ts`) already covers the content.
-- [ ] Shop links open only outside Kid Mode. ✅ Done.
-- [ ] The PIN is stored hashed, on the device only. ✅ Done.
+- [x] Shop links open only outside Kid Mode. ✅ Done.
+- [x] The PIN is stored hashed, on the device only. ✅ Done.
 - [ ] The retention clean-up job: a scheduled database function that deletes old lists.

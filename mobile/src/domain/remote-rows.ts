@@ -158,11 +158,13 @@ export type ServerError =
   | 'not-a-giver'
   | 'not-on-list'
   | 'no-group-gift'
-  | 'bad-amount';
+  | 'bad-amount'
+  | 'not-your-list';
 
 const SERVER_ERRORS: readonly ServerError[] = [
   'already-claimed', 'not-yours', 'not-claimed', 'not-signed-in', 'list-not-found', 'owner-cannot-give',
   'name-taken', 'not-a-giver', 'not-on-list', 'no-group-gift', 'bad-amount',
+  'not-your-list',
 ];
 
 /** Reads our error code out of a database error message; anything else is 'unknown'. */
@@ -184,5 +186,6 @@ export const SERVER_ERROR_TEXT: Record<ServerError | 'unknown', string> = {
   'not-on-list': "That isn't on the list any more.",
   'no-group-gift': "That isn't a group gift yet.",
   'bad-amount': 'That amount needs to be a positive number.',
+  'not-your-list': 'Only the person who made this list can change that.',
   unknown: 'Something went wrong. Please try again.',
 };
