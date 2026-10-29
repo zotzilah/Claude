@@ -1,6 +1,6 @@
 {
  "asOf": "2026-10-29",
- "status": "beta: prices and links checked through search results on 29 Oct 2026. Prices change: affiliate feeds will keep them current.",
+ "status": "beta: prices and links checked through search results on 29 Oct 2026 (two rounds). Prices change: affiliate feeds will keep them current.",
  "pages": [
   {
    "key": "bricks",
@@ -1174,6 +1174,858 @@
    "url": "https://www.bigjigstoys.co.uk/products/my-first-balance-bike-blue",
    "linkKind": "product",
    "emoji": "🚲",
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "342/0002",
+   "title": "Chad Valley Be U 1000 Pcs Sparkle Box",
+   "brand": "Chad",
+   "priceMinor": 1200,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Chad Valley Be U 1000 Pcs Sparkle Box",
+   "page": "crafts",
+   "ages": "5+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/chad-valley-be-u-1000-pcs-sparkle-box/",
+   "linkKind": "search",
+   "emoji": "✨",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "342/0003",
+   "title": "FabLab Luxury Tie Dye Kit for Kids",
+   "brand": "FabLab",
+   "priceMinor": 1300,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "FabLab Luxury Tie Dye Kit for Kids",
+   "page": "crafts",
+   "ages": "8+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/fablab-luxury-tie-dye-kit-for-kids/",
+   "linkKind": "search",
+   "emoji": "👕",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Price seen around £13"
+  },
+  {
+   "catalogueNo": "342/0004",
+   "title": "Snazaroo Rainbow Face Paint Kit",
+   "brand": "Snazaroo",
+   "priceMinor": 1349,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Snazaroo Rainbow Face Paint Kit",
+   "page": "crafts",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/snazaroo-rainbow-face-paint-kit/",
+   "linkKind": "search",
+   "emoji": "🎭",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "342/0005",
+   "title": "Aquabeads Amazing Play Pack",
+   "brand": "Aquabeads",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Aquabeads Amazing Play Pack",
+   "page": "crafts",
+   "ages": "4+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/aquabeads-amazing-play-pack/",
+   "linkKind": "search",
+   "emoji": "🔵",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "342/0006",
+   "title": "Cra-Z-Art Shimmer N Sparkle Unicorn Rock Art Set",
+   "brand": "Cra-Z-Art",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Cra-Z-Art Shimmer N Sparkle Unicorn Rock Art Set",
+   "page": "crafts",
+   "ages": "6+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/cra-z-art-shimmer-n-sparkle-unicorn-rock-art-set/",
+   "linkKind": "search",
+   "emoji": "🪨",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "342/0007",
+   "title": "Kinetic Sand 5 Sand Type Multipack",
+   "brand": "Kinetic",
+   "priceMinor": 2700,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Kinetic Sand 5 Sand Type Multipack",
+   "page": "crafts",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/kinetic-sand-5-sand-type-multipack/",
+   "linkKind": "search",
+   "emoji": "🏖️",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "342/0008",
+   "title": "Orbeez Challenge Meez Activity Set",
+   "brand": "Orbeez",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Orbeez Challenge Meez Activity Set",
+   "page": "crafts",
+   "ages": "5+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/kids-arts-and-crafts-kits/c:42643/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/orbeez-challenge-meez-activity-set/",
+   "linkKind": "search",
+   "emoji": "🫧",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "105/0002",
+   "title": "Chad Valley PlaySmart Wooden Shape Sorter",
+   "brand": "Chad",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Chad Valley PlaySmart Wooden Shape Sorter",
+   "page": "little",
+   "ages": "12m+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/baby-and-nursery/baby-toys/early-learning-toys/c:29101/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/chad-valley-playsmart-wooden-shape-sorter/",
+   "linkKind": "search",
+   "emoji": "🔷",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "105/0003",
+   "title": "Fisher-Price Laugh & Learn Sit & Steer Driver",
+   "brand": "Fisher-Price",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Fisher-Price Laugh & Learn Sit & Steer Driver",
+   "page": "little",
+   "ages": "6m+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/baby-and-nursery/baby-toys/early-learning-toys/c:29101/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/fisher-price-laugh-learn-sit-steer-driver/",
+   "linkKind": "search",
+   "emoji": "🚗",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "105/0004",
+   "title": "Chad Valley PlaySmart Interactive Magnetic Easel",
+   "brand": "Chad",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Chad Valley PlaySmart Interactive Magnetic Easel",
+   "page": "little",
+   "ages": "1+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/sd/1-to-2-years-toys/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/chad-valley-playsmart-interactive-magnetic-easel/",
+   "linkKind": "search",
+   "emoji": "🖍️",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "105/0005",
+   "title": "Fisher-Price Laugh & Learn 2-in-1 Vacuum",
+   "brand": "Fisher-Price",
+   "priceMinor": 2800,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Fisher-Price Laugh & Learn 2-in-1 Vacuum",
+   "page": "little",
+   "ages": "1+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/baby-and-nursery/baby-toys/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/fisher-price-laugh-learn-2-in-1-vacuum/",
+   "linkKind": "search",
+   "emoji": "🧹",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Seen on offer at £18.48"
+  },
+  {
+   "catalogueNo": "105/0006",
+   "title": "VTech Toot-Toot Drivers Garage",
+   "brand": "VTech",
+   "priceMinor": 3300,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "VTech Toot-Toot Drivers Garage",
+   "page": "little",
+   "ages": "1+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/sd/toot-toot-drivers/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/vtech-toot-toot-drivers-garage/",
+   "linkKind": "search",
+   "emoji": "🚙",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Seen at £33 (was £50)"
+  },
+  {
+   "catalogueNo": "482/0003",
+   "title": "Chad Valley 6ft Outdoor Kids Trampoline with Enclosure",
+   "brand": "Chad",
+   "priceMinor": 9500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Chad Valley 6ft Outdoor Kids Trampoline with Enclosure",
+   "page": "outdoor",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/outdoor-toys-and-activities/trampolines-and-accessories/c:30325/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/chad-valley-6ft-outdoor-kids-trampoline-with-enclosure/",
+   "linkKind": "search",
+   "emoji": "🤸",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "482/0004",
+   "title": "Chad Valley Toddler Trampoline",
+   "brand": "Chad",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Chad Valley Toddler Trampoline",
+   "page": "outdoor",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/outdoor-toys-and-activities/trampolines-and-accessories/c:30325/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/chad-valley-toddler-trampoline/",
+   "linkKind": "search",
+   "emoji": "🦘",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "482/0005",
+   "title": "Sportspower Sport-Pro 8ft Trampoline with Folding Enclosure",
+   "brand": "Sportspower",
+   "priceMinor": 11500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Sportspower Sport-Pro 8ft Trampoline with Folding Enclosure",
+   "page": "outdoor",
+   "ages": "6+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/outdoor-toys-and-activities/trampolines-and-accessories/c:30325/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/sportspower-sport-pro-8ft-trampoline-with-folding-enclosure/",
+   "linkKind": "search",
+   "emoji": "🏕️",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "482/0006",
+   "title": "Micro Scooters 3 in 1 Toddler Scooter",
+   "brand": "Micro",
+   "priceMinor": 11000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Micro Scooters 3 in 1 Toddler Scooter",
+   "page": "outdoor",
+   "ages": "1+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/8697934"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/8697934",
+   "linkKind": "product",
+   "emoji": "🛴",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "527/0003",
+   "title": "Rummikub Classic",
+   "brand": "Rummikub",
+   "priceMinor": 1600,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Rummikub Classic",
+   "page": "games",
+   "ages": "7+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/features/board-games"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/rummikub-classic/",
+   "linkKind": "search",
+   "emoji": "🀄",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "527/0004",
+   "title": "Jenga",
+   "brand": "Jenga",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Jenga",
+   "page": "games",
+   "ages": "6+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/features/board-games"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/jenga/",
+   "linkKind": "search",
+   "emoji": "🪵",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Seen at £10 (was £12)"
+  },
+  {
+   "catalogueNo": "527/0005",
+   "title": "Guess Who?",
+   "brand": "Guess",
+   "priceMinor": 1400,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Guess Who?",
+   "page": "games",
+   "ages": "6+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/features/board-games"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/guess-who/",
+   "linkKind": "search",
+   "emoji": "🕵️",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Price seen £12 to £14"
+  },
+  {
+   "catalogueNo": "527/0006",
+   "title": "Twister",
+   "brand": "Twister",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Twister",
+   "page": "games",
+   "ages": "6+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/features/board-games"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/twister/",
+   "linkKind": "search",
+   "emoji": "🌀",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "527/0007",
+   "title": "Sequence",
+   "brand": "Sequence",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Sequence",
+   "page": "games",
+   "ages": "7+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/features/board-games"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/sequence/",
+   "linkKind": "search",
+   "emoji": "🃏",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "214/0005",
+   "title": "LEGO City Advent Calendar 2026 Santa's Workshop 60510",
+   "brand": "LEGO",
+   "priceMinor": 1800,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "LEGO City Advent Calendar 2026 Santa's Workshop 60510",
+   "page": "bricks",
+   "ages": "5+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/sd/5-to-8-years-toys/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/lego-city-advent-calendar-2026-santa-s-workshop-60510/",
+   "linkKind": "search",
+   "emoji": "📅",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Seen at £18 (was £23)"
+  },
+  {
+   "catalogueNo": "214/0006",
+   "title": "LEGO Star Wars Advent Calendar 2026 75456",
+   "brand": "LEGO",
+   "priceMinor": 2300,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "LEGO Star Wars Advent Calendar 2026 75456",
+   "page": "bricks",
+   "ages": "6+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/sd/5-to-8-years-toys/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/lego-star-wars-advent-calendar-2026-75456/",
+   "linkKind": "search",
+   "emoji": "🌌",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Seen at £23 (was £30)"
+  },
+  {
+   "catalogueNo": "214/0007",
+   "title": "LEGO Technic Monster Jam Grave Digger",
+   "brand": "LEGO",
+   "priceMinor": 2500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "LEGO Technic Monster Jam Grave Digger",
+   "page": "bricks",
+   "ages": "7+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/sd/lego-technic/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/lego-technic-monster-jam-grave-digger/",
+   "linkKind": "search",
+   "emoji": "🚚",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "214/0008",
+   "title": "LEGO Harry Potter Knight Bus",
+   "brand": "LEGO",
+   "priceMinor": 4500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "LEGO Harry Potter Knight Bus",
+   "page": "bricks",
+   "ages": "8+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/lego/c:30379/age-range:child-(5%252D8-years)/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/lego-harry-potter-knight-bus/",
+   "linkKind": "search",
+   "emoji": "🚌",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "287/0004",
+   "title": "Squishmallows 16 Inch Bellamy the Axolotl Alicorn",
+   "brand": "Squishmallows",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Squishmallows 16 Inch Bellamy the Axolotl Alicorn",
+   "page": "soft",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/teddy-bears-and-soft-toys/c:30308/brands:squishmallows/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/squishmallows-16-inch-bellamy-the-axolotl-alicorn/",
+   "linkKind": "search",
+   "emoji": "🦎",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "287/0005",
+   "title": "Squishmallows 20 Inch Arnold Sheepdog",
+   "brand": "Squishmallows",
+   "priceMinor": 3500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Squishmallows 20 Inch Arnold Sheepdog",
+   "page": "soft",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/teddy-bears-and-soft-toys/c:30308/brands:squishmallows/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/squishmallows-20-inch-arnold-sheepdog/",
+   "linkKind": "search",
+   "emoji": "🐕",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Seen on offer from £50"
+  },
+  {
+   "catalogueNo": "287/0006",
+   "title": "Bluey Talking Bluey 13 Inch Plush",
+   "brand": "Bluey",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Bluey Talking Bluey 13 Inch Plush",
+   "page": "soft",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/9541223"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/9541223",
+   "linkKind": "product",
+   "emoji": "🐶",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Price seen £20 to £25"
+  },
+  {
+   "catalogueNo": "287/0007",
+   "title": "Bluey 8 Inch Bingo Soft Toy",
+   "brand": "Bluey",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Bluey 8 Inch Bingo Soft Toy",
+   "page": "soft",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/7814024"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/7814024",
+   "linkKind": "product",
+   "emoji": "🧡",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "287/0008",
+   "title": "Bluey Electronic Cuddle & Care 11 Inch Plush",
+   "brand": "Bluey",
+   "priceMinor": 2500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Bluey Electronic Cuddle & Care 11 Inch Plush",
+   "page": "soft",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/7468559"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/7468559",
+   "linkKind": "product",
+   "emoji": "🍼",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "318/0004",
+   "title": "Yoto Player",
+   "brand": "Yoto",
+   "priceMinor": 9000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Yoto Player",
+   "page": "music",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/4338905"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/4338905",
+   "linkKind": "product",
+   "emoji": "📻",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Story cards sold separately"
+  },
+  {
+   "catalogueNo": "318/0005",
+   "title": "VTech KidiZoom Dual Camera Smart Watch",
+   "brand": "VTech",
+   "priceMinor": 4000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "VTech KidiZoom Dual Camera Smart Watch",
+   "page": "music",
+   "ages": "4+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/8368641"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/8368641",
+   "linkKind": "product",
+   "emoji": "⌚",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Price seen £38 to £48"
+  },
+  {
+   "catalogueNo": "251/0008",
+   "title": "Barbie Dreamhouse",
+   "brand": "Barbie",
+   "priceMinor": 20000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "Barbie Dreamhouse",
+   "page": "dolls",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/product/9022278"
+    }
+   ],
+   "url": "https://www.argos.co.uk/product/9022278",
+   "linkKind": "product",
+   "emoji": "🏡",
+   "linkVerified": true,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)",
+   "checkNote": "Doll sold separately"
+  },
+  {
+   "catalogueNo": "251/0009",
+   "title": "BABY born Emma Doll and Accessories",
+   "brand": "BABY",
+   "priceMinor": 5000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "BABY born Emma Doll and Accessories",
+   "page": "dolls",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/dolls-and-doll-accessories/dolls/c:30381/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/baby-born-emma-doll-and-accessories/",
+   "linkKind": "search",
+   "emoji": "👶",
+   "linkVerified": false,
+   "priceCheckedOn": "2026-10-29",
+   "priceCheckedVia": "search engine results for the retailer site (not the live page)"
+  },
+  {
+   "catalogueNo": "251/0010",
+   "title": "BABY born Magic Boy Lukas Doll 36cm",
+   "brand": "BABY",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "searchPhrase": "BABY born Magic Boy Lukas Doll 36cm",
+   "page": "dolls",
+   "ages": "3+",
+   "reportedOn": "2026-10-29",
+   "sources": [
+    {
+     "name": "Argos listing (via search results)",
+     "url": "https://www.argos.co.uk/browse/toys/dolls-and-doll-accessories/dolls/c:30381/"
+    }
+   ],
+   "url": "https://www.argos.co.uk/search/baby-born-magic-boy-lukas-doll-36cm/",
+   "linkKind": "search",
+   "emoji": "🍼",
+   "linkVerified": false,
    "priceCheckedOn": "2026-10-29",
    "priceCheckedVia": "search engine results for the retailer site (not the live page)"
   }
