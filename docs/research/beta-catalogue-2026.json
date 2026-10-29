@@ -1,0 +1,1094 @@
+{
+  "asOf": "2026-10-29",
+  "status": "draft: prices as published on the reported date; product links not yet verified",
+  "pages": [
+    {
+      "key": "bricks",
+      "title": "Building & Bricks",
+      "familyCode": 214
+    },
+    {
+      "key": "pretend",
+      "title": "Pretend Play & Playsets",
+      "familyCode": 236
+    },
+    {
+      "key": "dolls",
+      "title": "Dolls & Figures",
+      "familyCode": 251
+    },
+    {
+      "key": "interactive",
+      "title": "Interactive Pets & Robots",
+      "familyCode": 268
+    },
+    {
+      "key": "soft",
+      "title": "Soft Toys & Squishies",
+      "familyCode": 287
+    },
+    {
+      "key": "music",
+      "title": "Music, Stories & Gadgets",
+      "familyCode": 318
+    },
+    {
+      "key": "crafts",
+      "title": "Arts & Crafts",
+      "familyCode": 342
+    },
+    {
+      "key": "outdoor",
+      "title": "Outdoor & Ride-ons",
+      "familyCode": 482
+    },
+    {
+      "key": "games",
+      "title": "Games & Family Fun",
+      "familyCode": 527
+    },
+    {
+      "key": "little",
+      "title": "Little Ones (0–3)",
+      "familyCode": 105
+    }
+  ],
+  "products": [
+    {
+      "catalogueNo": "236/0001",
+      "title": "Mini Brands Really Works Vinyl Playset",
+      "brand": "ZURU",
+      "priceMinor": 2000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Mini Brands Really Works Vinyl Playset",
+      "page": "pretend",
+      "ages": "3+",
+      "note": "Also on The Entertainer's list",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "214/0001",
+      "title": "LEGO Donkey Kong Arcade Building Set",
+      "brand": "LEGO",
+      "priceMinor": 15000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "LEGO Donkey Kong Arcade Building Set",
+      "page": "bricks",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "236/0002",
+      "title": "Hot Wheels City Ultimate T-Rex Garage",
+      "brand": "Hot Wheels",
+      "priceMinor": 13000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Hot Wheels City Ultimate T-Rex Garage",
+      "page": "pretend",
+      "ages": null,
+      "note": "Seen at £90 in an Argos sale",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "214/0002",
+      "title": "Chad Valley Alfie and Jo Wooden Train Set",
+      "brand": "Chad Valley",
+      "priceMinor": 1500,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Chad Valley Alfie and Jo Wooden Train Set",
+      "page": "bricks",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "236/0003",
+      "title": "Chad Valley Wooden Classic Kitchen",
+      "brand": "Chad Valley",
+      "priceMinor": 3000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Chad Valley Wooden Classic Kitchen",
+      "page": "pretend",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "318/0001",
+      "title": "Tonies Lite",
+      "brand": "Tonies",
+      "priceMinor": 6000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Tonies Lite",
+      "page": "music",
+      "ages": null,
+      "note": "Also reported as \"Toniebox Lite\"",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "268/0001",
+      "title": "Little Live Pets My Magical Dragon Skye",
+      "brand": "Little Live Pets",
+      "priceMinor": 5500,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Little Live Pets My Magical Dragon Skye",
+      "page": "interactive",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "268/0002",
+      "title": "Primal Hatch Megalodon Hatching Egg Shark Toy",
+      "brand": "Primal Hatch",
+      "priceMinor": 5500,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Primal Hatch Megalodon Hatching Egg Shark Toy",
+      "page": "interactive",
+      "ages": null,
+      "note": "Also on The Entertainer and Hamleys lists",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "318/0002",
+      "title": "VTech Kidi 12-In-1 Guitar Superstar",
+      "brand": "VTech",
+      "priceMinor": 5000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "VTech Kidi 12-In-1 Guitar Superstar",
+      "page": "music",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "318/0003",
+      "title": "Projector Karaoke Machine",
+      "brand": null,
+      "priceMinor": 9000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Projector Karaoke Machine",
+      "page": "music",
+      "ages": null,
+      "note": "Brand not stated",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "214/0003",
+      "title": "LEGO Pokémon SMART Play: Sprigatito, Fuecoco and Quaxly Battle",
+      "brand": "LEGO",
+      "priceMinor": 3000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "LEGO Pokémon SMART Play: Sprigatito, Fuecoco and Quaxly Battle",
+      "page": "bricks",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "268/0003",
+      "title": "Armosaurs Armor-Up Dinosaur T-Rex (Ajax)",
+      "brand": "Armosaurs",
+      "priceMinor": 4500,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Armosaurs Armor-Up Dinosaur T-Rex (Ajax)",
+      "page": "interactive",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "342/0001",
+      "title": "Giftie Badge Maker",
+      "brand": "Giftie",
+      "priceMinor": 3500,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Giftie Badge Maker",
+      "page": "crafts",
+      "ages": null,
+      "note": "Smyths: £34.99",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "236/0004",
+      "title": "Jupiter Workshops Four Storey Wooden Doll House",
+      "brand": "Jupiter Workshops",
+      "priceMinor": 15000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Jupiter Workshops Four Storey Wooden Doll House",
+      "page": "pretend",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "287/0001",
+      "title": "Flutter Monster 40cm Soft Toy",
+      "brand": null,
+      "priceMinor": 2000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Flutter Monster 40cm Soft Toy",
+      "page": "soft",
+      "ages": null,
+      "note": "Argos exclusive",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "287/0002",
+      "title": "Toy Story 5 Bullseye Jumbo Plush",
+      "brand": "Disney Pixar",
+      "priceMinor": 5000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Toy Story 5 Bullseye Jumbo Plush",
+      "page": "soft",
+      "ages": null,
+      "note": "Argos exclusive",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0001",
+      "title": "KPop Demon Hunters Golden Singing Doll",
+      "brand": null,
+      "priceMinor": 3500,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "KPop Demon Hunters Golden Singing Doll",
+      "page": "dolls",
+      "ages": null,
+      "note": "£35 each",
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "236/0005",
+      "title": "PAW Patrol The Dino Movie Megasaurus Dino Vehicle",
+      "brand": "PAW Patrol",
+      "priceMinor": 6000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "PAW Patrol The Dino Movie Megasaurus Dino Vehicle",
+      "page": "pretend",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "482/0001",
+      "title": "Peppa Pig Ready Pedal Peppa",
+      "brand": "Peppa Pig",
+      "priceMinor": 3000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Peppa Pig Ready Pedal Peppa",
+      "page": "outdoor",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "527/0001",
+      "title": "Minions & Monsters Fart Blaster Pro",
+      "brand": "Minions",
+      "priceMinor": 3000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Minions & Monsters Fart Blaster Pro",
+      "page": "games",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-09-01",
+      "sources": [
+        {
+          "name": "Sainsbury's press release",
+          "url": "https://corporate.sainsburys.co.uk/news/press-releases/argos-reveals-top-20-toys-set-to-rule-christmas-wishlists-for-2026/"
+        },
+        {
+          "name": "Enfield Independent",
+          "url": "https://www.enfieldindependent.co.uk/news/national/uk-today/26519281.argos-must-have-toys-children-will-want-christmas-2026/"
+        },
+        {
+          "name": "Brit Brief",
+          "url": "https://britbrief.co.uk/entertainment/awards/argos-top-toys-2026-full-list-of-20-with-hot-wheels-and-lego.html"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/argos-reveals-the-20-toys-set-to-be-top-of-kids-christmas-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "268/0004",
+      "title": "Pokémon Battle Action Pikachu",
+      "brand": "Pokémon",
+      "priceMinor": 5000,
+      "currency": "GBP",
+      "retailer": "The Entertainer",
+      "searchPhrase": "Pokémon Battle Action Pikachu",
+      "page": "interactive",
+      "ages": "4+",
+      "note": "Touch sensors, light-up tail",
+      "reportedOn": "2026-09",
+      "sources": [
+        {
+          "name": "Toy World Magazine",
+          "url": "https://toyworldmag.co.uk/breaking-news-the-entertainer-reveals-its-top-10-toys-for-christmas-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/the-10-toys-the-entertainer-predicts-will-be-on-christmas-wish-lists-in-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "287/0003",
+      "title": "Keycraft Big Squij",
+      "brand": "Keycraft",
+      "priceMinor": 999,
+      "currency": "GBP",
+      "retailer": "Hamleys",
+      "searchPhrase": "Keycraft Big Squij",
+      "page": "soft",
+      "ages": "3+",
+      "note": "New designs through to December",
+      "reportedOn": "2026-10",
+      "sources": [
+        {
+          "name": "Hamleys",
+          "url": "https://www.hamleys.com/hamleys-festive-15-toys"
+        },
+        {
+          "name": "Time Out",
+          "url": "https://www.timeout.com/london/news/hamleys-top-15-toys-christmas-2026-101426"
+        },
+        {
+          "name": "The Toy Book",
+          "url": "https://toybook.com/hamleys-festive-15-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/hamleys-reveals-its-top-15-toys-for-christmas-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0002",
+      "title": "Doctor Doom Light-Up Action Figure",
+      "brand": "Marvel",
+      "priceMinor": 3000,
+      "currency": "GBP",
+      "retailer": "Hamleys",
+      "searchPhrase": "Doctor Doom Light-Up Action Figure",
+      "page": "dolls",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-10",
+      "sources": [
+        {
+          "name": "Hamleys",
+          "url": "https://www.hamleys.com/hamleys-festive-15-toys"
+        },
+        {
+          "name": "Time Out",
+          "url": "https://www.timeout.com/london/news/hamleys-top-15-toys-christmas-2026-101426"
+        },
+        {
+          "name": "The Toy Book",
+          "url": "https://toybook.com/hamleys-festive-15-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/hamleys-reveals-its-top-15-toys-for-christmas-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0003",
+      "title": "Hatsune Miku Figure",
+      "brand": null,
+      "priceMinor": 2600,
+      "currency": "GBP",
+      "retailer": "Hamleys",
+      "searchPhrase": "Hatsune Miku Figure",
+      "page": "dolls",
+      "ages": null,
+      "note": "Sources disagree: £26–£28",
+      "reportedOn": "2026-10",
+      "sources": [
+        {
+          "name": "Hamleys",
+          "url": "https://www.hamleys.com/hamleys-festive-15-toys"
+        },
+        {
+          "name": "Time Out",
+          "url": "https://www.timeout.com/london/news/hamleys-top-15-toys-christmas-2026-101426"
+        },
+        {
+          "name": "The Toy Book",
+          "url": "https://toybook.com/hamleys-festive-15-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/hamleys-reveals-its-top-15-toys-for-christmas-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "268/0005",
+      "title": "Thunder Unicorn Remote-Controlled",
+      "brand": "Buzz Retail",
+      "priceMinor": 7500,
+      "currency": "GBP",
+      "retailer": "Hamleys",
+      "searchPhrase": "Thunder Unicorn Remote-Controlled",
+      "page": "interactive",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-10",
+      "sources": [
+        {
+          "name": "Hamleys",
+          "url": "https://www.hamleys.com/hamleys-festive-15-toys"
+        },
+        {
+          "name": "Time Out",
+          "url": "https://www.timeout.com/london/news/hamleys-top-15-toys-christmas-2026-101426"
+        },
+        {
+          "name": "The Toy Book",
+          "url": "https://toybook.com/hamleys-festive-15-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/hamleys-reveals-its-top-15-toys-for-christmas-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "236/0006",
+      "title": "Play-Doh Stamp and Spin Pizza Playset",
+      "brand": "Play-Doh",
+      "priceMinor": 2000,
+      "currency": "GBP",
+      "retailer": "Hamleys",
+      "searchPhrase": "Play-Doh Stamp and Spin Pizza Playset",
+      "page": "pretend",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-10",
+      "sources": [
+        {
+          "name": "Hamleys",
+          "url": "https://www.hamleys.com/hamleys-festive-15-toys"
+        },
+        {
+          "name": "Time Out",
+          "url": "https://www.timeout.com/london/news/hamleys-top-15-toys-christmas-2026-101426"
+        },
+        {
+          "name": "The Toy Book",
+          "url": "https://toybook.com/hamleys-festive-15-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/hamleys-reveals-its-top-15-toys-for-christmas-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "527/0002",
+      "title": "Articulate: Under Pressure",
+      "brand": "Articulate",
+      "priceMinor": 2500,
+      "currency": "GBP",
+      "retailer": "Hamleys",
+      "searchPhrase": "Articulate: Under Pressure",
+      "page": "games",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026-10",
+      "sources": [
+        {
+          "name": "Hamleys",
+          "url": "https://www.hamleys.com/hamleys-festive-15-toys"
+        },
+        {
+          "name": "Time Out",
+          "url": "https://www.timeout.com/london/news/hamleys-top-15-toys-christmas-2026-101426"
+        },
+        {
+          "name": "The Toy Book",
+          "url": "https://toybook.com/hamleys-festive-15-2026/"
+        },
+        {
+          "name": "MadeForMums",
+          "url": "https://www.madeformums.com/news/product-news/hamleys-reveals-its-top-15-toys-for-christmas-2026/"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0004",
+      "title": "Momiji Sugar Plum Wood Message Doll",
+      "brand": "Momiji",
+      "priceMinor": 1499,
+      "currency": "GBP",
+      "retailer": "John Lewis",
+      "searchPhrase": "Momiji Sugar Plum Wood Message Doll",
+      "page": "dolls",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0005",
+      "title": "K-Pop Demon Hunters Rumi Singing Doll",
+      "brand": null,
+      "priceMinor": 3499,
+      "currency": "GBP",
+      "retailer": "John Lewis",
+      "searchPhrase": "K-Pop Demon Hunters Rumi Singing Doll",
+      "page": "dolls",
+      "ages": null,
+      "note": "Out of stock when reported",
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "236/0007",
+      "title": "Le Toy Van Paddington Doll's House",
+      "brand": "Le Toy Van",
+      "priceMinor": 30000,
+      "currency": "GBP",
+      "retailer": "John Lewis",
+      "searchPhrase": "Le Toy Van Paddington Doll's House",
+      "page": "pretend",
+      "ages": null,
+      "note": "\"Coming soon\" when reported",
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "214/0004",
+      "title": "CONNETIX Ball Run Launcher Pack Set",
+      "brand": "CONNETIX",
+      "priceMinor": 4500,
+      "currency": "GBP",
+      "retailer": "John Lewis",
+      "searchPhrase": "CONNETIX Ball Run Launcher Pack Set",
+      "page": "bricks",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "268/0006",
+      "title": "Real FX Pikachu Puppetronic",
+      "brand": "Real FX",
+      "priceMinor": 5999,
+      "currency": "GBP",
+      "retailer": "Smyths",
+      "searchPhrase": "Real FX Pikachu Puppetronic",
+      "page": "interactive",
+      "ages": null,
+      "note": "Down from £69.99",
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0006",
+      "title": "Toy Story 5 Ultimate Action Buzz Lightyear",
+      "brand": "Disney Pixar",
+      "priceMinor": 5999,
+      "currency": "GBP",
+      "retailer": "Smyths",
+      "searchPhrase": "Toy Story 5 Ultimate Action Buzz Lightyear",
+      "page": "dolls",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "251/0007",
+      "title": "Toy Story 5 Woody",
+      "brand": "Disney Pixar",
+      "priceMinor": 4999,
+      "currency": "GBP",
+      "retailer": "Smyths",
+      "searchPhrase": "Toy Story 5 Woody",
+      "page": "dolls",
+      "ages": null,
+      "note": null,
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "105/0001",
+      "title": "Chad Valley Stacking Ball Drop",
+      "brand": "Chad Valley",
+      "priceMinor": 1000,
+      "currency": "GBP",
+      "retailer": "Argos",
+      "searchPhrase": "Chad Valley Stacking Ball Drop",
+      "page": "little",
+      "ages": null,
+      "note": "Which?'s cheaper alternative",
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Which?",
+          "url": "https://www.which.co.uk/news/article/toy-trends-for-2026-allFx4G2N0mT"
+        }
+      ],
+      "linkVerified": false
+    },
+    {
+      "catalogueNo": "482/0002",
+      "title": "Bigjigs Wooden Balance Bike",
+      "brand": "Bigjigs Toys",
+      "priceMinor": 6199,
+      "currency": "GBP",
+      "retailer": "Bigjigs Toys",
+      "searchPhrase": "Bigjigs Wooden Balance Bike",
+      "page": "outdoor",
+      "ages": "3+",
+      "note": "From the brand's own blog",
+      "reportedOn": "2026",
+      "sources": [
+        {
+          "name": "Bigjigs Toys blog",
+          "url": "https://www.bigjigstoys.co.uk/blog/spring-is-here"
+        }
+      ],
+      "linkVerified": false
+    }
+  ]
+}
