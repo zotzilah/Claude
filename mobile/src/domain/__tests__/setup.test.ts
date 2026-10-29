@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { defaultSettings, finishSettings, parseMoneyInput, setupProblem } from '../settings';
+import { defaultKidPricesShown, defaultSettings, finishSettings, parseMoneyInput, setupProblem } from '../settings';
+import { parseSnapshot } from '../snapshot';
 
 describe('parseMoneyInput', () => {
   it.each([
@@ -40,5 +41,26 @@ describe('setup', () => {
     expect(setupProblem({ ...draft, budgetMinor: 0 })).toBe('Set a budget above zero');
     expect(setupProblem({ ...draft, circler: 'adult', ageBand: null })).toBeNull();
     expect(setupProblem(draft)).toBeNull();
+  });
+});
+
+describe('prices in Kid Mode', () => {
+  it('hides prices from under-8s by default', () => {
+    expect(defaultKidPricesShown('3-5')).toBe(false);
+    expect(defaultKidPricesShown('6-8')).toBe(false);
+    expect(defaultKidPricesShown('9-12')).toBe(true);
+    expect(defaultKidPricesShown(null)).toBe(false);
+  });
+
+  it('gives lists saved before the setting existed the age-based default', () => {
+    const old = (ageBand: string) =>
+      parseSnapshot(JSON.stringify({ v: 1, list: { id: 'x', settings: { ageBand } } }))!.settings.kidPricesShown;
+    expect(old('6-8')).toBe(false);
+    expect(old('9-12')).toBe(true);
+  });
+
+  it('keeps a parent\'s explicit choice', () => {
+    const saved = parseSnapshot(JSON.stringify({ v: 1, list: { id: 'x', settings: { ageBand: '3-5', kidPricesShown: true } } }));
+    expect(saved!.settings.kidPricesShown).toBe(true);
   });
 });

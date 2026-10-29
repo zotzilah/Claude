@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
 import { ChoiceCard } from '@/components/choice-card';
-import { featuresFor, finishSettings, parseMoneyInput, setupProblem, templates } from '@/domain/settings';
+import { defaultKidPricesShown, featuresFor, finishSettings, parseMoneyInput, setupProblem, templates } from '@/domain/settings';
 import type { AgeBand, ListSettings } from '@/domain/types';
 import { formatMoney } from '@/domain/wishlist';
 import { useWishlist } from '@/state/wishlist-store';
@@ -108,7 +108,7 @@ export default function Setup() {
                 <Text style={styles.label}>How old?</Text>
                 <View style={styles.row}>
                   {AGE_BANDS.map((band) => (
-                    <ChoiceCard key={band} compact label={band} selected={draft.ageBand === band} onPress={() => set({ ageBand: band })} />
+                    <ChoiceCard key={band} compact label={band} selected={draft.ageBand === band} onPress={() => set({ ageBand: band, kidPricesShown: defaultKidPricesShown(band) })} />
                   ))}
                 </View>
                 <Text style={styles.note}>We only use this to pick suitable products. Children never get an account.</Text>
@@ -175,6 +175,21 @@ export default function Setup() {
                 accessibilityLabel="Show a running total"
               />
             </View>
+            {draft.circler === 'child' && (
+              <View style={styles.switchRow}>
+                <View style={styles.switchText}>
+                  <Text style={styles.switchLabel}>Show prices in Kid Mode</Text>
+                  <Text style={styles.note}>Off for under-8s, so they circle what they love, not what costs least.</Text>
+                </View>
+                <Switch
+                  value={draft.kidPricesShown}
+                  onValueChange={(kidPricesShown) => set({ kidPricesShown })}
+                  trackColor={{ true: colors.blue, false: colors.rule }}
+                  thumbColor={draft.kidPricesShown ? colors.yellow : colors.paper}
+                  accessibilityLabel="Show prices in Kid Mode"
+                />
+              </View>
+            )}
             {featuresFor(draft.buyers).claiming && (
               <>
                 <Text style={styles.label}>Surprise mode</Text>

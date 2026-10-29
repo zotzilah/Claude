@@ -19,11 +19,13 @@ interface Props {
   kid?: boolean;
   /** Someone has this covered (surprise mode shows that much, never who). */
   covered?: boolean;
+  /** Kid Mode for younger children: no price sticker. */
+  hidePrice?: boolean;
 }
 
 const STAR_WORDS = { 1: 'would like', 2: 'really want', 3: 'the big one' } as const;
 
-export function ProductCard({ product, stars, onTap, kid = false, covered = false }: Props) {
+export function ProductCard({ product, stars, onTap, kid = false, covered = false, hidePrice = false }: Props) {
   const [size, setSize] = useState({ width: 0, height: 0 });
   // Only a circle drawn by a tap on this card animates; circles shown on page load just appear.
   const [justCircled, setJustCircled] = useState(false);
@@ -50,7 +52,11 @@ export function ProductCard({ product, stars, onTap, kid = false, covered = fals
       onLayout={onLayout}
       style={styles.card}
       accessibilityRole="button"
-      accessibilityLabel={`${product.title}, ${formatMoney(product.priceMinor, product.currency)}, catalogue number ${product.catalogueNo}`}
+      accessibilityLabel={
+        hidePrice
+          ? product.title
+          : `${product.title}, ${formatMoney(product.priceMinor, product.currency)}, catalogue number ${product.catalogueNo}`
+      }
       accessibilityState={{ selected: stars !== null }}
       accessibilityValue={covered ? { text: 'Taken care of' } : undefined}
       accessibilityHint={stars === null ? 'Circles this item' : `Circled, ${STAR_WORDS[stars]}. Tap to change.`}
@@ -68,9 +74,11 @@ export function ProductCard({ product, stars, onTap, kid = false, covered = fals
         {product.title}
       </Text>
       {!kid && <Text style={styles.retailer}>{product.retailer}</Text>}
-      <View style={styles.sticker}>
-        <PriceSticker priceMinor={product.priceMinor} />
-      </View>
+      {!hidePrice && (
+        <View style={styles.sticker}>
+          <PriceSticker priceMinor={product.priceMinor} />
+        </View>
+      )}
       {stars !== null && (
         <>
           <BiroRing width={size.width} height={size.height} seedKey={product.id} animate={justCircled} />

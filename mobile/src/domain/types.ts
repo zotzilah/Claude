@@ -73,6 +73,8 @@ export interface ListSettings {
   currency: string;
   runningTotalOn: boolean;
   surpriseMode: SurpriseMode;
+  /** Whether prices show in Kid Mode. Off by default for under-8s (brief §4.3). */
+  kidPricesShown: boolean;
 }
 
 // ---------- Givers (brief §7) ----------

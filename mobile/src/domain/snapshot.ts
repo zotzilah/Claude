@@ -3,7 +3,7 @@
  * a corrupted or unrecognised save gives `null` (start fresh) rather than a crash,
  * and individual bad entries are dropped rather than poisoning the whole list.
  */
-import { defaultSettings } from './settings';
+import { defaultKidPricesShown, defaultSettings } from './settings';
 import type {
   AgeBand,
   Buyers,
@@ -59,17 +59,20 @@ export function parseSnapshot(json: string | null): ListState | null {
 function parseSettings(raw: unknown): ListSettings {
   const d = defaultSettings();
   if (!isObject(raw)) return d;
+  const ageBand = oneOf<AgeBand>(raw.ageBand, ['3-5', '6-8', '9-12']);
   return {
     title: str(raw.title) ?? d.title,
     template: oneOf<Template>(raw.template, ['christmas', 'birthday', 'custom']) ?? d.template,
     circler: oneOf<Circler>(raw.circler, ['child', 'adult']) ?? d.circler,
     circlerName: str(raw.circlerName) ?? d.circlerName,
-    ageBand: oneOf<AgeBand>(raw.ageBand, ['3-5', '6-8', '9-12']),
+    ageBand,
     buyers: oneOf<Buyers>(raw.buyers, ['just-me', 'partner', 'family']) ?? d.buyers,
     budgetMinor: minor(raw.budgetMinor) ?? d.budgetMinor,
     currency: str(raw.currency) ?? d.currency,
     runningTotalOn: typeof raw.runningTotalOn === 'boolean' ? raw.runningTotalOn : d.runningTotalOn,
     surpriseMode: oneOf<SurpriseMode>(raw.surpriseMode, ['hide-all', 'taken-care-of']) ?? d.surpriseMode,
+    // Lists saved before this setting existed get the age-based default.
+    kidPricesShown: typeof raw.kidPricesShown === 'boolean' ? raw.kidPricesShown : defaultKidPricesShown(ageBand),
   };
 }
 

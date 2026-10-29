@@ -33,7 +33,15 @@ export default function CatalogueScreen() {
     return (
       <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
         {onPage.map((p) => (
-          <ProductCard key={p.id} product={p} stars={list.starsFor(p.id)} onTap={list.tap} kid={kid} covered={list.coveredFor(p.id)} />
+          <ProductCard
+            key={p.id}
+            product={p}
+            stars={list.starsFor(p.id)}
+            onTap={list.tap}
+            kid={kid}
+            covered={list.coveredFor(p.id)}
+            hidePrice={list.hidePrices}
+          />
         ))}
         {/* Keeps a lone last product at half width instead of stretching across the page. */}
         {onPage.length % 2 === 1 && <View style={styles.spacer} />}

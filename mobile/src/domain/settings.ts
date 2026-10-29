@@ -1,4 +1,4 @@
-import type { Buyers, ListSettings, Template } from './types';
+import type { AgeBand, Buyers, ListSettings, Template } from './types';
 
 export interface TemplateInfo {
   key: Template;
@@ -33,7 +33,13 @@ export function defaultSettings(): ListSettings {
     currency: 'GBP',
     runningTotalOn: true,
     surpriseMode: 'taken-care-of',
+    kidPricesShown: false,
   };
+}
+
+/** Prices stay out of sight for under-8s unless a parent turns them on (brief §4.3). */
+export function defaultKidPricesShown(ageBand: AgeBand | null): boolean {
+  return ageBand === '9-12';
 }
 
 /** Group gifts are suggested for items at or above this price (minor units). */

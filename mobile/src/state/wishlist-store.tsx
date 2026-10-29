@@ -47,6 +47,8 @@ function useWishlistValue() {
       settings: state.settings,
       features: featuresFor(state.settings.buyers),
       kidMode: state.kidMode,
+      /** Kid Mode with prices hidden (younger children, or a parent's choice). */
+      hidePrices: state.kidMode && !state.settings.kidPricesShown,
       products,
       /** Catalogue pages, with "Your Finds" at the back once the family has added something. */
       pages,

@@ -65,6 +65,7 @@ export default function SearchScreen() {
                   onTap={list.tap}
                   kid={kid}
                   covered={list.coveredFor(outcome.product.id)}
+                  hidePrice={list.hidePrices}
                 />
                 <View style={styles.gridSpacer} />
               </View>
@@ -88,6 +89,7 @@ export default function SearchScreen() {
                     onTap={list.tap}
                     kid={kid}
                     covered={list.coveredFor(product.id)}
+                    hidePrice={list.hidePrices}
                   />
                 ))}
                 {outcome.results.length % 2 === 1 && <View style={styles.gridSpacer} />}

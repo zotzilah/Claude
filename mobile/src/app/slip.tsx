@@ -31,6 +31,8 @@ export default function OrderSlip() {
   const [paperHeight, setPaperHeight] = useState(0);
   const [printRun, setPrintRun] = useState(0);
   const offset = useSharedValue(-10000);
+  // Younger children see what they circled, not what it costs.
+  const hidePrices = list.hidePrices;
 
   useEffect(() => {
     if (!paperHeight) return;
@@ -56,7 +58,7 @@ export default function OrderSlip() {
     <View style={[styles.screen, { paddingTop: insets.top + space.lg, paddingBottom: insets.bottom + space.lg }]}>
       <View style={styles.till}>
         <Text style={styles.counter}>COUNTER 3</Text>
-        <Text style={styles.lcd}>{formatMoney(list.budget.totalMinor)}</Text>
+        <Text style={styles.lcd}>{hidePrices ? '★ ★ ★' : formatMoney(list.budget.totalMinor)}</Text>
       </View>
       <View style={styles.slot} />
       <View style={styles.receiptWrap}>
@@ -72,13 +74,13 @@ export default function OrderSlip() {
                 <Text style={[styles.mono, styles.name]}>
                   {product.title} <Text style={styles.stars}>{'★'.repeat(stars)}</Text>
                 </Text>
-                <Text style={styles.mono}>{(product.priceMinor / 100).toFixed(2)}</Text>
+                {!hidePrices && <Text style={styles.mono}>{(product.priceMinor / 100).toFixed(2)}</Text>}
               </View>
             ))}
             <Text style={styles.rule}>- - - - - - - - - - - - - - - -</Text>
             <View style={styles.line}>
-              <Text style={[styles.mono, styles.bold]}>{list.wishes.length} ITEMS</Text>
-              <Text style={[styles.mono, styles.bold]}>{formatMoney(list.budget.totalMinor)}</Text>
+              <Text style={[styles.mono, styles.bold]}>{list.wishes.length === 1 ? "1 ITEM" : `${list.wishes.length} ITEMS`}</Text>
+              {!hidePrices && <Text style={[styles.mono, styles.bold]}>{formatMoney(list.budget.totalMinor)}</Text>}
             </View>
             <View style={styles.queue}>
               <Text style={[styles.mono, styles.center]}>YOUR NUMBER IS</Text>
