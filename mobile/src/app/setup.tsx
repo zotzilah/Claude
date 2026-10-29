@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   accountLinkText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
   screen: { flex: 1, backgroundColor: colors.paper2 },
   head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
-  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, opacity: 0.9 },
+  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
   heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
   progress: { flexDirection: 'row', gap: 6, marginTop: space.md },
   progressBar: { flex: 1, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.3)' },

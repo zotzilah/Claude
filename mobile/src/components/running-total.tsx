@@ -17,7 +17,7 @@ export function RunningTotal({ budget, count, money, uncounted = 0 }: Props) {
   const t = useStrings();
   const { over, totalMinor, budgetMinor, remainingMinor, progress } = budget;
   return (
-    <View style={[styles.bar, over && styles.over]} accessibilityRole="summary">
+    <View style={[styles.bar, over && styles.over]}>
       <View style={styles.row}>
         <Text style={styles.label}>{t.runningTotal.label(count)}</Text>
         <Text style={styles.amount}>{money(totalMinor)}</Text>

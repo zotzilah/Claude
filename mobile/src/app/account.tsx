@@ -221,7 +221,7 @@ function TextLink(props: { label: string; onPress: () => void; disabled?: boolea
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper2 },
   head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
-  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, opacity: 0.9 },
+  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
   heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
   body: { padding: space.lg, gap: space.md },
   help: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.ink },

@@ -42,6 +42,7 @@ export function PinPad({ value, onChange, errorCount, disabled = false }: Props)
     <View style={styles.wrap}>
       <Animated.View
         style={[styles.dots, dotsStyle]}
+        role="status"
         accessibilityLabel={t.pin.enteredA11y(value.length, PIN_LENGTH)}
         accessibilityLiveRegion="polite"
       >

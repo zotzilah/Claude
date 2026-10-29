@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper2 },
   head: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingBottom: 14 },
   title: { fontFamily: fonts.display, fontSize: 23, color: colors.paper },
-  sub: { fontFamily: fonts.body, fontSize: 14, color: colors.paper, opacity: 0.9, marginTop: 4 },
+  sub: { fontFamily: fonts.body, fontSize: 14, color: colors.paper, marginTop: 4 },
   surprise: {
     marginHorizontal: space.md,
     marginTop: space.md,

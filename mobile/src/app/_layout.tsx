@@ -41,7 +41,8 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    // role="main" gives screen readers on the web a landmark to jump to.
+    <GestureHandlerRootView style={{ flex: 1 }} role="main">
       <WishlistProvider>
         <StatusBar style="light" />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />

@@ -78,6 +78,7 @@ export default function CatalogueScreen() {
               accessibilityRole="switch"
               accessibilityLabel={t.catalogue.soundA11y}
               accessibilityState={{ checked: soundOn }}
+              aria-checked={soundOn}
               hitSlop={10}
             >
               <Text style={styles.sound}>{soundOn ? '🔊' : '🔇'}</Text>
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
   sound: { fontSize: 18 },
   azButton: { backgroundColor: colors.yellow, borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 1 },
   azText: { fontFamily: fonts.display, fontSize: 12, color: colors.ink },
-  book: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, opacity: 0.9, flexShrink: 1 },
+  book: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, flexShrink: 1 },
   kidChip: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.yellow, backgroundColor: colors.ink, paddingHorizontal: 6, borderRadius: radius.sm, overflow: 'hidden' },
   pageTitle: { fontFamily: fonts.display, fontSize: 27, color: colors.paper, marginTop: 6 },
   pageNo: {

@@ -68,7 +68,9 @@ export default function OrderSlip() {
           <ScrollView contentContainerStyle={styles.receipt}>
             <Text style={styles.title}>{t.slip.title}</Text>
             <Text style={[styles.mono, styles.center]}>{list.settings.title}</Text>
-            <Text style={styles.rule}>- - - - - - - - - - - - - - - -</Text>
+            <Text style={styles.rule} aria-hidden>
+              - - - - - - - - - - - - - - - -
+            </Text>
             {list.wishes.length === 0 && <Text style={[styles.mono, styles.center]}>{t.slip.nothing}</Text>}
             {list.wishes.map(({ product, stars }) => (
               <View key={product.id} style={styles.line}>
@@ -85,7 +87,9 @@ export default function OrderSlip() {
                 )}
               </View>
             ))}
-            <Text style={styles.rule}>- - - - - - - - - - - - - - - -</Text>
+            <Text style={styles.rule} aria-hidden>
+              - - - - - - - - - - - - - - - -
+            </Text>
             <View style={styles.line}>
               <Text style={[styles.mono, styles.bold]}>{t.slip.items(list.wishes.length)}</Text>
               {!hidePrices && <Text style={[styles.mono, styles.bold]}>{list.money(list.budget.totalMinor)}</Text>}
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
   mono: { fontFamily: fonts.till, fontSize: 13.5, color: '#222' },
   bold: { fontFamily: fonts.tillBold, fontSize: 15 },
   center: { textAlign: 'center' },
-  rule: { fontFamily: fonts.till, color: '#9aa0aa', textAlign: 'center' },
+  rule: { fontFamily: fonts.till, color: colors.inkSoft, textAlign: 'center' },
   line: { flexDirection: 'row', justifyContent: 'space-between', gap: 6 },
   no: { width: 74 },
   name: { flex: 1 },

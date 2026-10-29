@@ -19,6 +19,8 @@ export function ChoiceCard({ label, icon, description, selected, onPress, compac
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected }}
+      // The web build needs aria-checked spelled out for screen readers to say "selected".
+      aria-checked={selected}
       accessibilityLabel={description ? `${label}. ${description}` : label}
       style={({ pressed }) => [
         compact ? styles.pill : styles.card,
