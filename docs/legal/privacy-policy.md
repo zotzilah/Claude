@@ -23,6 +23,7 @@ This policy explains what we collect, why we collect it, and what you can ask us
 | The child's first name (or a nickname) and an age band, such as "6–8" | The account holder types it in | Showing "Ellie's Christmas Book" and setting sensible defaults, like hiding prices for younger children | Contract |
 | The list: what's circled, star ratings, budget, and items added from links | The account holder and the child, in Kid Mode | This *is* the service | Contract |
 | A giver's display name (e.g. "Nan") and what they've claimed, bought or pledged | Givers using the share link | Letting family see who is getting what, so no one buys the same thing twice | Legitimate interests |
+| The phone's notification address (a "push token") and the messages waiting to be sent | Created when the account holder turns on notifications | Telling you when someone reserves or buys a gift. Sent messages are deleted after 7 days. Turn notifications off in the phone's Settings at any time. | Consent |
 | A random sign-in ID for givers | Created automatically when a giver opens the link | So a giver can come back and change their claim. Givers don't need an email or password. | Legitimate interests |
 | Crash reports (device model, app version, what went wrong) | Automatically | Fixing bugs. They don't contain list contents, names or emails. | Legitimate interests |
 | Waitlist email address | Anyone who joins the waitlist on our website | Telling you when Biro opens. Nothing else. | Consent |
