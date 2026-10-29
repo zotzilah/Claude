@@ -1,11 +1,13 @@
-# Publishes the landing page in site/ to GitHub Pages whenever main changes.
-# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
-name: Publish landing page
+# Publishes the website whenever main changes:
+#   /       the landing page (site/)
+#   /app/   the web version of the app, where the family's share links open
+# One-time setup (done): repo Settings → Pages → Source: "GitHub Actions".
+name: Publish website
 
 on:
   push:
     branches: [main]
-    paths: ['site/**', '.github/workflows/pages.yml']
+    paths: ['site/**', 'mobile/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -25,9 +27,33 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - name: Check the app
+        working-directory: mobile
+        run: |
+          npm ci
+          npx tsc --noEmit
+          npx jest --ci
+      - name: Build the web app
+        working-directory: mobile
+        env:
+          EXPO_BASE_URL: /Claude/app
+        run: npx expo export --platform web --output-dir dist-web
+      - name: Put the site and the app together
+        run: |
+          mkdir -p public
+          cp -R site/. public/
+          cp -R mobile/dist-web public/app
+          # GitHub Pages has no "single-page app" setting: unknown paths such as
+          # /app/g/<token> get 404.html, so make that the app, which then routes itself.
+          cp public/app/index.html public/404.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: public
       - id: deployment
         uses: actions/deploy-pages@v4

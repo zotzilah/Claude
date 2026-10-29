@@ -7,7 +7,7 @@ import { randomUUID } from 'expo-crypto';
 import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
 
 import { categories, productsById as catalogueById, productsIn, yourFinds } from '@/data/catalogue';
-import { listSideView, pruneExpired } from '@/domain/claims';
+import { listSideView, pruneExpired, type ListSideView } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
 import { formatMoney, formatMoneyShort, moneyParts } from '@/domain/money';
 import { featuresFor } from '@/domain/settings';
@@ -15,6 +15,8 @@ import type { Category, ListSettings, Product } from '@/domain/types';
 import { budgetStatus, otherCurrencyCount, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
 
 import { deviceLocale } from './locale';
+import { useOwnerSync } from './owner-sync';
+import { WEB_APP_URL } from './remote';
 import { loadList, saveList } from './storage';
 
 const newList = () => createList(randomUUID(), deviceLocale.currency);
@@ -39,6 +41,8 @@ function useWishlistValue() {
   useEffect(() => {
     if (ready) saveList(state);
   }, [ready, state]);
+
+  const sync = useOwnerSync(state, ready);
 
   return useMemo(() => {
     const products: Record<string, Product> = { ...catalogueById, ...state.customProducts };
@@ -68,11 +72,24 @@ function useWishlistValue() {
       moneyParts: (minor: number, inCurrency = currency) => moneyParts(minor, inCurrency, deviceLocale.tag),
       wishes: sortedWishes(state.marks, products),
       starsFor: (productId: string) => state.marks[productId]?.stars ?? null,
-      /** What the catalogue may show about who's buying a wish (see listSideView). */
-      listSideFor: (productId: string) =>
-        featuresFor(state.settings.buyers).claiming
-          ? listSideView(state.claims[productId], state.settings.surpriseMode, Date.now(), state.kidMode)
-          : null,
+      /**
+       * What the catalogue may show about who's buying a wish (see listSideView).
+       * With the backend on, this comes from the server, which only ever tells the
+       * parent what surprise mode allows.
+       */
+      listSideFor: (productId: string): ListSideView | null => {
+        if (!featuresFor(state.settings.buyers).claiming) return null;
+        const remote = sync.buying;
+        if (!remote) return listSideView(state.claims[productId], state.settings.surpriseMode, Date.now(), state.kidMode);
+        if (remote.mode === 'hidden') return null;
+        if (remote.mode === 'covered') return remote.covered.has(productId) ? { kind: 'covered' } : null;
+        return listSideView(remote.claims[productId], state.settings.surpriseMode, Date.now(), state.kidMode);
+      },
+      /** Saving to the backend: 'off' when there's no backend or the list isn't set up yet. */
+      syncStatus: sync.status,
+      /** The link the family opens to claim gifts (web, no app needed), once the list is saved online. */
+      shareUrl: sync.shareToken ? `${WEB_APP_URL}/g/${sync.shareToken}` : null,
+      shareToken: sync.shareToken,
 
       tap: (productId: string) => dispatch({ type: 'tap', productId, now: Date.now() }),
       setKidMode: (on: boolean) => dispatch({ type: 'setKidMode', on }),
@@ -91,7 +108,7 @@ function useWishlistValue() {
       /** Starts a brand-new list (the old one is replaced). */
       reset: () => dispatch({ type: 'hydrate', state: newList() }),
     };
-  }, [state, ready]);
+  }, [state, ready, sync]);
 }
 
 type Wishlist = ReturnType<typeof useWishlistValue>;
