@@ -9,11 +9,14 @@ import { BigButton } from '@/components/big-button';
 import { yourFinds } from '@/data/catalogue';
 import { currencySymbol, moneyInputText, parseMoneyInput, toMinor } from '@/domain/money';
 import { checkLink, checkProduct, findDuplicate } from '@/domain/moderation';
+import { isGrownUpOccasion } from '@/domain/settings';
 import { extractUrl, type ProductDetails } from '@/domain/product-page';
 import { detailsFromUrl, fetchProduct } from '@/state/fetch-product';
 import { deviceLocale, useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 type Status = 'idle' | 'loading' | 'found' | 'manual';
 
@@ -22,6 +25,8 @@ type Status = 'idle' | 'loading' | 'found' | 'manual';
  * the parent checks them, and the item goes on this list only.
  */
 export default function AddFromLink() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -201,43 +206,44 @@ export default function AddFromLink() {
         {tried && problem && <Text style={styles.problem}>{problem}</Text>}
         <View style={styles.row}>
           <BigButton label={t.common.cancel} tone="yellow" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
-          {showForm && <BigButton label={t.add.circleIt} onPress={add} grow />}
+          {showForm && <BigButton label={isGrownUpOccasion(list.settings.template) ? t.add.addToList : t.add.circleIt} onPress={add} grow />}
         </View>
       </View>
     </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper2 },
-  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
-  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
-  heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
-  body: { padding: space.lg, gap: space.md },
-  help: { fontFamily: fonts.body, fontSize: 15, lineHeight: 20, color: colors.inkSoft },
-  input: {
-    backgroundColor: colors.paper,
-    borderWidth: 2,
-    borderColor: colors.ink,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.md,
-    fontFamily: fonts.bodySemi,
-    fontSize: 16,
-    color: colors.ink,
-    minWidth: 0,
-  },
-  loading: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  message: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.redDeep },
-  messageGood: { color: colors.good },
-  form: { gap: space.sm },
-  image: { height: 180, backgroundColor: colors.paper, borderRadius: radius.md },
-  label: { fontFamily: fonts.display, fontSize: 15, color: colors.ink, marginTop: space.sm },
-  moneyRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  currency: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
-  moneyInput: { flex: 1 },
-  note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft, marginTop: space.sm },
-  footer: { paddingHorizontal: space.lg, paddingTop: space.md, gap: space.sm, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
-  problem: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red, textAlign: 'center' },
-  row: { flexDirection: 'row', gap: space.sm },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper2 },
+    head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
+    kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
+    heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
+    body: { padding: space.lg, gap: space.md },
+    help: { fontFamily: fonts.body, fontSize: 15, lineHeight: 20, color: colors.inkSoft },
+    input: {
+      backgroundColor: colors.paper,
+      borderWidth: 2,
+      borderColor: colors.ink,
+      borderRadius: radius.md,
+      paddingHorizontal: space.md,
+      paddingVertical: space.md,
+      fontFamily: fonts.bodySemi,
+      fontSize: 16,
+      color: colors.ink,
+      minWidth: 0,
+    },
+    loading: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+    message: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.redDeep },
+    messageGood: { color: colors.good },
+    form: { gap: space.sm },
+    image: { height: 180, backgroundColor: colors.paper, borderRadius: radius.md },
+    label: { fontFamily: fonts.display, fontSize: 15, color: colors.ink, marginTop: space.sm },
+    moneyRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+    currency: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
+    moneyInput: { flex: 1 },
+    note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft, marginTop: space.sm },
+    footer: { paddingHorizontal: space.lg, paddingTop: space.md, gap: space.sm, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
+    problem: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red, textAlign: 'center' },
+    row: { flexDirection: 'row', gap: space.sm },
+  });

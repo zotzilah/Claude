@@ -50,7 +50,7 @@ export interface CircleMark {
 
 // ---------- List setup (brief §4) ----------
 
-export type Template = 'christmas' | 'birthday' | 'custom';
+export type Template = 'christmas' | 'birthday' | 'wedding' | 'anniversary' | 'custom';
 
 /** Who's circling: drives Kid Mode. */
 export type Circler = 'child' | 'adult';

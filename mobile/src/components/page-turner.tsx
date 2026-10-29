@@ -14,7 +14,8 @@ import Animated, {
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { playSfx } from '@/audio/sfx';
-import { colors } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
 
 /** How far a page swings open around the spine, in degrees. Past 90 it's out of sight. */
 const OPEN = -105;
@@ -57,6 +58,7 @@ interface Props {
  * works, and Reduce Motion skips straight to the next page.
  */
 export function PageTurner({ page, pageCount, renderPage, onChangePage, ref }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const reducedMotion = useReducedMotion();
   const [turn, setTurn] = useState<Turn | null>(null);
   const [width, setWidth] = useState(0);
@@ -216,15 +218,16 @@ export function PageTurner({ page, pageCount, renderPage, onChangePage, ref }: P
   );
 }
 
-const styles = StyleSheet.create({
-  stage: { flex: 1, overflow: 'hidden', backgroundColor: colors.paper2 },
-  sheet: {
-    transformOrigin: ['0%', '50%', 0],
-    backfaceVisibility: 'hidden',
-    boxShadow: '8px 0 24px rgba(0,0,0,0.25)',
-  },
-  strip: { position: 'absolute', top: 0, bottom: 0, left: 0, overflow: 'hidden', backgroundColor: colors.paper },
-  outer: { transformOrigin: ['0%', '50%', 0], boxShadow: '6px 0 18px rgba(0,0,0,0.18)' },
-  shade: { backgroundColor: '#000' },
-  sheen: { position: 'absolute', top: 0, bottom: 0, left: 0, width: 46 },
-});
+const makeStyles = ({ colors }: ThemeParts) =>
+  StyleSheet.create({
+    stage: { flex: 1, overflow: 'hidden', backgroundColor: colors.paper2 },
+    sheet: {
+      transformOrigin: ['0%', '50%', 0],
+      backfaceVisibility: 'hidden',
+      boxShadow: '8px 0 24px rgba(0,0,0,0.25)',
+    },
+    strip: { position: 'absolute', top: 0, bottom: 0, left: 0, overflow: 'hidden', backgroundColor: colors.paper },
+    outer: { transformOrigin: ['0%', '50%', 0], boxShadow: '6px 0 18px rgba(0,0,0,0.18)' },
+    shade: { backgroundColor: '#000' },
+    sheen: { position: 'absolute', top: 0, bottom: 0, left: 0, width: 46 },
+  });

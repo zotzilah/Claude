@@ -4,7 +4,7 @@ import Animated, { Easing, useAnimatedProps, useReducedMotion, useSharedValue, w
 import Svg, { Path } from 'react-native-svg';
 
 import { hashSeed, wobblyCircle } from '@/domain/wobbly-circle';
-import { colors } from '@/theme/tokens';
+import { useTheme } from '@/theme/theme-context';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -22,6 +22,7 @@ interface Props {
 
 /** A hand-drawn biro circle around its parent. */
 export function BiroRing({ width, height, seedKey, animate = false }: Props) {
+  const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
   const drawOn = animate && !reducedMotion;
   const { d, length } = useMemo(() => wobblyCircle(width, height, hashSeed(seedKey)), [width, height, seedKey]);

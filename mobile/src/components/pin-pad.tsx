@@ -6,7 +6,9 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import { playSfx } from '@/audio/sfx';
 import { PIN_LENGTH } from '@/domain/pin';
 import { useStrings } from '@/state/locale';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 interface Props {
   value: string;
@@ -20,6 +22,7 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'];
 
 /** Four dots and a chunky keypad. Calls onChange as digits are typed. */
 export function PinPad({ value, onChange, errorCount, disabled = false }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const t = useStrings();
   const shake = useSharedValue(0);
 
@@ -72,22 +75,23 @@ export function PinPad({ value, onChange, errorCount, disabled = false }: Props)
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: { alignItems: 'center', gap: space.xl },
-  dots: { flexDirection: 'row', gap: space.lg },
-  dot: { width: 18, height: 18, borderRadius: 9, borderWidth: 2, borderColor: colors.paper },
-  dotFilled: { backgroundColor: colors.yellow, borderColor: colors.yellow },
-  keys: { flexDirection: 'row', flexWrap: 'wrap', width: 3 * 76 + 2 * space.md, gap: space.md },
-  key: {
-    width: 76,
-    height: 64,
-    borderRadius: radius.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.12)',
-  },
-  blank: { width: 76, height: 64 },
-  keyPressed: { backgroundColor: 'rgba(255,255,255,0.3)' },
-  keyDisabled: { opacity: 0.4 },
-  keyText: { fontFamily: fonts.display, fontSize: 26, color: colors.paper },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    wrap: { alignItems: 'center', gap: space.xl },
+    dots: { flexDirection: 'row', gap: space.lg },
+    dot: { width: 18, height: 18, borderRadius: 9, borderWidth: 2, borderColor: colors.paper },
+    dotFilled: { backgroundColor: colors.yellow, borderColor: colors.yellow },
+    keys: { flexDirection: 'row', flexWrap: 'wrap', width: 3 * 76 + 2 * space.md, gap: space.md },
+    key: {
+      width: 76,
+      height: 64,
+      borderRadius: radius.lg,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(255,255,255,0.12)',
+    },
+    blank: { width: 76, height: 64 },
+    keyPressed: { backgroundColor: 'rgba(255,255,255,0.3)' },
+    keyDisabled: { opacity: 0.4 },
+    keyText: { fontFamily: fonts.display, fontSize: 26, color: colors.paper },
+  });

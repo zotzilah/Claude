@@ -9,7 +9,9 @@ import { isEasyPin, lockedForMs, NO_ATTEMPTS, PIN_LENGTH, type AttemptState } fr
 import { authenticateParent, canUseBiometrics, checkPin, loadAttempts, setPin } from '@/state/parent-pin';
 import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { space } from '@/theme/tokens';
 
 /**
  * The grown-ups' gate (brief §6).
@@ -22,6 +24,7 @@ export default function PinScreen() {
 }
 
 function CreatePin() {
+  const styles = useThemedStyles(makeStyles);
   const list = useWishlist();
   const t = useStrings();
   const [first, setFirst] = useState<string | null>(null);
@@ -76,6 +79,7 @@ function CreatePin() {
 }
 
 function UnlockPin() {
+  const styles = useThemedStyles(makeStyles);
   const list = useWishlist();
   const t = useStrings();
   const [value, setValue] = useState('');
@@ -154,6 +158,7 @@ function UnlockPin() {
 }
 
 function Gate(props: { title: string; subtitle: string; message: string | null; children: ReactNode }) {
+  const styles = useThemedStyles(makeStyles);
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.screen, { paddingTop: insets.top + space.xl, paddingBottom: insets.bottom + space.lg }]}>
@@ -171,6 +176,7 @@ function Gate(props: { title: string; subtitle: string; message: string | null; 
 }
 
 function TextButton({ label, onPress }: { label: string; onPress: () => void }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable onPress={onPress} accessibilityRole="button" hitSlop={8} style={styles.textButton}>
       <Text style={styles.textButtonLabel}>{label}</Text>
@@ -178,13 +184,14 @@ function TextButton({ label, onPress }: { label: string; onPress: () => void }) 
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.blueDeep, alignItems: 'center', paddingHorizontal: space.lg, gap: space.md },
-  lock: { fontSize: 40 },
-  title: { fontFamily: fonts.display, fontSize: 26, color: colors.paper, textAlign: 'center' },
-  subtitle: { fontFamily: fonts.body, fontSize: 16, lineHeight: 21, color: '#c9d4f2', textAlign: 'center', maxWidth: 320 },
-  message: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow, textAlign: 'center', minHeight: 22 },
-  row: { flexDirection: 'row', gap: space.lg, alignItems: 'center', justifyContent: 'center', alignSelf: 'stretch' },
-  textButton: { paddingVertical: space.sm },
-  textButtonLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow, textDecorationLine: 'underline' },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.blueDeep, alignItems: 'center', paddingHorizontal: space.lg, gap: space.md },
+    lock: { fontSize: 40 },
+    title: { fontFamily: fonts.display, fontSize: 26, color: colors.paper, textAlign: 'center' },
+    subtitle: { fontFamily: fonts.body, fontSize: 16, lineHeight: 21, color: '#c9d4f2', textAlign: 'center', maxWidth: 320 },
+    message: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow, textAlign: 'center', minHeight: 22 },
+    row: { flexDirection: 'row', gap: space.lg, alignItems: 'center', justifyContent: 'center', alignSelf: 'stretch' },
+    textButton: { paddingVertical: space.sm },
+    textButtonLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow, textDecorationLine: 'underline' },
+  });

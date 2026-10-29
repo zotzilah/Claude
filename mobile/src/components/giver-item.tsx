@@ -8,7 +8,9 @@ import { amountsFor, currencySymbol, formatMoney, formatMoneyShort, parseMoneyIn
 import { groupGiftThresholdMinor } from '@/domain/settings';
 import type { Claim, GroupGift, Product, Stars } from '@/domain/types';
 import { deviceLocale, useStrings } from '@/state/locale';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 const money = (minor: number, currency: string) => formatMoney(minor, currency, deviceLocale.tag);
 
@@ -23,6 +25,8 @@ interface Props {
   /** Off for "just me" lists: show the wishes, nothing to claim. */
   claimingOn: boolean;
   groupGiftsOn: boolean;
+  /** Weddings and anniversaries: gentler wording ("I'll give this"). */
+  grownUp?: boolean;
   onClaim: () => void;
   onBought: () => void;
   onRelease: () => void;
@@ -32,6 +36,7 @@ interface Props {
 
 /** One wish on the Giver page: what it is, who has it, and what you can do. */
 export function GiverItem(props: Props) {
+  const styles = useThemedStyles(makeStyles);
   const { product, stars, me, now } = props;
   const t = useStrings();
   const claim = activeClaim(props.claim, now);
@@ -52,9 +57,12 @@ export function GiverItem(props: Props) {
             <Text style={styles.price}>{money(product.priceMinor, product.currency)}</Text>
           </View>
           <View style={styles.meta}>
-            <Text style={styles.stars} accessibilityLabel={t.common.stars(stars)}>
-              {'★'.repeat(stars)}
-            </Text>
+            {/* Wedding lists have no star levels: every gift is simply on the list. */}
+            {!props.grownUp && (
+              <Text style={styles.stars} accessibilityLabel={t.common.stars(stars)}>
+                {'★'.repeat(stars)}
+              </Text>
+            )}
             {product.catalogueNo ? <Text style={styles.metaText}>{product.catalogueNo}</Text> : null}
             <Pressable onPress={() => WebBrowser.openBrowserAsync(product.url)} accessibilityRole="link" hitSlop={6}>
               <Text style={styles.link}>{t.giver.viewAt(product.retailer || t.common.theShop)}</Text>
@@ -69,9 +77,18 @@ export function GiverItem(props: Props) {
         <View style={styles.actions}>
           {!claim && (
             <>
-              <ActionButton label={props.groupGift ? t.giver.claimToBuy : t.giver.claim} onPress={props.onClaim} disabled={!me} />
+              <ActionButton
+                label={props.groupGift ? t.giver.claimToBuy : props.grownUp ? t.giver.giveThis : t.giver.claim}
+                onPress={props.onClaim}
+                disabled={!me}
+              />
               {canGroup && !props.groupGift && (
-                <ActionButton label={t.giver.makeGroupGift} ghost onPress={props.onStartGroupGift} disabled={!me} />
+                <ActionButton
+                  label={props.grownUp ? t.giver.chipIn : t.giver.makeGroupGift}
+                  ghost
+                  onPress={props.onStartGroupGift}
+                  disabled={!me}
+                />
               )}
               {!props.groupGift && <Text style={styles.hint}>{t.giver.heldFor48}</Text>}
             </>
@@ -98,6 +115,8 @@ export function GiverItem(props: Props) {
 }
 
 function GroupGiftBox(props: Props & { gift: GroupGift }) {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const { gift, product, me } = props;
   const t = useStrings();
   const currency = product.currency;
@@ -159,6 +178,7 @@ function GroupGiftBox(props: Props & { gift: GroupGift }) {
 }
 
 function ActionButton(props: { label: string; onPress: () => void; ghost?: boolean; tone?: 'good'; disabled?: boolean }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable
       onPress={props.onPress}
@@ -178,47 +198,48 @@ function ActionButton(props: { label: string; onPress: () => void; ghost?: boole
   );
 }
 
-const styles = StyleSheet.create({
-  item: { backgroundColor: colors.paper, borderRadius: 12, borderWidth: 1, borderColor: colors.rule, padding: space.md, gap: space.sm },
-  itemDone: { opacity: 0.75 },
-  top: { flexDirection: 'row', gap: space.md },
-  thumbImage: { width: 58, height: 58, borderWidth: 1, borderColor: colors.rule, borderRadius: 8, backgroundColor: colors.paper },
-  thumb: { width: 58, height: 58, fontSize: 34, lineHeight: 58, textAlign: 'center', borderWidth: 1, borderColor: colors.rule, borderRadius: 8 },
-  info: { flex: 1, gap: 4 },
-  titleRow: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
-  title: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 18, color: colors.ink, flexShrink: 1 },
-  price: { fontFamily: fonts.display, fontSize: 15, color: colors.red },
-  meta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: space.md, rowGap: 2 },
-  metaText: { fontFamily: fonts.body, fontSize: 12.5, color: colors.inkSoft },
-  stars: { fontFamily: fonts.hand, fontSize: 18, color: colors.biro },
-  link: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.blue, textDecorationLine: 'underline' },
-  actions: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: space.sm },
-  hint: { fontFamily: fonts.body, fontSize: 13, color: colors.inkSoft },
-  pill: { fontFamily: fonts.bodyBold, fontSize: 13, borderRadius: radius.pill, paddingVertical: 4, paddingHorizontal: 10, overflow: 'hidden' },
-  pillHeld: { backgroundColor: '#fff3c2', color: '#6b5200' },
-  pillBought: { backgroundColor: '#dff3e8', color: colors.good },
-  group: { backgroundColor: colors.paper2, borderRadius: 8, padding: space.md, gap: 6 },
-  groupTitle: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.ink },
-  groupText: { fontFamily: fonts.body, fontSize: 13, color: colors.inkSoft },
-  track: { height: 8, borderRadius: 4, backgroundColor: colors.rule, overflow: 'hidden' },
-  fill: { height: '100%', borderRadius: 4, backgroundColor: colors.good },
-  otherInput: {
-    width: 84,
-    borderWidth: 2,
-    borderColor: colors.blue,
-    borderRadius: 8,
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    fontFamily: fonts.bodyBold,
-    fontSize: 14,
-    color: colors.ink,
-    backgroundColor: colors.paper,
-  },
-  button: { backgroundColor: colors.blue, borderRadius: 8, paddingVertical: 7, paddingHorizontal: 12, borderWidth: 2, borderColor: colors.blue },
-  buttonGhost: { backgroundColor: 'transparent' },
-  buttonGood: { backgroundColor: colors.good, borderColor: colors.good },
-  buttonDisabled: { opacity: 0.4 },
-  buttonPressed: { transform: [{ translateY: 1 }] },
-  buttonText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.paper },
-  buttonTextGhost: { color: colors.blue },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    item: { backgroundColor: colors.paper, borderRadius: 12, borderWidth: 1, borderColor: colors.rule, padding: space.md, gap: space.sm },
+    itemDone: { opacity: 0.75 },
+    top: { flexDirection: 'row', gap: space.md },
+    thumbImage: { width: 58, height: 58, borderWidth: 1, borderColor: colors.rule, borderRadius: 8, backgroundColor: colors.paper },
+    thumb: { width: 58, height: 58, fontSize: 34, lineHeight: 58, textAlign: 'center', borderWidth: 1, borderColor: colors.rule, borderRadius: 8 },
+    info: { flex: 1, gap: 4 },
+    titleRow: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
+    title: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 18, color: colors.ink, flexShrink: 1 },
+    price: { fontFamily: fonts.display, fontSize: 15, color: colors.red, fontVariant: ['lining-nums'] },
+    meta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: space.md, rowGap: 2 },
+    metaText: { fontFamily: fonts.body, fontSize: 12.5, color: colors.inkSoft },
+    stars: { fontFamily: fonts.hand, fontSize: 18, color: colors.biro },
+    link: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.blue, textDecorationLine: 'underline' },
+    actions: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: space.sm },
+    hint: { fontFamily: fonts.body, fontSize: 13, color: colors.inkSoft },
+    pill: { fontFamily: fonts.bodyBold, fontSize: 13, borderRadius: radius.pill, paddingVertical: 4, paddingHorizontal: 10, overflow: 'hidden' },
+    pillHeld: { backgroundColor: '#fff3c2', color: '#6b5200' },
+    pillBought: { backgroundColor: '#dff3e8', color: colors.good },
+    group: { backgroundColor: colors.paper2, borderRadius: 8, padding: space.md, gap: 6 },
+    groupTitle: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.ink },
+    groupText: { fontFamily: fonts.body, fontSize: 13, color: colors.inkSoft },
+    track: { height: 8, borderRadius: 4, backgroundColor: colors.rule, overflow: 'hidden' },
+    fill: { height: '100%', borderRadius: 4, backgroundColor: colors.good },
+    otherInput: {
+      width: 84,
+      borderWidth: 2,
+      borderColor: colors.blue,
+      borderRadius: 8,
+      paddingVertical: 5,
+      paddingHorizontal: 8,
+      fontFamily: fonts.bodyBold,
+      fontSize: 14,
+      color: colors.ink,
+      backgroundColor: colors.paper,
+    },
+    button: { backgroundColor: colors.blue, borderRadius: 8, paddingVertical: 7, paddingHorizontal: 12, borderWidth: 2, borderColor: colors.blue },
+    buttonGhost: { backgroundColor: 'transparent' },
+    buttonGood: { backgroundColor: colors.good, borderColor: colors.good },
+    buttonDisabled: { opacity: 0.4 },
+    buttonPressed: { transform: [{ translateY: 1 }] },
+    buttonText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.paper },
+    buttonTextGhost: { color: colors.blue },
+  });

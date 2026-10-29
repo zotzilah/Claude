@@ -10,7 +10,7 @@ import { categories, productsById as catalogueById, productsIn, yourFinds } from
 import { listSideView, pruneExpired, type ListSideView } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
 import { formatMoney, formatMoneyShort, moneyParts } from '@/domain/money';
-import { featuresFor } from '@/domain/settings';
+import { featuresFor, isGrownUpOccasion } from '@/domain/settings';
 import type { Category, ListSettings, ListState, Product } from '@/domain/types';
 import { budgetStatus, otherCurrencyCount, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
 
@@ -45,9 +45,11 @@ function useWishlistValue() {
   const sync = useOwnerSync(state, ready);
 
   return useMemo(() => {
-    const products: Record<string, Product> = { ...catalogueById, ...state.customProducts };
+    // Weddings and anniversaries have no catalogue: just what the couple add from shops.
+    const grownUp = isGrownUpOccasion(state.settings.template);
+    const products: Record<string, Product> = grownUp ? { ...state.customProducts } : { ...catalogueById, ...state.customProducts };
     const finds = Object.values(state.customProducts);
-    const pages: Category[] = finds.length ? [...categories, yourFinds] : categories;
+    const pages: Category[] = grownUp ? [yourFinds] : finds.length ? [...categories, yourFinds] : categories;
     const currency = state.settings.currency;
     const totalMinor = runningTotalMinor(state.marks, products, currency);
     return {
@@ -94,6 +96,8 @@ function useWishlistValue() {
       renewShareLink: sync.renewShareLink,
 
       tap: (productId: string) => dispatch({ type: 'tap', productId, now: Date.now() }),
+      /** Wedding lists: on the list, or off it. */
+      toggle: (productId: string) => dispatch({ type: 'toggle', productId, now: Date.now() }),
       setKidMode: (on: boolean) => dispatch({ type: 'setKidMode', on }),
       updateSettings: (patch: Partial<ListSettings>) => dispatch({ type: 'updateSettings', patch }),
       completeSetup: (settings: ListSettings) => dispatch({ type: 'completeSetup', settings }),
