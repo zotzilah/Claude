@@ -44,6 +44,7 @@ export const products: Product[] = beta.products.map((p) => ({
   retailer: p.retailer,
   url: p.url,
   emoji: p.emoji,
+  ...(p.imageUrl ? { imageUrl: p.imageUrl } : {}),
 }));
 
 export const productsById: Record<string, Product> = Object.fromEntries(products.map((p) => [p.id, p]));

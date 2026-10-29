@@ -148,6 +148,11 @@ export default function CatalogueScreen() {
               <DevLink label={t.catalogue.addFromLink} onPress={() => router.navigate('/add')} />
               <DevLink label={t.catalogue.settings} onPress={() => router.navigate('/setup')} />
             </View>
+            {list.syncStatus !== 'off' && (
+              <Text style={styles.syncNote} accessibilityLiveRegion="polite">
+                {t.catalogue.sync[list.syncStatus]}
+              </Text>
+            )}
           </>
         )}
       </View>
@@ -236,5 +241,6 @@ const styles = StyleSheet.create({
   sendBar: { flexDirection: 'row', gap: space.sm, padding: 14, borderTopWidth: 1, borderTopColor: colors.rule },
   devLinks: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: space.lg, paddingHorizontal: space.lg, paddingBottom: space.sm },
   devLink: { paddingVertical: 6 },
+  syncNote: { fontFamily: fonts.body, fontSize: 13, color: colors.paper, paddingHorizontal: space.lg, paddingBottom: space.sm },
   devLinkText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.yellow },
 });

@@ -57,6 +57,11 @@ export const enGB = {
     giverLink: 'Giver link',
     addFromLink: '＋ Add from a link',
     settings: 'Settings',
+    sync: {
+      saving: 'Saving…',
+      saved: '✓ Saved online',
+      offline: "Saved on this phone. It'll save online when you're connected.",
+    },
   },
 
   product: {
@@ -247,6 +252,14 @@ export const enGB = {
     link: 'Account ▸',
     notSetUp:
       "Accounts aren't switched on yet. Your list is saved on this phone, and nothing leaves it.",
+    familyLink: 'Family link',
+    familyLinkHint: 'Anyone with this link can see the list and claim gifts.',
+    newLink: 'Make a new link',
+    newLinkWarning:
+      "The old link will stop working for anyone new. People who've already joined keep access.",
+    newLinkConfirm: 'Yes, make a new link',
+    newLinkDone: 'Done. Share the new link with the family.',
+    newLinkFailed: "We couldn't make a new link. Check you're online and try again.",
     savedOnline:
       'Your list is saved online automatically, so the family link always shows the latest. Signing in with your email, so you can keep the list if you change phones, is coming soon.',
     why: 'Sign in to keep your list safe if you lose your phone, and to share it with family.',

@@ -16,6 +16,8 @@ const products = source.products
     retailer: p.retailer,
     url: p.url,
     emoji: p.emoji ?? '🎁',
+    // Only from sources that permit it (affiliate feeds); never copied from shop pages.
+    imageUrl: p.imageUrl ?? null,
     ages: p.ages ?? null,
   }));
 

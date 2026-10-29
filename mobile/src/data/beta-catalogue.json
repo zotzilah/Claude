@@ -62,6 +62,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/mini-brands-really-works-vinyl/",
    "emoji": "💿",
+   "imageUrl": null,
    "ages": "3+"
   },
   {
@@ -73,6 +74,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/hot-wheels-t-rex-garage/",
    "emoji": "🦖",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -84,6 +86,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/chad-valley-alfie-and-joe-train/",
    "emoji": "🚂",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -95,6 +98,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/product/7660405",
    "emoji": "🍳",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -106,6 +110,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/toniebox-lite/",
    "emoji": "🎧",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -117,6 +122,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/little-live-pets-skye/",
    "emoji": "🐉",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -128,6 +134,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/product/8788111",
    "emoji": "🦈",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -139,6 +146,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/vtech-kidi-guitar-superstar/",
    "emoji": "🎸",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -150,6 +158,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/karaoke-projector/",
    "emoji": "🎤",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -161,6 +170,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/product/8780401",
    "emoji": "🧱",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -172,6 +182,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/armorsaurs-ajax/",
    "emoji": "🦕",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -183,6 +194,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/giftie-badge-maker/",
    "emoji": "📛",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -194,6 +206,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/product/3444759",
    "emoji": "🏠",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -205,6 +218,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/flutter-monster/",
    "emoji": "👾",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -216,6 +230,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/product/8486839",
    "emoji": "🐴",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -227,6 +242,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/kpop-demon-hunters-singing-doll/",
    "emoji": "🎙️",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -238,6 +254,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/paw-patrol-megasaurus/",
    "emoji": "🚒",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -249,6 +266,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/ready-pedal-peppa/",
    "emoji": "🐷",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -260,6 +278,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/product/8024954",
    "emoji": "💨",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -271,6 +290,7 @@
    "retailer": "The Entertainer",
    "url": "https://www.thetoyshop.com/action-toys/video-game-figures/Pokemon-Ash-and-Pikachu-Battle-Figures/p/577949",
    "emoji": "⚡",
+   "imageUrl": null,
    "ages": "4+"
   },
   {
@@ -282,6 +302,7 @@
    "retailer": "Hamleys",
    "url": "https://www.hamleys.com/the-big-squij-croissant",
    "emoji": "🥐",
+   "imageUrl": null,
    "ages": "3+"
   },
   {
@@ -293,6 +314,7 @@
    "retailer": "Hamleys",
    "url": "https://www.hamleys.com/hamleys-festive-15-toys",
    "emoji": "🦹",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -304,6 +326,7 @@
    "retailer": "Hamleys",
    "url": "https://www.hamleys.com/hamleys-festive-15-toys",
    "emoji": "🦄",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -315,6 +338,7 @@
    "retailer": "Hamleys",
    "url": "https://www.hamleys.com/pd-stamp-spin-pizza-playset",
    "emoji": "🍕",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -326,6 +350,7 @@
    "retailer": "Hamleys",
    "url": "https://www.hamleys.com/hamleys-festive-15-toys",
    "emoji": "🃏",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -337,6 +362,7 @@
    "retailer": "John Lewis",
    "url": "https://www.johnlewis.com/le-toy-van-paddington-dolls-house/p115533652",
    "emoji": "🧸",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -348,6 +374,7 @@
    "retailer": "John Lewis",
    "url": "https://www.johnlewis.com/browse/baby-child/shop-toys/connetix/_/N-ferZpx13",
    "emoji": "🔮",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -359,6 +386,7 @@
    "retailer": "Smyths",
    "url": "https://www.smythstoys.com/uk/en-gb/toys/action-figures-and-playsets/pokemon-toys/pokemon-playsets-and-figures/pokemon-pikachu-puppetronic-by-realfx-interactive-toy/p/253307",
    "emoji": "⚡",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -370,6 +398,7 @@
    "retailer": "Smyths",
    "url": "https://www.smythstoys.com/uk/en-gb/toys/top-toys/disney-toy-story-ultimate-action-buzz-lightyear-interactive-toy/p/254683",
    "emoji": "🚀",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -381,6 +410,7 @@
    "retailer": "Smyths",
    "url": "https://www.smythstoys.com/uk/en-gb/toys/action-figures-and-playsets/toy-story/disney-pixar-toy-story-5-interactables-figure-woody/p/254494",
    "emoji": "🤠",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -392,6 +422,7 @@
    "retailer": "Argos",
    "url": "https://www.argos.co.uk/search/chad-valley-stacking-ball-drop/",
    "emoji": "🔴",
+   "imageUrl": null,
    "ages": null
   },
   {
@@ -403,6 +434,427 @@
    "retailer": "Bigjigs Toys",
    "url": "https://www.bigjigstoys.co.uk/products/my-first-balance-bike-blue",
    "emoji": "🚲",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "342/0002",
+   "title": "Chad Valley Be U 1000 Pcs Sparkle Box",
+   "page": "crafts",
+   "priceMinor": 1200,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-be-u-1000-pcs-sparkle-box/",
+   "emoji": "✨",
+   "imageUrl": null,
+   "ages": "5+"
+  },
+  {
+   "catalogueNo": "342/0003",
+   "title": "FabLab Luxury Tie Dye Kit for Kids",
+   "page": "crafts",
+   "priceMinor": 1300,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/fablab-luxury-tie-dye-kit-for-kids/",
+   "emoji": "👕",
+   "imageUrl": null,
+   "ages": "8+"
+  },
+  {
+   "catalogueNo": "342/0004",
+   "title": "Snazaroo Rainbow Face Paint Kit",
+   "page": "crafts",
+   "priceMinor": 1349,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/snazaroo-rainbow-face-paint-kit/",
+   "emoji": "🎭",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "342/0005",
+   "title": "Aquabeads Amazing Play Pack",
+   "page": "crafts",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/aquabeads-amazing-play-pack/",
+   "emoji": "🔵",
+   "imageUrl": null,
+   "ages": "4+"
+  },
+  {
+   "catalogueNo": "342/0006",
+   "title": "Cra-Z-Art Shimmer N Sparkle Unicorn Rock Art Set",
+   "page": "crafts",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/cra-z-art-shimmer-n-sparkle-unicorn-rock-art-set/",
+   "emoji": "🪨",
+   "imageUrl": null,
+   "ages": "6+"
+  },
+  {
+   "catalogueNo": "342/0007",
+   "title": "Kinetic Sand 5 Sand Type Multipack",
+   "page": "crafts",
+   "priceMinor": 2700,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/kinetic-sand-5-sand-type-multipack/",
+   "emoji": "🏖️",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "342/0008",
+   "title": "Orbeez Challenge Meez Activity Set",
+   "page": "crafts",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/orbeez-challenge-meez-activity-set/",
+   "emoji": "🫧",
+   "imageUrl": null,
+   "ages": "5+"
+  },
+  {
+   "catalogueNo": "105/0002",
+   "title": "Chad Valley PlaySmart Wooden Shape Sorter",
+   "page": "little",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-playsmart-wooden-shape-sorter/",
+   "emoji": "🔷",
+   "imageUrl": null,
+   "ages": "12m+"
+  },
+  {
+   "catalogueNo": "105/0003",
+   "title": "Fisher-Price Laugh & Learn Sit & Steer Driver",
+   "page": "little",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/fisher-price-laugh-learn-sit-steer-driver/",
+   "emoji": "🚗",
+   "imageUrl": null,
+   "ages": "6m+"
+  },
+  {
+   "catalogueNo": "105/0004",
+   "title": "Chad Valley PlaySmart Interactive Magnetic Easel",
+   "page": "little",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-playsmart-interactive-magnetic-easel/",
+   "emoji": "🖍️",
+   "imageUrl": null,
+   "ages": "1+"
+  },
+  {
+   "catalogueNo": "105/0005",
+   "title": "Fisher-Price Laugh & Learn 2-in-1 Vacuum",
+   "page": "little",
+   "priceMinor": 2800,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/fisher-price-laugh-learn-2-in-1-vacuum/",
+   "emoji": "🧹",
+   "imageUrl": null,
+   "ages": "1+"
+  },
+  {
+   "catalogueNo": "105/0006",
+   "title": "VTech Toot-Toot Drivers Garage",
+   "page": "little",
+   "priceMinor": 3300,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/vtech-toot-toot-drivers-garage/",
+   "emoji": "🚙",
+   "imageUrl": null,
+   "ages": "1+"
+  },
+  {
+   "catalogueNo": "482/0003",
+   "title": "Chad Valley 6ft Outdoor Kids Trampoline with Enclosure",
+   "page": "outdoor",
+   "priceMinor": 9500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-6ft-outdoor-kids-trampoline-with-enclosure/",
+   "emoji": "🤸",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "482/0004",
+   "title": "Chad Valley Toddler Trampoline",
+   "page": "outdoor",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-toddler-trampoline/",
+   "emoji": "🦘",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "482/0005",
+   "title": "Sportspower Sport-Pro 8ft Trampoline with Folding Enclosure",
+   "page": "outdoor",
+   "priceMinor": 11500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/sportspower-sport-pro-8ft-trampoline-with-folding-enclosure/",
+   "emoji": "🏕️",
+   "imageUrl": null,
+   "ages": "6+"
+  },
+  {
+   "catalogueNo": "482/0006",
+   "title": "Micro Scooters 3 in 1 Toddler Scooter",
+   "page": "outdoor",
+   "priceMinor": 11000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/8697934",
+   "emoji": "🛴",
+   "imageUrl": null,
+   "ages": "1+"
+  },
+  {
+   "catalogueNo": "527/0003",
+   "title": "Rummikub Classic",
+   "page": "games",
+   "priceMinor": 1600,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/rummikub-classic/",
+   "emoji": "🀄",
+   "imageUrl": null,
+   "ages": "7+"
+  },
+  {
+   "catalogueNo": "527/0004",
+   "title": "Jenga",
+   "page": "games",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/jenga/",
+   "emoji": "🪵",
+   "imageUrl": null,
+   "ages": "6+"
+  },
+  {
+   "catalogueNo": "527/0005",
+   "title": "Guess Who?",
+   "page": "games",
+   "priceMinor": 1400,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/guess-who/",
+   "emoji": "🕵️",
+   "imageUrl": null,
+   "ages": "6+"
+  },
+  {
+   "catalogueNo": "527/0006",
+   "title": "Twister",
+   "page": "games",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/twister/",
+   "emoji": "🌀",
+   "imageUrl": null,
+   "ages": "6+"
+  },
+  {
+   "catalogueNo": "527/0007",
+   "title": "Sequence",
+   "page": "games",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/sequence/",
+   "emoji": "🃏",
+   "imageUrl": null,
+   "ages": "7+"
+  },
+  {
+   "catalogueNo": "214/0005",
+   "title": "LEGO City Advent Calendar 2026 Santa's Workshop 60510",
+   "page": "bricks",
+   "priceMinor": 1800,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/lego-city-advent-calendar-2026-santa-s-workshop-60510/",
+   "emoji": "📅",
+   "imageUrl": null,
+   "ages": "5+"
+  },
+  {
+   "catalogueNo": "214/0006",
+   "title": "LEGO Star Wars Advent Calendar 2026 75456",
+   "page": "bricks",
+   "priceMinor": 2300,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/lego-star-wars-advent-calendar-2026-75456/",
+   "emoji": "🌌",
+   "imageUrl": null,
+   "ages": "6+"
+  },
+  {
+   "catalogueNo": "214/0007",
+   "title": "LEGO Technic Monster Jam Grave Digger",
+   "page": "bricks",
+   "priceMinor": 2500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/lego-technic-monster-jam-grave-digger/",
+   "emoji": "🚚",
+   "imageUrl": null,
+   "ages": "7+"
+  },
+  {
+   "catalogueNo": "214/0008",
+   "title": "LEGO Harry Potter Knight Bus",
+   "page": "bricks",
+   "priceMinor": 4500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/lego-harry-potter-knight-bus/",
+   "emoji": "🚌",
+   "imageUrl": null,
+   "ages": "8+"
+  },
+  {
+   "catalogueNo": "287/0004",
+   "title": "Squishmallows 16 Inch Bellamy the Axolotl Alicorn",
+   "page": "soft",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/squishmallows-16-inch-bellamy-the-axolotl-alicorn/",
+   "emoji": "🦎",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "287/0005",
+   "title": "Squishmallows 20 Inch Arnold Sheepdog",
+   "page": "soft",
+   "priceMinor": 3500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/squishmallows-20-inch-arnold-sheepdog/",
+   "emoji": "🐕",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "287/0006",
+   "title": "Bluey Talking Bluey 13 Inch Plush",
+   "page": "soft",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/9541223",
+   "emoji": "🐶",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "287/0007",
+   "title": "Bluey 8 Inch Bingo Soft Toy",
+   "page": "soft",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/7814024",
+   "emoji": "🧡",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "287/0008",
+   "title": "Bluey Electronic Cuddle & Care 11 Inch Plush",
+   "page": "soft",
+   "priceMinor": 2500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/7468559",
+   "emoji": "🍼",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "318/0004",
+   "title": "Yoto Player",
+   "page": "music",
+   "priceMinor": 9000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/4338905",
+   "emoji": "📻",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "318/0005",
+   "title": "VTech KidiZoom Dual Camera Smart Watch",
+   "page": "music",
+   "priceMinor": 4000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/8368641",
+   "emoji": "⌚",
+   "imageUrl": null,
+   "ages": "4+"
+  },
+  {
+   "catalogueNo": "251/0008",
+   "title": "Barbie Dreamhouse",
+   "page": "dolls",
+   "priceMinor": 20000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/9022278",
+   "emoji": "🏡",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "251/0009",
+   "title": "BABY born Emma Doll and Accessories",
+   "page": "dolls",
+   "priceMinor": 5000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/baby-born-emma-doll-and-accessories/",
+   "emoji": "👶",
+   "imageUrl": null,
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "251/0010",
+   "title": "BABY born Magic Boy Lukas Doll 36cm",
+   "page": "dolls",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/baby-born-magic-boy-lukas-doll-36cm/",
+   "emoji": "🍼",
+   "imageUrl": null,
    "ages": "3+"
   }
  ]

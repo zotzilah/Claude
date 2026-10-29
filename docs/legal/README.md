@@ -43,4 +43,4 @@ The policy describes these features. Some don't exist yet, so they're on the to-
 - [ ] **Export my lists.** The local snapshot format (`mobile/src/domain/snapshot.ts`) already covers the content.
 - [x] Shop links open only outside Kid Mode. ✅ Done.
 - [x] The PIN is stored hashed, on the device only. ✅ Done.
-- [ ] The retention clean-up job: a scheduled database function that deletes old lists.
+- [x] The retention clean-up job: `supabase/migrations/20261030120000_retention.sql` runs nightly. ✅ Built and tested. It needs running once in the Supabase SQL Editor.

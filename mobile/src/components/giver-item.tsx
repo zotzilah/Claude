@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import * as WebBrowser from 'expo-web-browser';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -40,7 +41,11 @@ export function GiverItem(props: Props) {
   return (
     <View style={[styles.item, claim?.status === 'bought' && styles.itemDone]}>
       <View style={styles.top}>
-        <Text style={styles.thumb}>{product.emoji}</Text>
+        {product.imageUrl ? (
+          <Image source={product.imageUrl} style={styles.thumbImage} contentFit="contain" accessibilityIgnoresInvertColors />
+        ) : (
+          <Text style={styles.thumb}>{product.emoji}</Text>
+        )}
         <View style={styles.info}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>{product.title}</Text>
@@ -177,6 +182,7 @@ const styles = StyleSheet.create({
   item: { backgroundColor: colors.paper, borderRadius: 12, borderWidth: 1, borderColor: colors.rule, padding: space.md, gap: space.sm },
   itemDone: { opacity: 0.75 },
   top: { flexDirection: 'row', gap: space.md },
+  thumbImage: { width: 58, height: 58, borderWidth: 1, borderColor: colors.rule, borderRadius: 8, backgroundColor: colors.paper },
   thumb: { width: 58, height: 58, fontSize: 34, lineHeight: 58, textAlign: 'center', borderWidth: 1, borderColor: colors.rule, borderRadius: 8 },
   info: { flex: 1, gap: 4 },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
