@@ -277,6 +277,7 @@ export const enGB = {
   giver: {
     /** "Ellie's Christmas Book 2026" reads as a list to the family. */
     listTitle: (bookTitle: string) => bookTitle.replace('Book', 'List'),
+    backToCatalogue: '◀ Back to the catalogue',
     circledBy: (name: string) => `Circled by ${name || 'them'} · no app needed`,
     surpriseOn: (name: string) => `🤫 Surprise mode is on. ${name || 'They'} can't see who's buying what.`,
     hello: "Hello! Who's buying?",

@@ -1,4 +1,4 @@
-import { Redirect, useLocalSearchParams } from 'expo-router';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Linking, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -66,6 +66,17 @@ export default function GiverList() {
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={{ paddingBottom: space.lg }} keyboardShouldPersistTaps="handled">
         <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
+          {/* This phone made the list, so this is a preview of the family's view: offer a way back. */}
+          {list.list.setupComplete && (
+            <Pressable
+              onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+              accessibilityRole="button"
+              hitSlop={10}
+              style={styles.back}
+            >
+              <Text style={styles.backText}>{t.giver.backToCatalogue}</Text>
+            </Pressable>
+          )}
           <Text style={styles.title} accessibilityRole="header">
             {listTitle}
           </Text>
@@ -159,6 +170,8 @@ function Stat({ value, label }: { value: string; label: string }) {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper2 },
   head: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingBottom: 14 },
+  back: { alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center', marginBottom: space.xs },
+  backText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow },
   title: { fontFamily: fonts.display, fontSize: 23, color: colors.paper },
   sub: { fontFamily: fonts.body, fontSize: 14, color: colors.paper, marginTop: 4 },
   surprise: {
