@@ -1,7 +1,6 @@
 /**
- * Placeholder catalogue for development and the Christmas 2026 beta build-up.
- * Products, prices and shops are made-up examples, not real listings.
- * Real products will come from the curated beta catalogue and, later, affiliate feeds.
+ * Made-up products used as fixed examples by the unit tests. Not shown in the app,
+ * which uses the real beta catalogue in `catalogue.ts`.
  */
 import { formatCatalogueNumber } from '@/domain/catalogue-number';
 import type { Category, Product } from '@/domain/types';

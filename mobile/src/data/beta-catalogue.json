@@ -1,0 +1,409 @@
+{
+ "asOf": "2026-10-29",
+ "pages": [
+  {
+   "key": "bricks",
+   "title": "Building & Bricks",
+   "familyCode": 214
+  },
+  {
+   "key": "pretend",
+   "title": "Pretend Play & Playsets",
+   "familyCode": 236
+  },
+  {
+   "key": "dolls",
+   "title": "Dolls & Figures",
+   "familyCode": 251
+  },
+  {
+   "key": "interactive",
+   "title": "Interactive Pets & Robots",
+   "familyCode": 268
+  },
+  {
+   "key": "soft",
+   "title": "Soft Toys & Squishies",
+   "familyCode": 287
+  },
+  {
+   "key": "music",
+   "title": "Music, Stories & Gadgets",
+   "familyCode": 318
+  },
+  {
+   "key": "crafts",
+   "title": "Arts & Crafts",
+   "familyCode": 342
+  },
+  {
+   "key": "outdoor",
+   "title": "Outdoor & Ride-ons",
+   "familyCode": 482
+  },
+  {
+   "key": "games",
+   "title": "Games & Family Fun",
+   "familyCode": 527
+  },
+  {
+   "key": "little",
+   "title": "Little Ones (0–3)",
+   "familyCode": 105
+  }
+ ],
+ "products": [
+  {
+   "catalogueNo": "236/0001",
+   "title": "Mini Brands Really Works Vinyl Playset",
+   "page": "pretend",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/mini-brands-really-works-vinyl/",
+   "emoji": "💿",
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "236/0002",
+   "title": "Hot Wheels City Ultimate T-Rex Garage",
+   "page": "pretend",
+   "priceMinor": 9000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/hot-wheels-t-rex-garage/",
+   "emoji": "🦖",
+   "ages": null
+  },
+  {
+   "catalogueNo": "214/0002",
+   "title": "Chad Valley Alfie and Joe Wooden Train Set",
+   "page": "bricks",
+   "priceMinor": 1500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-alfie-and-joe-train/",
+   "emoji": "🚂",
+   "ages": null
+  },
+  {
+   "catalogueNo": "236/0003",
+   "title": "Chad Valley Wooden Classic Kitchen Set",
+   "page": "pretend",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/7660405",
+   "emoji": "🍳",
+   "ages": null
+  },
+  {
+   "catalogueNo": "318/0001",
+   "title": "Toniebox Lite with Creative Tonie",
+   "page": "music",
+   "priceMinor": 6000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/toniebox-lite/",
+   "emoji": "🎧",
+   "ages": null
+  },
+  {
+   "catalogueNo": "268/0001",
+   "title": "Little Live Pets Skye My Magical Dragon",
+   "page": "interactive",
+   "priceMinor": 5000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/little-live-pets-skye/",
+   "emoji": "🐉",
+   "ages": null
+  },
+  {
+   "catalogueNo": "268/0002",
+   "title": "Primal Hatch Megalodon Hatching Egg Shark Toy",
+   "page": "interactive",
+   "priceMinor": 5500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/8788111",
+   "emoji": "🦈",
+   "ages": null
+  },
+  {
+   "catalogueNo": "318/0002",
+   "title": "VTech Kidi Guitar Superstar",
+   "page": "music",
+   "priceMinor": 5000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/vtech-kidi-guitar-superstar/",
+   "emoji": "🎸",
+   "ages": null
+  },
+  {
+   "catalogueNo": "318/0003",
+   "title": "Music Creator Wireless Karaoke Projector",
+   "page": "music",
+   "priceMinor": 6500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/karaoke-projector/",
+   "emoji": "🎤",
+   "ages": null
+  },
+  {
+   "catalogueNo": "214/0003",
+   "title": "LEGO Pokémon SMART Play: Sprigatito, Fuecoco and Quaxly Battle",
+   "page": "bricks",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/8780401",
+   "emoji": "🧱",
+   "ages": null
+  },
+  {
+   "catalogueNo": "268/0003",
+   "title": "Armorsaurs Armor-Up Dinosaur T-Rex Ajax",
+   "page": "interactive",
+   "priceMinor": 4500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/armorsaurs-ajax/",
+   "emoji": "🦕",
+   "ages": null
+  },
+  {
+   "catalogueNo": "342/0001",
+   "title": "Giftie Badge Maker",
+   "page": "crafts",
+   "priceMinor": 3500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/giftie-badge-maker/",
+   "emoji": "📛",
+   "ages": null
+  },
+  {
+   "catalogueNo": "236/0004",
+   "title": "Jupiter Workshops Kensington Dolls House",
+   "page": "pretend",
+   "priceMinor": 4200,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/3444759",
+   "emoji": "🏠",
+   "ages": null
+  },
+  {
+   "catalogueNo": "287/0001",
+   "title": "Flutter Monster 40cm Soft Toy",
+   "page": "soft",
+   "priceMinor": 2000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/flutter-monster/",
+   "emoji": "👾",
+   "ages": null
+  },
+  {
+   "catalogueNo": "287/0002",
+   "title": "Toy Story 5 Ginormous Bullseye Soft Toy",
+   "page": "soft",
+   "priceMinor": 3500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/8486839",
+   "emoji": "🐴",
+   "ages": null
+  },
+  {
+   "catalogueNo": "251/0001",
+   "title": "KPop Demon Hunters Golden Singing Doll Rumi",
+   "page": "dolls",
+   "priceMinor": 3500,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/kpop-demon-hunters-singing-doll/",
+   "emoji": "🎙️",
+   "ages": null
+  },
+  {
+   "catalogueNo": "236/0005",
+   "title": "PAW Patrol The Dino Movie Megasaurus Dino Vehicle",
+   "page": "pretend",
+   "priceMinor": 6000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/paw-patrol-megasaurus/",
+   "emoji": "🚒",
+   "ages": null
+  },
+  {
+   "catalogueNo": "482/0001",
+   "title": "Peppa Pig Ready Pedal Peppa",
+   "page": "outdoor",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/ready-pedal-peppa/",
+   "emoji": "🐷",
+   "ages": null
+  },
+  {
+   "catalogueNo": "527/0001",
+   "title": "Minions & Monsters Fart Blaster Pro",
+   "page": "games",
+   "priceMinor": 3000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/product/8024954",
+   "emoji": "💨",
+   "ages": null
+  },
+  {
+   "catalogueNo": "268/0004",
+   "title": "Pokémon Ash and Pikachu Battle Figures",
+   "page": "interactive",
+   "priceMinor": 1200,
+   "currency": "GBP",
+   "retailer": "The Entertainer",
+   "url": "https://www.thetoyshop.com/action-toys/video-game-figures/Pokemon-Ash-and-Pikachu-Battle-Figures/p/577949",
+   "emoji": "⚡",
+   "ages": "4+"
+  },
+  {
+   "catalogueNo": "287/0003",
+   "title": "The Big Squij Croissant",
+   "page": "soft",
+   "priceMinor": 999,
+   "currency": "GBP",
+   "retailer": "Hamleys",
+   "url": "https://www.hamleys.com/the-big-squij-croissant",
+   "emoji": "🥐",
+   "ages": "3+"
+  },
+  {
+   "catalogueNo": "251/0002",
+   "title": "Marvel Doctor Doom Action Figure",
+   "page": "dolls",
+   "priceMinor": 2999,
+   "currency": "GBP",
+   "retailer": "Hamleys",
+   "url": "https://www.hamleys.com/hamleys-festive-15-toys",
+   "emoji": "🦹",
+   "ages": null
+  },
+  {
+   "catalogueNo": "268/0005",
+   "title": "Thunder Unicorn Remote-Controlled Unicorn",
+   "page": "interactive",
+   "priceMinor": 7499,
+   "currency": "GBP",
+   "retailer": "Hamleys",
+   "url": "https://www.hamleys.com/hamleys-festive-15-toys",
+   "emoji": "🦄",
+   "ages": null
+  },
+  {
+   "catalogueNo": "236/0006",
+   "title": "Play-Doh Stamp & Spin Pizza Playset",
+   "page": "pretend",
+   "priceMinor": 1999,
+   "currency": "GBP",
+   "retailer": "Hamleys",
+   "url": "https://www.hamleys.com/pd-stamp-spin-pizza-playset",
+   "emoji": "🍕",
+   "ages": null
+  },
+  {
+   "catalogueNo": "527/0002",
+   "title": "Articulate: Under Pressure",
+   "page": "games",
+   "priceMinor": 2499,
+   "currency": "GBP",
+   "retailer": "Hamleys",
+   "url": "https://www.hamleys.com/hamleys-festive-15-toys",
+   "emoji": "🃏",
+   "ages": null
+  },
+  {
+   "catalogueNo": "236/0007",
+   "title": "Le Toy Van Paddington Doll's House",
+   "page": "pretend",
+   "priceMinor": 29995,
+   "currency": "GBP",
+   "retailer": "John Lewis",
+   "url": "https://www.johnlewis.com/le-toy-van-paddington-dolls-house/p115533652",
+   "emoji": "🧸",
+   "ages": null
+  },
+  {
+   "catalogueNo": "214/0004",
+   "title": "CONNETIX Ball Run Launcher Pack Set",
+   "page": "bricks",
+   "priceMinor": 4500,
+   "currency": "GBP",
+   "retailer": "John Lewis",
+   "url": "https://www.johnlewis.com/browse/baby-child/shop-toys/connetix/_/N-ferZpx13",
+   "emoji": "🔮",
+   "ages": null
+  },
+  {
+   "catalogueNo": "268/0006",
+   "title": "Pokémon Pikachu Puppetronic by RealFX",
+   "page": "interactive",
+   "priceMinor": 6999,
+   "currency": "GBP",
+   "retailer": "Smyths",
+   "url": "https://www.smythstoys.com/uk/en-gb/toys/action-figures-and-playsets/pokemon-toys/pokemon-playsets-and-figures/pokemon-pikachu-puppetronic-by-realfx-interactive-toy/p/253307",
+   "emoji": "⚡",
+   "ages": null
+  },
+  {
+   "catalogueNo": "251/0006",
+   "title": "Disney Toy Story Ultimate Action Buzz Lightyear",
+   "page": "dolls",
+   "priceMinor": 4999,
+   "currency": "GBP",
+   "retailer": "Smyths",
+   "url": "https://www.smythstoys.com/uk/en-gb/toys/top-toys/disney-toy-story-ultimate-action-buzz-lightyear-interactive-toy/p/254683",
+   "emoji": "🚀",
+   "ages": null
+  },
+  {
+   "catalogueNo": "251/0007",
+   "title": "Toy Story 5 Interactables Talking Woody",
+   "page": "dolls",
+   "priceMinor": 1799,
+   "currency": "GBP",
+   "retailer": "Smyths",
+   "url": "https://www.smythstoys.com/uk/en-gb/toys/action-figures-and-playsets/toy-story/disney-pixar-toy-story-5-interactables-figure-woody/p/254494",
+   "emoji": "🤠",
+   "ages": null
+  },
+  {
+   "catalogueNo": "105/0001",
+   "title": "Chad Valley Stacking Ball Drop",
+   "page": "little",
+   "priceMinor": 1000,
+   "currency": "GBP",
+   "retailer": "Argos",
+   "url": "https://www.argos.co.uk/search/chad-valley-stacking-ball-drop/",
+   "emoji": "🔴",
+   "ages": null
+  },
+  {
+   "catalogueNo": "482/0002",
+   "title": "Bigjigs My First Balance Bike (Blue)",
+   "page": "outdoor",
+   "priceMinor": 7299,
+   "currency": "GBP",
+   "retailer": "Bigjigs Toys",
+   "url": "https://www.bigjigstoys.co.uk/products/my-first-balance-bike-blue",
+   "emoji": "🚲",
+   "ages": "3+"
+  }
+ ]
+}

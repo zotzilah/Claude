@@ -45,6 +45,7 @@ export const enGB = {
   catalogue: {
     hintKid: 'Tap to circle it! Tap again for more stars ★',
     hint: 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page',
+    pricesAsOf: (date: string) => `Prices checked ${date}. They can change, so check the shop before buying.`,
     kidModeChip: '🔒 KID MODE',
     indexA11y: 'A to Z index',
     soundA11y: 'Sound effects',

@@ -8,7 +8,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-import { yourFinds } from '@/data/sample-catalogue';
+import { yourFinds } from '@/data/catalogue';
 import {
   claimsFromRows,
   groupGiftsFromRows,

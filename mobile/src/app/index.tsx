@@ -8,7 +8,8 @@ import { BigButton } from '@/components/big-button';
 import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
-import { useStrings } from '@/state/locale';
+import { pricesCheckedOn } from '@/data/catalogue';
+import { deviceLocale, useStrings } from '@/state/locale';
 import { hasPin } from '@/state/parent-pin';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -50,6 +51,7 @@ export default function CatalogueScreen() {
         <Text style={styles.hint}>
           {kid ? t.catalogue.hintKid : t.catalogue.hint}
         </Text>
+        {!kid && <Text style={styles.hint}>{t.catalogue.pricesAsOf(checkedDate)}</Text>}
       </ScrollView>
     );
   };
@@ -152,6 +154,11 @@ export default function CatalogueScreen() {
     </View>
   );
 }
+
+const checkedDate = new Date(`${pricesCheckedOn}T12:00:00Z`).toLocaleDateString(deviceLocale.tag, {
+  day: 'numeric',
+  month: 'long',
+});
 
 function clampPage(n: number, count: number) {
   return Number.isInteger(n) && n >= 0 && n < count ? n : 0;
