@@ -22,10 +22,11 @@ export type ListAction =
   | { type: 'addCustomProduct'; product: Product; now: number }
   | { type: 'hydrate'; state: ListState };
 
-export function createList(id: string): ListState {
+/** A new, empty list. `currency` is the family's local one (see `currencyForRegion`). */
+export function createList(id: string, currency = 'GBP'): ListState {
   return {
     id,
-    settings: defaultSettings(),
+    settings: defaultSettings(currency),
     setupComplete: false,
     kidMode: false,
     marks: {},

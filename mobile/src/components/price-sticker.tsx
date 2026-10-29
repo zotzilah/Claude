@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Polygon } from 'react-native-svg';
 
+import { moneyParts } from '@/domain/money';
+import { deviceLocale } from '@/state/locale';
 import { colors, fonts } from '@/theme/tokens';
 
 const WIDTH = 74;
@@ -14,18 +16,20 @@ const BURST: [number, number][] = [
 ];
 const points = BURST.map(([x, y]) => `${x * WIDTH},${y * HEIGHT}`).join(' ');
 
-/** The loud yellow starburst price sticker, e.g. £39.99. */
-export function PriceSticker({ priceMinor }: { priceMinor: number }) {
-  const pounds = Math.floor(priceMinor / 100);
-  const pence = String(priceMinor % 100).padStart(2, '0');
+/** The loud yellow starburst price sticker: big "£39", small ".99" (or "39,99 €", "￥1,200"). */
+export function PriceSticker({ priceMinor, currency }: { priceMinor: number; currency: string }) {
+  const { main, fraction, after } = moneyParts(priceMinor, currency, deviceLocale.tag);
   return (
     <View style={styles.wrap} accessible={false} importantForAccessibility="no-hide-descendants">
       <Svg width={WIDTH} height={HEIGHT} style={StyleSheet.absoluteFill}>
         <Polygon points={points} fill={colors.yellow} />
       </Svg>
       <Text style={styles.pounds}>
-        £{pounds}
-        <Text style={styles.pence}>.{pence}</Text>
+        {main}
+        <Text style={styles.pence}>
+          {fraction}
+          {after}
+        </Text>
       </Text>
     </View>
   );

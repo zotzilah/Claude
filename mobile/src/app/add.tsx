@@ -7,19 +7,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
 import { yourFinds } from '@/data/sample-catalogue';
+import { currencySymbol, moneyInputText, parseMoneyInput, toMinor } from '@/domain/money';
 import { extractUrl, type ProductDetails } from '@/domain/product-page';
-import { parseMoneyInput } from '@/domain/settings';
 import { detailsFromUrl, fetchProduct } from '@/state/fetch-product';
+import { deviceLocale, useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
 type Status = 'idle' | 'loading' | 'found' | 'manual';
-
-const FAILURE: Record<'timeout' | 'blocked' | 'not-found', string> = {
-  timeout: 'That shop took too long to answer. Fill in the details below.',
-  blocked: "We couldn't read that page (some shops block it). Fill in the details below.",
-  'not-found': "That page doesn't seem to exist. Check the link, or fill in the details below.",
-};
 
 /**
  * Paste a link from any shop (brief §8.2). Biro reads the name, price and photo,
@@ -28,6 +23,7 @@ const FAILURE: Record<'timeout' | 'blocked' | 'not-found', string> = {
 export default function AddFromLink() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
   const [link, setLink] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string | null>(null);
@@ -42,14 +38,14 @@ export default function AddFromLink() {
   const fill = (d: ProductDetails) => {
     setDetails(d);
     setTitle(d.title ?? '');
-    setPriceText(d.priceMinor !== null ? (d.priceMinor / 100).toFixed(2) : '');
+    setPriceText(d.priceMinor !== null ? moneyInputText(d.priceMinor, d.currency ?? list.settings.currency, deviceLocale.tag) : '');
     setRetailer(d.retailer);
   };
 
   const lookUp = async () => {
     const url = extractUrl(link);
     if (!url) {
-      setMessage("That doesn't look like a shop link. It should start with https://");
+      setMessage(t.add.notALink);
       return;
     }
     setStatus('loading');
@@ -58,17 +54,24 @@ export default function AddFromLink() {
     if (result.ok && (result.details.title || result.details.priceMinor !== null)) {
       fill(result.details);
       setStatus('found');
-      const missing = [!result.details.title && 'name', result.details.priceMinor === null && 'price'].filter(Boolean);
-      setMessage(missing.length ? `Found it, but add the ${missing.join(' and ')}.` : 'Found it! Check the details.');
+      const noName = !result.details.title;
+      const noPrice = result.details.priceMinor === null;
+      setMessage(noName || noPrice ? t.add.foundMissing(noName, noPrice) : t.add.found);
     } else {
       fill(detailsFromUrl(url));
       setStatus('manual');
-      setMessage(FAILURE[result.ok ? 'blocked' : result.reason]);
+      setMessage(t.add.failure[result.ok ? 'blocked' : result.reason]);
     }
   };
 
-  const priceMinor = parseMoneyInput(priceText);
-  const problem = !title.trim() ? 'Add a name' : priceMinor === null || priceMinor <= 0 ? 'Add a price, e.g. 24.99' : null;
+  const currency = details?.currency ?? list.settings.currency;
+  const priceExample = moneyInputText(toMinor(24.99, currency), currency, deviceLocale.tag);
+  const priceMinor = parseMoneyInput(priceText, currency, deviceLocale.tag);
+  const problem = !title.trim()
+    ? t.add.needName
+    : priceMinor === null || priceMinor <= 0
+      ? t.add.needPrice(priceExample)
+      : null;
 
   const add = () => {
     setTried(true);
@@ -79,7 +82,7 @@ export default function AddFromLink() {
       title: title.trim(),
       categoryKey: yourFinds.key,
       priceMinor,
-      currency: details.currency ?? list.settings.currency,
+      currency,
       retailer: retailer.trim() || details.retailer,
       url: details.url,
       emoji: '🎁',
@@ -94,15 +97,15 @@ export default function AddFromLink() {
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
-        <Text style={styles.kicker}>ADD FROM ANY SHOP</Text>
+        <Text style={styles.kicker}>{t.add.kicker}</Text>
         <Text style={styles.heading} accessibilityRole="header">
-          Paste a link
+          {t.add.heading}
         </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
         <Text style={styles.help}>
-          {`Found something ${list.settings.circlerName || 'they'} would love? Copy the link from the shop's app or website and paste it here.`}
+          {t.add.help(list.settings.circlerName)}
         </Text>
         <TextInput
           value={link}
@@ -119,13 +122,13 @@ export default function AddFromLink() {
           keyboardType="url"
           returnKeyType="go"
           style={styles.input}
-          accessibilityLabel="Shop link"
+          accessibilityLabel={t.add.linkA11y}
         />
-        {status !== 'loading' && !showForm && <BigButton label="Find it" onPress={lookUp} />}
+        {status !== 'loading' && !showForm && <BigButton label={t.add.find} onPress={lookUp} />}
         {status === 'loading' && (
           <View style={styles.loading}>
             <ActivityIndicator color={colors.blue} />
-            <Text style={styles.help}>{"Looking at the shop's page…"}</Text>
+            <Text style={styles.help}>{t.add.looking}</Text>
           </View>
         )}
         {message && (
@@ -137,28 +140,26 @@ export default function AddFromLink() {
         {showForm && (
           <View style={styles.form}>
             {details?.imageUrl && (
-              <Image source={details.imageUrl} style={styles.image} contentFit="contain" accessibilityLabel="Product photo" />
+              <Image source={details.imageUrl} style={styles.image} contentFit="contain" accessibilityLabel={t.add.photoA11y} />
             )}
-            <Text style={styles.label}>Name</Text>
-            <TextInput value={title} onChangeText={setTitle} style={styles.input} maxLength={120} accessibilityLabel="Name" />
-            <Text style={styles.label}>Price</Text>
+            <Text style={styles.label}>{t.add.name}</Text>
+            <TextInput value={title} onChangeText={setTitle} style={styles.input} maxLength={120} accessibilityLabel={t.add.name} />
+            <Text style={styles.label}>{t.add.price}</Text>
             <View style={styles.moneyRow}>
-              <Text style={styles.currency}>{details?.currency && details.currency !== 'GBP' ? details.currency : '£'}</Text>
+              <Text style={styles.currency}>{currencySymbol(currency, deviceLocale.tag)}</Text>
               <TextInput
                 value={priceText}
                 onChangeText={setPriceText}
                 keyboardType="decimal-pad"
-                placeholder="24.99"
+                placeholder={priceExample}
                 placeholderTextColor={colors.inkSoft}
                 style={[styles.input, styles.moneyInput]}
-                accessibilityLabel="Price"
+                accessibilityLabel={t.add.price}
               />
             </View>
-            <Text style={styles.label}>Shop</Text>
-            <TextInput value={retailer} onChangeText={setRetailer} style={styles.input} maxLength={60} accessibilityLabel="Shop" />
-            <Text style={styles.note}>
-              Only your list sees this. Givers tap through to the shop to buy it.
-            </Text>
+            <Text style={styles.label}>{t.add.shop}</Text>
+            <TextInput value={retailer} onChangeText={setRetailer} style={styles.input} maxLength={60} accessibilityLabel={t.add.shop} />
+            <Text style={styles.note}>{t.add.privateNote}</Text>
           </View>
         )}
       </ScrollView>
@@ -166,8 +167,8 @@ export default function AddFromLink() {
       <View style={[styles.footer, { paddingBottom: insets.bottom + space.md }]}>
         {tried && problem && <Text style={styles.problem}>{problem}</Text>}
         <View style={styles.row}>
-          <BigButton label="Cancel" tone="yellow" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
-          {showForm && <BigButton label="Circle it! ⭕" onPress={add} grow />}
+          <BigButton label={t.common.cancel} tone="yellow" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
+          {showForm && <BigButton label={t.add.circleIt} onPress={add} grow />}
         </View>
       </View>
     </KeyboardAvoidingView>

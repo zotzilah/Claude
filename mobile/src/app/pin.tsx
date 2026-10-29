@@ -7,6 +7,7 @@ import { BigButton } from '@/components/big-button';
 import { PinPad } from '@/components/pin-pad';
 import { isEasyPin, lockedForMs, NO_ATTEMPTS, PIN_LENGTH, type AttemptState } from '@/domain/pin';
 import { authenticateParent, canUseBiometrics, checkPin, loadAttempts, setPin } from '@/state/parent-pin';
+import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, space } from '@/theme/tokens';
 
@@ -22,6 +23,7 @@ export default function PinScreen() {
 
 function CreatePin() {
   const list = useWishlist();
+  const t = useStrings();
   const [first, setFirst] = useState<string | null>(null);
   const [value, setValue] = useState('');
   const [easyWarning, setEasyWarning] = useState(false);
@@ -45,7 +47,7 @@ function CreatePin() {
     }
     if (next !== first) {
       setErrors((n) => n + 1);
-      setMessage("Those didn't match. Let's start again.");
+      setMessage(t.pin.mismatch);
       setFirst(null);
       setValue('');
       return;
@@ -57,24 +59,25 @@ function CreatePin() {
 
   return (
     <Gate
-      title={first === null ? 'Choose a grown-ups PIN' : 'Type it again'}
-      subtitle={`You'll need this to leave Kid Mode, so ${list.settings.circlerName || 'your child'} can't wander off into settings.`}
-      message={easyWarning ? "That one's easy to guess. Kids are sneaky." : message}
+      title={first === null ? t.pin.chooseTitle : t.pin.confirmTitle}
+      subtitle={t.pin.chooseSubtitle(list.settings.circlerName || t.common.yourChild)}
+      message={easyWarning ? t.pin.easy : message}
     >
       <PinPad value={value} onChange={onChange} errorCount={errors} disabled={easyWarning} />
       {easyWarning && (
         <View style={styles.row}>
-          <BigButton label="Pick another" tone="yellow" onPress={() => { setEasyWarning(false); setValue(''); }} />
-          <BigButton label="Use it anyway" onPress={() => confirmFirst(value)} grow />
+          <BigButton label={t.pin.pickAnother} tone="yellow" onPress={() => { setEasyWarning(false); setValue(''); }} />
+          <BigButton label={t.pin.useAnyway} onPress={() => confirmFirst(value)} grow />
         </View>
       )}
-      <TextButton label="Cancel" onPress={() => router.back()} />
+      <TextButton label={t.common.cancel} onPress={() => router.back()} />
     </Gate>
   );
 }
 
 function UnlockPin() {
   const list = useWishlist();
+  const t = useStrings();
   const [value, setValue] = useState('');
   const [errors, setErrors] = useState(0);
   const [attempts, setAttempts] = useState<AttemptState>(NO_ATTEMPTS);
@@ -120,18 +123,18 @@ function UnlockPin() {
 
   return (
     <Gate
-      title="Grown-ups only"
-      subtitle="Type your PIN to leave Kid Mode."
-      message={lockedMs > 0 ? `Too many tries. Wait ${Math.ceil(lockedMs / 1000)} seconds.` : errors ? 'Not quite. Try again.' : null}
+      title={t.pin.unlockTitle}
+      subtitle={t.pin.unlockSubtitle}
+      message={lockedMs > 0 ? t.pin.wait(Math.ceil(lockedMs / 1000)) : errors ? t.pin.wrong : null}
     >
       <PinPad value={value} onChange={onChange} errorCount={errors} disabled={lockedMs > 0} />
-      {biometrics && <TextButton label="Use Face ID or fingerprint" onPress={() => tryBiometrics(false)} />}
+      {biometrics && <TextButton label={t.pin.biometrics} onPress={() => tryBiometrics(false)} />}
       <View style={styles.row}>
         <TextButton
-          label="◀ Back to circling"
+          label={t.pin.backToCircling}
           onPress={() => (router.canGoBack() ? router.back() : router.replace('/kid'))}
         />
-        {biometrics && <TextButton label="Forgot PIN?" onPress={() => tryBiometrics(true)} />}
+        {biometrics && <TextButton label={t.pin.forgot} onPress={() => tryBiometrics(true)} />}
       </View>
     </Gate>
   );

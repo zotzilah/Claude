@@ -1,6 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { defaultKidPricesShown, defaultSettings, finishSettings, parseMoneyInput, setupProblem } from '../settings';
+import { enGB } from '../../i18n/en-GB';
+
+import { parseMoneyInput } from '../money';
+import { defaultKidPricesShown, defaultSettings, finishSettings, setupProblem } from '../settings';
 import { parseSnapshot } from '../snapshot';
 
 describe('parseMoneyInput', () => {
@@ -26,19 +29,19 @@ describe('setup', () => {
   const draft = { ...defaultSettings(), circlerName: ' Ellie ', ageBand: '6-8' as const };
 
   it('names the list from the template and tidies the name', () => {
-    const done = finishSettings(draft, 2026);
+    const done = finishSettings(draft, 2026, enGB.templates.title);
     expect(done.title).toBe("Ellie's Christmas Book 2026");
     expect(done.circlerName).toBe('Ellie');
   });
 
   it('drops the age band for adult lists', () => {
-    expect(finishSettings({ ...draft, circler: 'adult' }, 2026).ageBand).toBeNull();
+    expect(finishSettings({ ...draft, circler: 'adult' }, 2026, enGB.templates.title).ageBand).toBeNull();
   });
 
   it('explains what is missing', () => {
-    expect(setupProblem({ ...draft, circlerName: '' })).toBe("Add the child's name");
-    expect(setupProblem({ ...draft, ageBand: null })).toBe('Pick an age');
-    expect(setupProblem({ ...draft, budgetMinor: 0 })).toBe('Set a budget above zero');
+    expect(setupProblem({ ...draft, circlerName: '' })).toBe('child-name');
+    expect(setupProblem({ ...draft, ageBand: null })).toBe('age');
+    expect(setupProblem({ ...draft, budgetMinor: 0 })).toBe('budget');
     expect(setupProblem({ ...draft, circler: 'adult', ageBand: null })).toBeNull();
     expect(setupProblem(draft)).toBeNull();
   });

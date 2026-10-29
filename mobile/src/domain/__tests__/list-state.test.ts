@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { createList, listReducer, type ListAction } from '../list-reducer';
-import { featuresFor, possessive, templates } from '../settings';
+import { enGB } from '../../i18n/en-GB';
+
+import { featuresFor, possessive } from '../settings';
 import { parseSnapshot, serialize } from '../snapshot';
 import type { ListState, Product } from '../types';
 
@@ -27,7 +29,7 @@ describe('settings helpers', () => {
   });
 
   it('titles lists from templates', () => {
-    expect(templates[0].title('Ellie', 2026)).toBe("Ellie's Christmas Book 2026");
+    expect(enGB.templates.title('christmas', 'Ellie', 2026)).toBe("Ellie's Christmas Book 2026");
   });
 
   it('adapts features to who is buying', () => {

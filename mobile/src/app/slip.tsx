@@ -8,7 +8,8 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { playSfx } from '@/audio/sfx';
 import { BigButton } from '@/components/big-button';
-import { formatMoney } from '@/domain/wishlist';
+import { moneyInputText } from '@/domain/money';
+import { deviceLocale, useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, space } from '@/theme/tokens';
 
@@ -27,6 +28,7 @@ const printed = () => {
 export default function OrderSlip() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
   const reducedMotion = useReducedMotion();
   const [paperHeight, setPaperHeight] = useState(0);
   const [printRun, setPrintRun] = useState(0);
@@ -57,42 +59,48 @@ export default function OrderSlip() {
   return (
     <View style={[styles.screen, { paddingTop: insets.top + space.lg, paddingBottom: insets.bottom + space.lg }]}>
       <View style={styles.till}>
-        <Text style={styles.counter}>COUNTER 3</Text>
-        <Text style={styles.lcd}>{hidePrices ? '★ ★ ★' : formatMoney(list.budget.totalMinor)}</Text>
+        <Text style={styles.counter}>{t.slip.counter}</Text>
+        <Text style={styles.lcd}>{hidePrices ? '★ ★ ★' : list.money(list.budget.totalMinor)}</Text>
       </View>
       <View style={styles.slot} />
       <View style={styles.receiptWrap}>
         <Animated.View style={[styles.paper, paperStyle]} onLayout={onPaperLayout}>
           <ScrollView contentContainerStyle={styles.receipt}>
-            <Text style={styles.title}>ORDER SLIP</Text>
+            <Text style={styles.title}>{t.slip.title}</Text>
             <Text style={[styles.mono, styles.center]}>{list.settings.title}</Text>
             <Text style={styles.rule}>- - - - - - - - - - - - - - - -</Text>
-            {list.wishes.length === 0 && <Text style={[styles.mono, styles.center]}>Nothing circled yet!</Text>}
+            {list.wishes.length === 0 && <Text style={[styles.mono, styles.center]}>{t.slip.nothing}</Text>}
             {list.wishes.map(({ product, stars }) => (
               <View key={product.id} style={styles.line}>
-                <Text style={[styles.mono, styles.no]}>{product.catalogueNo || 'YOURS'}</Text>
+                <Text style={[styles.mono, styles.no]}>{product.catalogueNo || t.slip.yours}</Text>
                 <Text style={[styles.mono, styles.name]}>
                   {product.title} <Text style={styles.stars}>{'★'.repeat(stars)}</Text>
                 </Text>
-                {!hidePrices && <Text style={styles.mono}>{(product.priceMinor / 100).toFixed(2)}</Text>}
+                {!hidePrices && (
+                  <Text style={styles.mono}>
+                    {product.currency === list.settings.currency
+                      ? moneyInputText(product.priceMinor, product.currency, deviceLocale.tag)
+                      : list.money(product.priceMinor, product.currency)}
+                  </Text>
+                )}
               </View>
             ))}
             <Text style={styles.rule}>- - - - - - - - - - - - - - - -</Text>
             <View style={styles.line}>
-              <Text style={[styles.mono, styles.bold]}>{list.wishes.length === 1 ? "1 ITEM" : `${list.wishes.length} ITEMS`}</Text>
-              {!hidePrices && <Text style={[styles.mono, styles.bold]}>{formatMoney(list.budget.totalMinor)}</Text>}
+              <Text style={[styles.mono, styles.bold]}>{t.slip.items(list.wishes.length)}</Text>
+              {!hidePrices && <Text style={[styles.mono, styles.bold]}>{list.money(list.budget.totalMinor)}</Text>}
             </View>
             <View style={styles.queue}>
-              <Text style={[styles.mono, styles.center]}>YOUR NUMBER IS</Text>
+              <Text style={[styles.mono, styles.center]}>{t.slip.yourNumber}</Text>
               <Text style={styles.queueNo}>47</Text>
-              <Text style={[styles.mono, styles.center]}>PLEASE WAIT FOR CHRISTMAS</Text>
+              <Text style={[styles.mono, styles.center]}>{t.templates.waitFor[list.settings.template]}</Text>
             </View>
           </ScrollView>
         </Animated.View>
       </View>
       <View style={styles.actions}>
-        <BigButton label="◀ Back" tone="yellow" onPress={() => router.back()} />
-        <BigButton label="Print again" onPress={() => setPrintRun((n) => n + 1)} grow />
+        <BigButton label={t.common.back} tone="yellow" onPress={() => router.back()} />
+        <BigButton label={t.slip.printAgain} onPress={() => setPrintRun((n) => n + 1)} grow />
       </View>
     </View>
   );

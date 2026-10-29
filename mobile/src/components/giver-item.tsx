@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { activeClaim, formatCountdown, msLeft, pledgedMinor } from '@/domain/claims';
-import { GROUP_GIFT_THRESHOLD_MINOR, parseMoneyInput } from '@/domain/settings';
+import { amountsFor, currencySymbol, formatMoney, formatMoneyShort, parseMoneyInput } from '@/domain/money';
+import { groupGiftThresholdMinor } from '@/domain/settings';
 import type { Claim, GroupGift, Product, Stars } from '@/domain/types';
-import { formatMoney } from '@/domain/wishlist';
+import { deviceLocale, useStrings } from '@/state/locale';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
-const QUICK_PLEDGES = [1000, 2500, 5000];
+const money = (minor: number, currency: string) => formatMoney(minor, currency, deviceLocale.tag);
 
 interface Props {
   product: Product;
@@ -31,9 +32,10 @@ interface Props {
 /** One wish on the Giver page: what it is, who has it, and what you can do. */
 export function GiverItem(props: Props) {
   const { product, stars, me, now } = props;
+  const t = useStrings();
   const claim = activeClaim(props.claim, now);
   const mine = claim?.giverName === me;
-  const canGroup = props.groupGiftsOn && !claim && product.priceMinor >= GROUP_GIFT_THRESHOLD_MINOR;
+  const canGroup = props.groupGiftsOn && !claim && product.priceMinor >= groupGiftThresholdMinor(product.currency);
 
   return (
     <View style={[styles.item, claim?.status === 'bought' && styles.itemDone]}>
@@ -42,15 +44,15 @@ export function GiverItem(props: Props) {
         <View style={styles.info}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>{product.title}</Text>
-            <Text style={styles.price}>{formatMoney(product.priceMinor, product.currency)}</Text>
+            <Text style={styles.price}>{money(product.priceMinor, product.currency)}</Text>
           </View>
           <View style={styles.meta}>
-            <Text style={styles.stars} accessibilityLabel={`${stars} star${stars > 1 ? 's' : ''}`}>
+            <Text style={styles.stars} accessibilityLabel={t.common.stars(stars)}>
               {'★'.repeat(stars)}
             </Text>
             {product.catalogueNo ? <Text style={styles.metaText}>{product.catalogueNo}</Text> : null}
             <Pressable onPress={() => WebBrowser.openBrowserAsync(product.url)} accessibilityRole="link" hitSlop={6}>
-              <Text style={styles.link}>View at {product.retailer || 'the shop'} ↗</Text>
+              <Text style={styles.link}>{t.giver.viewAt(product.retailer || t.common.theShop)}</Text>
             </Pressable>
           </View>
         </View>
@@ -62,27 +64,27 @@ export function GiverItem(props: Props) {
         <View style={styles.actions}>
           {!claim && (
             <>
-              <ActionButton label={props.groupGift ? 'Claim to buy it' : 'Claim it'} onPress={props.onClaim} disabled={!me} />
+              <ActionButton label={props.groupGift ? t.giver.claimToBuy : t.giver.claim} onPress={props.onClaim} disabled={!me} />
               {canGroup && !props.groupGift && (
-                <ActionButton label="Make it a group gift" ghost onPress={props.onStartGroupGift} disabled={!me} />
+                <ActionButton label={t.giver.makeGroupGift} ghost onPress={props.onStartGroupGift} disabled={!me} />
               )}
-              {!props.groupGift && <Text style={styles.hint}>Held for you for 48 hours</Text>}
+              {!props.groupGift && <Text style={styles.hint}>{t.giver.heldFor48}</Text>}
             </>
           )}
           {claim?.status === 'held' && mine && (
             <>
-              <Text style={[styles.pill, styles.pillHeld]}>Held by you · {formatCountdown(msLeft(claim, now))} left</Text>
-              <ActionButton label="I've bought it ✓" tone="good" onPress={props.onBought} />
-              <ActionButton label="Release" ghost onPress={props.onRelease} />
+              <Text style={[styles.pill, styles.pillHeld]}>{t.giver.heldByYou(formatCountdown(msLeft(claim, now)))}</Text>
+              <ActionButton label={t.giver.bought} tone="good" onPress={props.onBought} />
+              <ActionButton label={t.giver.release} ghost onPress={props.onRelease} />
             </>
           )}
           {claim?.status === 'held' && !mine && (
             <Text style={[styles.pill, styles.pillHeld]}>
-              Claimed by {claim.giverName} · {formatCountdown(msLeft(claim, now))} left
+              {t.giver.claimedBy(claim.giverName, formatCountdown(msLeft(claim, now)))}
             </Text>
           )}
           {claim?.status === 'bought' && (
-            <Text style={[styles.pill, styles.pillBought]}>Bought ✓ by {mine ? 'you' : claim.giverName}</Text>
+            <Text style={[styles.pill, styles.pillBought]}>{t.giver.boughtBy(mine ? t.giver.you : claim.giverName)}</Text>
           )}
         </View>
       )}
@@ -92,30 +94,32 @@ export function GiverItem(props: Props) {
 
 function GroupGiftBox(props: Props & { gift: GroupGift }) {
   const { gift, product, me } = props;
+  const t = useStrings();
+  const currency = product.currency;
   const pledged = pledgedMinor(gift);
   const myPledge = gift.pledges.find((p) => p.giverName === me);
   const [other, setOther] = useState('');
-  const otherMinor = parseMoneyInput(other);
+  const otherMinor = parseMoneyInput(other, currency, deviceLocale.tag);
 
   return (
     <View style={styles.group}>
       <Text style={styles.groupTitle}>
-        Group gift · organised by {gift.organiserName === me ? 'you' : gift.organiserName}
+        {t.giver.groupGiftBy(gift.organiserName === me ? t.giver.you : gift.organiserName)}
       </Text>
       <View style={styles.track}>
         <View style={[styles.fill, { width: `${Math.min(100, (pledged / product.priceMinor) * 100)}%` }]} />
       </View>
       <Text style={styles.groupText}>
-        {formatMoney(pledged)} of {formatMoney(product.priceMinor)} pledged
-        {gift.pledges.length ? ` · ${gift.pledges.map((p) => `${p.giverName} ${formatMoney(p.amountMinor)}`).join(' · ')}` : ''}
+        {t.giver.pledged(money(pledged, currency), money(product.priceMinor, currency))}
+        {gift.pledges.length ? ` · ${gift.pledges.map((p) => `${p.giverName} ${money(p.amountMinor, currency)}`).join(' · ')}` : ''}
       </Text>
       {me ? (
         <>
           <View style={styles.actions}>
-            {QUICK_PLEDGES.map((amount) => (
+            {amountsFor(currency).pledgesMinor.map((amount) => (
               <ActionButton
                 key={amount}
-                label={`${myPledge?.amountMinor === amount ? '✓ ' : ''}${formatMoney(amount).replace('.00', '')}`}
+                label={`${myPledge?.amountMinor === amount ? '✓ ' : ''}${formatMoneyShort(amount, currency, deviceLocale.tag)}`}
                 ghost={myPledge?.amountMinor !== amount}
                 onPress={() => props.onPledge(amount)}
               />
@@ -123,25 +127,25 @@ function GroupGiftBox(props: Props & { gift: GroupGift }) {
             <TextInput
               value={other}
               onChangeText={setOther}
-              placeholder="Other £"
+              placeholder={t.giver.other(currencySymbol(currency, deviceLocale.tag))}
               placeholderTextColor={colors.inkSoft}
               keyboardType="decimal-pad"
               style={styles.otherInput}
-              accessibilityLabel="Other pledge amount"
+              accessibilityLabel={t.giver.otherA11y}
             />
             {otherMinor !== null && otherMinor > 0 && (
-              <ActionButton label="Pledge" onPress={() => { props.onPledge(otherMinor); setOther(''); }} />
+              <ActionButton label={t.giver.pledge} onPress={() => { props.onPledge(otherMinor); setOther(''); }} />
             )}
           </View>
           {myPledge && (
             <Pressable onPress={() => props.onPledge(0)} accessibilityRole="button" hitSlop={6}>
-              <Text style={styles.link}>Remove my pledge</Text>
+              <Text style={styles.link}>{t.giver.removePledge}</Text>
             </Pressable>
           )}
           <Text style={styles.hint}>
             {gift.organiserName === me
-              ? "Collect the money directly, then claim it and buy it. Biro never handles money."
-              : `Pay ${gift.organiserName} directly. Biro just keeps track.`}
+              ? t.giver.organiserNote
+              : t.giver.pledgerNote(gift.organiserName)}
           </Text>
         </>
       ) : null}

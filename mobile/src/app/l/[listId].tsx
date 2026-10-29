@@ -5,8 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GiverItem } from '@/components/giver-item';
 import { giverSummary } from '@/domain/claims';
-import { formatMoney } from '@/domain/wishlist';
 import { loadGiverName, saveGiverName } from '@/state/giver-name';
+import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -19,6 +19,7 @@ export default function GiverList() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
   const [me, setMe] = useState('');
   const [nameDraft, setNameDraft] = useState('');
   const [now, setNow] = useState(() => Date.now());
@@ -40,8 +41,8 @@ export default function GiverList() {
   if (list.kidMode) return <Redirect href="/kid" />;
 
   const { settings, features } = list;
-  const summary = giverSummary(list.wishes, list.list.claims, now);
-  const listTitle = settings.title.replace('Book', 'List');
+  const summary = giverSummary(list.wishes, list.list.claims, now, settings.currency);
+  const listTitle = t.giver.listTitle(settings.title);
 
   // Every action refreshes the clock too, so a fresh claim reads "48h 00m", not a stale time.
   const act = (fn: () => void) => () => {
@@ -57,7 +58,7 @@ export default function GiverList() {
   };
 
   const share = () =>
-    Share.share({ message: `${listTitle}: claim a present here https://biro.example/l/${listId}` }).catch(() => undefined);
+    Share.share({ message: t.giver.shareMessage(listTitle, `https://biro.example/l/${listId}`) }).catch(() => undefined);
 
   return (
     <View style={styles.screen}>
@@ -67,48 +68,48 @@ export default function GiverList() {
             {listTitle}
           </Text>
           <Text style={styles.sub}>
-            Circled by {settings.circlerName || 'them'} · no app needed
+            {t.giver.circledBy(settings.circlerName)}
           </Text>
         </View>
 
         {features.claiming && settings.surpriseMode !== 'off' && (
           <Text style={styles.surprise}>
-            {`🤫 Surprise mode is on. ${settings.circlerName || 'They'} can't see who's buying what.`}
+            {t.giver.surpriseOn(settings.circlerName)}
           </Text>
         )}
 
         {features.claiming && !me && (
           <View style={styles.nameCard}>
-            <Text style={styles.nameTitle}>{"Hello! Who's buying?"}</Text>
-            <Text style={styles.nameHint}>{"So everyone knows who's claimed what. No account needed."}</Text>
+            <Text style={styles.nameTitle}>{t.giver.hello}</Text>
+            <Text style={styles.nameHint}>{t.giver.helloHint}</Text>
             <View style={styles.nameRow}>
               <TextInput
                 value={nameDraft}
                 onChangeText={setNameDraft}
                 onSubmitEditing={rememberName}
-                placeholder="e.g. Nan"
+                placeholder={t.giver.nameExample}
                 placeholderTextColor={colors.inkSoft}
                 autoCapitalize="words"
                 maxLength={30}
                 style={styles.nameInput}
-                accessibilityLabel="Your name"
+                accessibilityLabel={t.giver.nameA11y}
               />
               <Pressable onPress={rememberName} accessibilityRole="button" style={styles.nameButton}>
-                <Text style={styles.nameButtonText}>{"That's me"}</Text>
+                <Text style={styles.nameButtonText}>{t.giver.thatsMe}</Text>
               </Pressable>
             </View>
           </View>
         )}
-        {features.claiming && me ? <Text style={styles.signedIn}>Buying as {me}</Text> : null}
+        {features.claiming && me ? <Text style={styles.signedIn}>{t.giver.buyingAs(me)}</Text> : null}
 
         <View style={styles.summary}>
-          <Stat value={String(summary.wishCount)} label="wishes" />
-          <Stat value={formatMoney(summary.totalMinor)} label="list total" />
-          {features.claiming && <Stat value={formatMoney(summary.remainingMinor)} label="still to get" />}
+          <Stat value={String(summary.wishCount)} label={t.giver.wishes} />
+          <Stat value={list.money(summary.totalMinor)} label={t.giver.total} />
+          {features.claiming && <Stat value={list.money(summary.remainingMinor)} label={t.giver.stillToGet} />}
         </View>
 
         <View style={styles.items}>
-          {list.wishes.length === 0 && <Text style={styles.empty}>Nothing circled yet. Check back soon!</Text>}
+          {list.wishes.length === 0 && <Text style={styles.empty}>{t.giver.empty}</Text>}
           {list.wishes.map(({ product, stars }) => (
             <GiverItem
               key={product.id}
@@ -133,7 +134,7 @@ export default function GiverList() {
       {features.giverLink && (
         <View style={[styles.shareBar, { paddingBottom: insets.bottom + space.md }]}>
           <Pressable onPress={share} accessibilityRole="button" style={styles.shareButton}>
-            <Text style={styles.shareText}>Share this list</Text>
+            <Text style={styles.shareText}>{t.giver.share}</Text>
           </Pressable>
         </View>
       )}

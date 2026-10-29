@@ -1,25 +1,36 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import type { BudgetStatus } from '@/domain/wishlist';
-import { formatMoney } from '@/domain/wishlist';
+import { useStrings } from '@/state/locale';
 import { colors, fonts, space } from '@/theme/tokens';
 
-export function RunningTotal({ budget, count }: { budget: BudgetStatus; count: number }) {
+interface Props {
+  budget: BudgetStatus;
+  count: number;
+  /** Writes an amount in the list's currency. */
+  money: (minor: number) => string;
+  /** Circled items in another currency, left out of the total. */
+  uncounted?: number;
+}
+
+export function RunningTotal({ budget, count, money, uncounted = 0 }: Props) {
+  const t = useStrings();
   const { over, totalMinor, budgetMinor, remainingMinor, progress } = budget;
   return (
     <View style={[styles.bar, over && styles.over]} accessibilityRole="summary">
       <View style={styles.row}>
-        <Text style={styles.label}>RUNNING TOTAL · {count} CIRCLED</Text>
-        <Text style={styles.amount}>{formatMoney(totalMinor)}</Text>
+        <Text style={styles.label}>{t.runningTotal.label(count)}</Text>
+        <Text style={styles.amount}>{money(totalMinor)}</Text>
       </View>
       <View style={styles.track}>
         <View style={[styles.fill, over && styles.fillOver, { width: `${progress * 100}%` }]} />
       </View>
       <Text style={styles.msg}>
         {over
-          ? `${formatMoney(-remainingMinor)} over the ${formatMoney(budgetMinor)} budget`
-          : `${formatMoney(remainingMinor)} left in the ${formatMoney(budgetMinor)} budget`}
+          ? t.runningTotal.over(money(-remainingMinor), money(budgetMinor))
+          : t.runningTotal.left(money(remainingMinor), money(budgetMinor))}
       </Text>
+      {uncounted > 0 && <Text style={styles.msg}>{t.runningTotal.otherCurrency(uncounted)}</Text>}
     </View>
   );
 }

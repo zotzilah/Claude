@@ -4,6 +4,7 @@ import { Pressable, ScrollView, SectionList, StyleSheet, Text, View } from 'reac
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { buildCatalogueIndex, type IndexEntry } from '@/domain/catalogue-index';
+import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -11,9 +12,11 @@ import { colors, fonts, radius, space } from '@/theme/tokens';
 export default function CatalogueIndex() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
   const sections = useMemo(
-    () => buildCatalogueIndex(list.pages, list.productsFor).map((s) => ({ title: s.letter, data: s.entries })),
-    [list],
+    () =>
+      buildCatalogueIndex(list.pages, list.productsFor, t.catalogue.page).map((s) => ({ title: s.letter, data: s.entries })),
+    [list, t],
   );
   const listRef = useRef<SectionList<IndexEntry, { title: string }>>(null);
 
@@ -24,11 +27,11 @@ export default function CatalogueIndex() {
     <View style={styles.screen}>
       <View style={[styles.head, { paddingTop: insets.top + space.sm }]}>
         <View style={styles.headRow}>
-          <Pressable onPress={close} accessibilityRole="button" accessibilityLabel="Back to the catalogue" hitSlop={10}>
+          <Pressable onPress={close} accessibilityRole="button" accessibilityLabel={t.index.backA11y} hitSlop={10}>
             <Text style={styles.back}>◀</Text>
           </Pressable>
           <Text style={styles.title} accessibilityRole="header">
-            Index
+            {t.index.title}
           </Text>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.letters}>
@@ -37,7 +40,7 @@ export default function CatalogueIndex() {
               key={s.title}
               onPress={() => listRef.current?.scrollToLocation({ sectionIndex: i, itemIndex: 0, viewOffset: 0 })}
               accessibilityRole="button"
-              accessibilityLabel={`Jump to ${s.title === '#' ? 'numbers' : s.title}`}
+              accessibilityLabel={t.index.jumpTo(s.title)}
               style={styles.letter}
             >
               <Text style={styles.letterText}>{s.title}</Text>
@@ -60,7 +63,7 @@ export default function CatalogueIndex() {
             <Pressable
               onPress={() => open(item)}
               accessibilityRole="link"
-              accessibilityLabel={`${item.label}, ${item.ref}${stars ? `, circled with ${stars} star${stars > 1 ? 's' : ''}` : ''}`}
+              accessibilityLabel={t.index.entryA11y(item.label, item.ref, stars)}
               style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
             >
               <Text style={[styles.label, item.kind === 'page' && styles.pageLabel]} numberOfLines={1}>

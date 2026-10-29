@@ -8,6 +8,7 @@ import { BigButton } from '@/components/big-button';
 import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
+import { useStrings } from '@/state/locale';
 import { hasPin } from '@/state/parent-pin';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -18,6 +19,7 @@ export default function CatalogueScreen() {
   const params = useLocalSearchParams<{ page?: string }>();
   // The page lives in the URL (?page=N), so Kid Mode tiles and shared links can open any page.
   const list = useWishlist();
+  const t = useStrings();
   const pages = list.pages;
   const page = clampPage(Number(params.page ?? 0), pages.length);
   const setPage = (n: number) => router.setParams({ page: String(n) });
@@ -46,9 +48,7 @@ export default function CatalogueScreen() {
         {/* Keeps a lone last product at half width instead of stretching across the page. */}
         {onPage.length % 2 === 1 && <View style={styles.spacer} />}
         <Text style={styles.hint}>
-          {kid
-            ? 'Tap to circle it! Tap again for more stars ★'
-            : 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page'}
+          {kid ? t.catalogue.hintKid : t.catalogue.hint}
         </Text>
       </ScrollView>
     );
@@ -60,23 +60,23 @@ export default function CatalogueScreen() {
         <View style={styles.bookRow}>
           <Text style={styles.book}>{list.settings.title.toUpperCase()}</Text>
           <View style={styles.headActions}>
-            {kid && <Text style={styles.kidChip}>🔒 KID MODE</Text>}
+            {kid && <Text style={styles.kidChip}>{t.catalogue.kidModeChip}</Text>}
             <Pressable
               onPress={() => router.navigate('/catalogue-index')}
               accessibilityRole="button"
-              accessibilityLabel="A to Z index"
+              accessibilityLabel={t.catalogue.indexA11y}
               hitSlop={10}
               style={styles.azButton}
             >
               <Text style={styles.azText}>A–Z</Text>
             </Pressable>
-            <Pressable onPress={() => router.navigate('/search')} accessibilityRole="button" accessibilityLabel="Search" hitSlop={10}>
+            <Pressable onPress={() => router.navigate('/search')} accessibilityRole="button" accessibilityLabel={t.common.search} hitSlop={10}>
               <Text style={styles.sound}>🔍</Text>
             </Pressable>
             <Pressable
               onPress={() => setSoundEnabled(!soundOn)}
               accessibilityRole="switch"
-              accessibilityLabel="Sound effects"
+              accessibilityLabel={t.catalogue.soundA11y}
               accessibilityState={{ checked: soundOn }}
               hitSlop={10}
             >
@@ -87,7 +87,7 @@ export default function CatalogueScreen() {
         <Text style={styles.pageTitle} accessibilityRole="header">
           {category.title}
         </Text>
-        <Text style={styles.pageNo}>PAGE {category.familyCode}</Text>
+        <Text style={styles.pageNo}>{t.catalogue.page(category.familyCode)}</Text>
       </View>
 
       <PageTurner
@@ -99,7 +99,7 @@ export default function CatalogueScreen() {
       />
 
       <View style={styles.pager}>
-        <PagerButton label="◀" a11y="Previous page" disabled={page === 0} onPress={() => turner.current?.turn(-1)} />
+        <PagerButton label="◀" a11y={t.catalogue.previousPage} disabled={page === 0} onPress={() => turner.current?.turn(-1)} />
         <View style={styles.dots}>
           {pages.map((c, i) => (
             <View key={c.key} style={[styles.dot, i === page && styles.dotOn]} />
@@ -107,7 +107,7 @@ export default function CatalogueScreen() {
         </View>
         <PagerButton
           label="▶"
-          a11y="Next page"
+          a11y={t.catalogue.nextPage}
           disabled={page === pages.length - 1}
           onPress={() => turner.current?.turn(1)}
         />
@@ -116,16 +116,18 @@ export default function CatalogueScreen() {
       <View style={{ paddingBottom: insets.bottom, backgroundColor: kid ? colors.paper : colors.blue }}>
         {kid ? (
           <View style={styles.sendBar}>
-            <BigButton label="◀ Pictures" tone="yellow" onPress={() => router.navigate('/kid')} />
-            <BigButton label="Send to Mum & Dad" onPress={() => router.navigate('/slip')} grow />
+            <BigButton label={t.catalogue.pictures} tone="yellow" onPress={() => router.navigate('/kid')} />
+            <BigButton label={t.common.sendToParents} onPress={() => router.navigate('/slip')} grow />
           </View>
         ) : (
           <>
-            {list.settings.runningTotalOn && <RunningTotal budget={list.budget} count={list.wishes.length} />}
+            {list.settings.runningTotalOn && (
+              <RunningTotal budget={list.budget} count={list.wishes.length} money={list.money} uncounted={list.uncountedItems} />
+            )}
             <View style={styles.devLinks}>
               {list.settings.circler === 'child' && (
                 <DevLink
-                  label={`Hand to ${list.settings.circlerName}`}
+                  label={t.catalogue.handTo(list.settings.circlerName)}
                   onPress={async () => {
                     // First hand-over: choose a PIN, which then switches Kid Mode on.
                     if (!(await hasPin())) {
@@ -138,10 +140,10 @@ export default function CatalogueScreen() {
                 />
               )}
               {list.features.giverLink && (
-                <DevLink label="Giver link" onPress={() => router.navigate(`/l/${list.list.id}`)} />
+                <DevLink label={t.catalogue.giverLink} onPress={() => router.navigate(`/l/${list.list.id}`)} />
               )}
-              <DevLink label="＋ Add from a link" onPress={() => router.navigate('/add')} />
-              <DevLink label="Settings" onPress={() => router.navigate('/setup')} />
+              <DevLink label={t.catalogue.addFromLink} onPress={() => router.navigate('/add')} />
+              <DevLink label={t.catalogue.settings} onPress={() => router.navigate('/setup')} />
             </View>
           </>
         )}

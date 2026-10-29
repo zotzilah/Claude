@@ -5,6 +5,8 @@
  * Pure: fetching the page happens elsewhere.
  */
 
+import { minorDigits, toMinor } from './money';
+
 export interface ProductDetails {
   title: string | null;
   priceMinor: number | null;
@@ -46,10 +48,11 @@ export function parseProductPage(html: string, pageUrl: string): ProductDetails 
 
   const title =
     fromJson.title ?? meta('og:title') ?? meta('twitter:title') ?? decode(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? '') ?? null;
-  const priceMinor =
-    fromJson.priceMinor ?? parsePrice(meta('product:price:amount') ?? meta('og:price:amount') ?? meta('twitter:data1'));
   const currency =
     fromJson.currency ?? (meta('product:price:currency') ?? meta('og:price:currency'))?.toUpperCase() ?? null;
+  const priceMinor =
+    fromJson.priceMinor ??
+    parsePrice(meta('product:price:amount') ?? meta('og:price:amount') ?? meta('twitter:data1'), currency ?? 'GBP');
   const image = fromJson.imageUrl ?? meta('og:image') ?? meta('og:image:url') ?? meta('twitter:image');
 
   return {
@@ -62,19 +65,23 @@ export function parseProductPage(html: string, pageUrl: string): ProductDetails 
   };
 }
 
-/** "12.99", "£1,299.00", 12.99 → minor units. Ranges and nonsense give null. */
-export function parsePrice(value: unknown): number | null {
-  if (typeof value === 'number') return Number.isFinite(value) && value >= 0 ? Math.round(value * 100) : null;
+/** "12.99", "£1,299.00", 12.99 → minor units of the currency. Ranges and nonsense give null. */
+export function parsePrice(value: unknown, currency = 'GBP'): number | null {
+  const digits = minorDigits(currency);
+  if (typeof value === 'number') return Number.isFinite(value) && value >= 0 ? toMinor(value, currency) : null;
   if (typeof value !== 'string') return null;
   const cleaned = value.replace(/[^\d.,]/g, '');
   if (!cleaned) return null;
   // "1.299,00" (European) or "1,299.00" (UK/US): the last separator is the decimal point.
   const lastSep = Math.max(cleaned.lastIndexOf('.'), cleaned.lastIndexOf(','));
-  const hasDecimals = lastSep >= 0 && cleaned.length - lastSep - 1 === 2;
+  const tail = lastSep >= 0 ? cleaned.length - lastSep - 1 : 0;
+  // A 3-digit tail is a thousands group ("1,299"), except for 3-decimal currencies like KWD.
+  const hasDecimals = lastSep >= 0 && tail > 0 && (tail === 3 ? digits === 3 : tail <= 2);
   const whole = (hasDecimals ? cleaned.slice(0, lastSep) : cleaned).replace(/[.,]/g, '');
-  const fraction = hasDecimals ? cleaned.slice(lastSep + 1) : '00';
+  const fraction = hasDecimals ? cleaned.slice(lastSep + 1) : '';
   if (!/^\d+$/.test(whole || '0')) return null;
-  return Number(whole || '0') * 100 + Number(fraction);
+  // Round "12.99" to whole yen for currencies with no minor unit.
+  return toMinor(Number(`${whole || '0'}.${fraction || '0'}`), currency);
 }
 
 // ---------- JSON-LD ----------
@@ -99,10 +106,11 @@ function productFromJsonLd(html: string): JsonLdDetails {
     const product = findProduct(data);
     if (!product) continue;
     const offer = firstOffer(product.offers);
+    const offerCurrency = typeof offer?.priceCurrency === 'string' ? offer.priceCurrency.toUpperCase() : null;
     return {
       title: typeof product.name === 'string' ? decode(product.name) : null,
-      priceMinor: parsePrice(offer?.price ?? offer?.lowPrice),
-      currency: typeof offer?.priceCurrency === 'string' ? offer.priceCurrency.toUpperCase() : null,
+      priceMinor: parsePrice(offer?.price ?? offer?.lowPrice, offerCurrency ?? 'GBP'),
+      currency: offerCurrency,
       imageUrl: imageOf(product.image),
     };
   }

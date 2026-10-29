@@ -27,12 +27,29 @@ export function tapProduct(
   return next;
 }
 
-/** Sum of circled product prices, in minor units. */
+/**
+ * Sum of circled product prices, in minor units of the list's currency.
+ * Items priced in another currency (a link from an overseas shop) can't be
+ * added up honestly, so they're left out and counted in `otherCurrencyCount`.
+ */
 export function runningTotalMinor(
   marks: Record<string, CircleMark>,
   products: Record<string, Product>,
+  currency = 'GBP',
 ): number {
-  return Object.keys(marks).reduce((sum, id) => sum + (products[id]?.priceMinor ?? 0), 0);
+  return Object.keys(marks).reduce((sum, id) => {
+    const p = products[id];
+    return p && p.currency === currency ? sum + p.priceMinor : sum;
+  }, 0);
+}
+
+/** How many circled items are priced in a different currency from the list. */
+export function otherCurrencyCount(
+  marks: Record<string, CircleMark>,
+  products: Record<string, Product>,
+  currency: string,
+): number {
+  return Object.keys(marks).filter((id) => products[id] && products[id].currency !== currency).length;
 }
 
 export interface BudgetStatus {
@@ -67,6 +84,4 @@ export function sortedWishes(
     .sort((a, b) => b.stars - a.stars || b.product.priceMinor - a.product.priceMinor);
 }
 
-export function formatMoney(minor: number, currency = 'GBP', locale = 'en-GB'): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(minor / 100);
-}
+export { formatMoney } from './money';

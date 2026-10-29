@@ -1,18 +1,15 @@
+import { amountsFor } from './money';
 import type { AgeBand, Buyers, ListSettings, Template } from './types';
 
-export interface TemplateInfo {
-  key: Template;
-  label: string;
-  icon: string;
-  /** Builds a default list title from the Circler's name, e.g. "Ellie's Christmas Book 2026". */
-  title: (name: string, year: number) => string;
-}
-
-export const templates: TemplateInfo[] = [
-  { key: 'christmas', label: 'Christmas', icon: '🎄', title: (n, y) => `${possessive(n)} Christmas Book ${y}` },
-  { key: 'birthday', label: 'Birthday', icon: '🎂', title: (n, y) => `${possessive(n)} Birthday Book ${y}` },
-  { key: 'custom', label: 'Something else', icon: '🎁', title: (n) => `${possessive(n)} Wish Book` },
+/** The occasions offered in setup. Their names live in the strings (`templates.label`). */
+export const templates: { key: Template; icon: string }[] = [
+  { key: 'christmas', icon: '🎄' },
+  { key: 'birthday', icon: '🎂' },
+  { key: 'custom', icon: '🎁' },
 ];
+
+/** Builds a list title, e.g. "Ellie's Christmas Book 2026". Comes from the app's strings. */
+export type TitleFor = (template: Template, name: string, year: number) => string;
 
 /** "Ellie" → "Ellie's", "James" → "James'". Empty names fall back to "My". */
 export function possessive(name: string): string {
@@ -21,7 +18,8 @@ export function possessive(name: string): string {
   return /s$/i.test(n) ? `${n}'` : `${n}'s`;
 }
 
-export function defaultSettings(): ListSettings {
+/** A fresh list. The budget is a round number in the family's own currency. */
+export function defaultSettings(currency = 'GBP'): ListSettings {
   return {
     title: 'My Christmas Book',
     template: 'christmas',
@@ -29,8 +27,8 @@ export function defaultSettings(): ListSettings {
     circlerName: '',
     ageBand: null,
     buyers: 'family',
-    budgetMinor: 15000,
-    currency: 'GBP',
+    budgetMinor: amountsFor(currency).budgetMinor,
+    currency,
     runningTotalOn: true,
     // Surprise is opt-in: by default the parent sees who's buying what.
     surpriseMode: 'off',
@@ -43,8 +41,10 @@ export function defaultKidPricesShown(ageBand: AgeBand | null): boolean {
   return ageBand === '9-12';
 }
 
-/** Group gifts are suggested for items at or above this price (minor units). */
-export const GROUP_GIFT_THRESHOLD_MINOR = 10000;
+/** Group gifts are offered for items at or above this price (e.g. £100, $100, ¥15,000). */
+export function groupGiftThresholdMinor(currency: string): number {
+  return amountsFor(currency).groupGiftMinor;
+}
 
 export interface Features {
   /** Givers can claim items. Pointless when only one person is buying. */
@@ -60,33 +60,24 @@ export function featuresFor(buyers: Buyers): Features {
   return { claiming: shared, groupGifts: buyers === 'family', giverLink: shared };
 }
 
-/**
- * Reads a budget the way people type it: "150", "£150", "150.50", "1,000".
- * Returns minor units, or null if it isn't a sensible amount.
- */
-export function parseMoneyInput(text: string): number | null {
-  const cleaned = text.trim().replace(/^[£$€]\s*/, '').replace(/,(?=\d{3}\b)/g, '');
-  if (!/^\d{1,7}(\.\d{1,2})?$/.test(cleaned)) return null;
-  const [whole, fraction = ''] = cleaned.split('.');
-  return Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
-}
-
 /** Turns setup answers into list settings, filling in the title from the template. */
-export function finishSettings(draft: ListSettings, year: number): ListSettings {
+export function finishSettings(draft: ListSettings, year: number, titleFor: TitleFor): ListSettings {
   const name = draft.circlerName.trim();
-  const template = templates.find((t) => t.key === draft.template) ?? templates[0];
   return {
     ...draft,
     circlerName: name,
     ageBand: draft.circler === 'child' ? draft.ageBand : null,
-    title: template.title(name, year),
+    title: titleFor(draft.template, name, year),
   };
 }
 
+/** What's stopping setup from finishing. The words for each live in `setup.problems`. */
+export type SetupProblem = 'child-name' | 'list-name' | 'age' | 'budget';
+
 /** Why setup can't finish yet, or null when it can. */
-export function setupProblem(draft: ListSettings): string | null {
-  if (!draft.circlerName.trim()) return draft.circler === 'child' ? "Add the child's name" : 'Add a name for the list';
-  if (draft.circler === 'child' && !draft.ageBand) return 'Pick an age';
-  if (draft.budgetMinor <= 0) return 'Set a budget above zero';
+export function setupProblem(draft: ListSettings): SetupProblem | null {
+  if (!draft.circlerName.trim()) return draft.circler === 'child' ? 'child-name' : 'list-name';
+  if (draft.circler === 'child' && !draft.ageBand) return 'age';
+  if (draft.budgetMinor <= 0) return 'budget';
   return null;
 }

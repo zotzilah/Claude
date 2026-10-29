@@ -5,9 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
 import { ChoiceCard } from '@/components/choice-card';
-import { defaultKidPricesShown, featuresFor, finishSettings, parseMoneyInput, setupProblem, templates } from '@/domain/settings';
+import { currencyChoices, currencySymbol, moneyInputText, parseMoneyInput } from '@/domain/money';
+import { defaultKidPricesShown, featuresFor, finishSettings, setupProblem, templates, type SetupProblem } from '@/domain/settings';
 import type { AgeBand, ListSettings } from '@/domain/types';
-import { formatMoney } from '@/domain/wishlist';
+import { deviceLocale, useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -21,9 +22,12 @@ const AGE_BANDS: AgeBand[] = ['3-5', '6-8', '9-12'];
 export default function Setup() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
   const editing = list.list.setupComplete;
   const [draft, setDraft] = useState<ListSettings>(list.settings);
-  const [budgetText, setBudgetText] = useState(String(list.settings.budgetMinor / 100));
+  const [budgetText, setBudgetText] = useState(() =>
+    moneyInputText(list.settings.budgetMinor, list.settings.currency, deviceLocale.tag),
+  );
   const [step, setStep] = useState(0);
   // Only nag about missing answers after someone tries to move on.
   const [tried, setTried] = useState(false);
@@ -38,10 +42,13 @@ export default function Setup() {
 
   const last = step === STEPS.length - 1;
   const problem = last ? setupProblem(draft) : stepProblem(step, draft);
-  const childName = draft.circlerName.trim() || 'your child';
+  const childName = draft.circlerName.trim() || t.common.yourChild;
+  const problemText = problem ? t.setup.problems[problem] : null;
+  const setCurrency = (currency: string) =>
+    set({ currency, budgetMinor: parseMoneyInput(budgetText, currency, deviceLocale.tag) ?? 0 });
 
   const finish = () => {
-    list.completeSetup(finishSettings(draft, new Date().getFullYear()));
+    list.completeSetup(finishSettings(draft, new Date().getFullYear(), t.templates.title));
     if (editing) router.back();
     else router.replace('/');
   };
@@ -49,16 +56,9 @@ export default function Setup() {
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
-        <Text style={styles.kicker}>{editing ? 'LIST SETTINGS' : `STEP ${step + 1} OF ${STEPS.length}`}</Text>
+        <Text style={styles.kicker}>{editing ? t.setup.kickerEditing : t.setup.kicker(step + 1, STEPS.length)}</Text>
         <Text style={styles.heading} accessibilityRole="header">
-          {
-            [
-              "What's the occasion?",
-              "Who's circling?",
-              "Who's buying?",
-              'How much to spend?',
-            ][step]
-          }
+          {t.setup.headings[step]}
         </Text>
         <View style={styles.progress}>
           {STEPS.map((s, i) => (
@@ -69,33 +69,33 @@ export default function Setup() {
 
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
         {step === 0 &&
-          templates.map((t) => (
-            <ChoiceCard key={t.key} icon={t.icon} label={t.label} selected={draft.template === t.key} onPress={() => set({ template: t.key })} />
+          templates.map((tpl) => (
+            <ChoiceCard key={tpl.key} icon={tpl.icon} label={t.templates.label[tpl.key]} selected={draft.template === tpl.key} onPress={() => set({ template: tpl.key })} />
           ))}
 
         {step === 1 && (
           <>
             <ChoiceCard
               icon="🧒"
-              label="A child"
-              description="You hand them the phone in Kid Mode to circle"
+              label={t.setup.child}
+              description={t.setup.childNote}
               selected={draft.circler === 'child'}
               onPress={() => set({ circler: 'child' })}
             />
             <ChoiceCard
               icon="🧑"
-              label="A grown-up"
-              description="For yourself, a partner or a couple"
+              label={t.setup.adult}
+              description={t.setup.adultNote}
               selected={draft.circler === 'adult'}
               onPress={() => set({ circler: 'adult' })}
             />
             <Text style={styles.label} nativeID="name-label">
-              {draft.circler === 'child' ? "Child's first name" : 'Name for the list'}
+              {draft.circler === 'child' ? t.setup.childName : t.setup.listName}
             </Text>
             <TextInput
               value={draft.circlerName}
               onChangeText={(circlerName) => set({ circlerName })}
-              placeholder={draft.circler === 'child' ? 'e.g. Ellie' : 'e.g. Sam & Alex'}
+              placeholder={draft.circler === 'child' ? t.setup.childNameExample : t.setup.listNameExample}
               placeholderTextColor={colors.inkSoft}
               autoCapitalize="words"
               autoComplete="off"
@@ -105,13 +105,13 @@ export default function Setup() {
             />
             {draft.circler === 'child' && (
               <>
-                <Text style={styles.label}>How old?</Text>
+                <Text style={styles.label}>{t.setup.howOld}</Text>
                 <View style={styles.row}>
                   {AGE_BANDS.map((band) => (
                     <ChoiceCard key={band} compact label={band} selected={draft.ageBand === band} onPress={() => set({ ageBand: band, kidPricesShown: defaultKidPricesShown(band) })} />
                   ))}
                 </View>
-                <Text style={styles.note}>We only use this to pick suitable products. Children never get an account.</Text>
+                <Text style={styles.note}>{t.setup.ageNote}</Text>
               </>
             )}
           </>
@@ -121,22 +121,22 @@ export default function Setup() {
           <>
             <ChoiceCard
               icon="🙋"
-              label="Just me"
-              description="One buyer, so no claiming or sharing needed"
+              label={t.setup.justMe}
+              description={t.setup.justMeNote}
               selected={draft.buyers === 'just-me'}
               onPress={() => set({ buyers: 'just-me' })}
             />
             <ChoiceCard
               icon="👫"
-              label="Me and a partner"
-              description="Share the list and claim items so you don't double up"
+              label={t.setup.partner}
+              description={t.setup.partnerNote}
               selected={draft.buyers === 'partner'}
               onPress={() => set({ buyers: 'partner' })}
             />
             <ChoiceCard
               icon="👨‍👩‍👧‍👦"
-              label="The whole family"
-              description="Grandparents, aunties, uncles: claiming, surprise mode and group gifts"
+              label={t.setup.family}
+              description={t.setup.familyNote}
               selected={draft.buyers === 'family'}
               onPress={() => set({ buyers: 'family' })}
             />
@@ -146,15 +146,15 @@ export default function Setup() {
         {step === 3 && (
           <>
             <Text style={styles.label} nativeID="budget-label">
-              Budget
+              {t.setup.budget}
             </Text>
             <View style={styles.moneyRow}>
-              <Text style={styles.currency}>£</Text>
+              <Text style={styles.currency}>{currencySymbol(draft.currency, deviceLocale.tag)}</Text>
               <TextInput
                 value={budgetText}
                 onChangeText={(text) => {
                   setBudgetText(text);
-                  const minor = parseMoneyInput(text);
+                  const minor = parseMoneyInput(text, draft.currency, deviceLocale.tag);
                   set({ budgetMinor: minor ?? 0 });
                 }}
                 keyboardType="decimal-pad"
@@ -162,65 +162,77 @@ export default function Setup() {
                 accessibilityLabelledBy="budget-label"
               />
             </View>
+            <Text style={styles.label}>{t.setup.currency}</Text>
+            <View style={styles.row}>
+              {currencyChoices(draft.currency).map((code) => (
+                <ChoiceCard
+                  key={code}
+                  compact
+                  label={`${currencySymbol(code, deviceLocale.tag)} ${code}`}
+                  selected={draft.currency === code}
+                  onPress={() => setCurrency(code)}
+                />
+              ))}
+            </View>
             <View style={styles.switchRow}>
               <View style={styles.switchText}>
-                <Text style={styles.switchLabel}>Show a running total</Text>
-                <Text style={styles.note}>Adds up everything circled against the budget</Text>
+                <Text style={styles.switchLabel}>{t.setup.runningTotal}</Text>
+                <Text style={styles.note}>{t.setup.runningTotalNote}</Text>
               </View>
               <Switch
                 value={draft.runningTotalOn}
                 onValueChange={(runningTotalOn) => set({ runningTotalOn })}
                 trackColor={{ true: colors.blue, false: colors.rule }}
                 thumbColor={draft.runningTotalOn ? colors.yellow : colors.paper}
-                accessibilityLabel="Show a running total"
+                accessibilityLabel={t.setup.runningTotal}
               />
             </View>
             {draft.circler === 'child' && (
               <View style={styles.switchRow}>
                 <View style={styles.switchText}>
-                  <Text style={styles.switchLabel}>Show prices in Kid Mode</Text>
-                  <Text style={styles.note}>Off for under-8s, so they circle what they love, not what costs least.</Text>
+                  <Text style={styles.switchLabel}>{t.setup.kidPrices}</Text>
+                  <Text style={styles.note}>{t.setup.kidPricesNote}</Text>
                 </View>
                 <Switch
                   value={draft.kidPricesShown}
                   onValueChange={(kidPricesShown) => set({ kidPricesShown })}
                   trackColor={{ true: colors.blue, false: colors.rule }}
                   thumbColor={draft.kidPricesShown ? colors.yellow : colors.paper}
-                  accessibilityLabel="Show prices in Kid Mode"
+                  accessibilityLabel={t.setup.kidPrices}
                 />
               </View>
             )}
             {featuresFor(draft.buyers).claiming && (
               <>
-                <Text style={styles.label}>Surprise mode</Text>
+                <Text style={styles.label}>{t.setup.surprise}</Text>
                 <ChoiceCard
                   compact
-                  label="Off: I'll see who's buying what"
+                  label={t.setup.surpriseOff}
                   selected={draft.surpriseMode === 'off'}
                   onPress={() => set({ surpriseMode: 'off' })}
                 />
                 <ChoiceCard
                   compact
-                  label={`On: just show "taken care of"`}
+                  label={t.setup.surpriseCovered}
                   selected={draft.surpriseMode === 'taken-care-of'}
                   onPress={() => set({ surpriseMode: 'taken-care-of' })}
                 />
                 <ChoiceCard
                   compact
-                  label="On: hide everything"
+                  label={t.setup.surpriseHideAll}
                   selected={draft.surpriseMode === 'hide-all'}
                   onPress={() => set({ surpriseMode: 'hide-all' })}
                 />
                 <Text style={styles.note}>
                   {draft.surpriseMode === 'off'
-                    ? `You can claim gifts too. ${draft.circler === 'child' ? `Kid Mode still never shows ${childName} who's buying.` : ''}`
-                    : "You won't see who bought what, so the surprise stays a surprise."}
+                    ? t.setup.surpriseOffNote(draft.circler === 'child' ? childName : null)
+                    : t.setup.surpriseOnNote}
                 </Text>
               </>
             )}
             {draft.budgetMinor > 0 && (
               <Text style={styles.summary}>
-                {`${formatMoney(draft.budgetMinor)} for ${draft.circlerName.trim() || 'this list'}`}
+                {t.setup.summary(list.money(draft.budgetMinor, draft.currency), draft.circlerName.trim())}
               </Text>
             )}
           </>
@@ -228,22 +240,22 @@ export default function Setup() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + space.md }]}>
-        {tried && problem && (
+        {tried && problemText && (
           <Text style={styles.problem} accessibilityLiveRegion="polite">
-            {problem}
+            {problemText}
           </Text>
         )}
         <View style={styles.row}>
           {(step > 0 || editing) && (
             <BigButton
-              label={step > 0 ? '◀ Back' : 'Cancel'}
+              label={step > 0 ? t.common.back : t.common.cancel}
               tone="yellow"
               onPress={() => (step > 0 ? goTo(step - 1) : router.back())}
             />
           )}
           <BigButton
             grow
-            label={last ? (editing ? 'Save' : 'Make my catalogue!') : 'Next ▶'}
+            label={last ? (editing ? t.common.save : t.setup.finish) : t.common.next}
             onPress={() => {
               if (problem) {
                 setTried(true);
@@ -260,10 +272,10 @@ export default function Setup() {
 }
 
 /** Problems that stop each step moving on. The last step checks everything. */
-function stepProblem(step: number, draft: ListSettings): string | null {
+function stepProblem(step: number, draft: ListSettings): SetupProblem | null {
   if (step !== 1) return null;
   const all = setupProblem(draft);
-  return all === 'Set a budget above zero' ? null : all;
+  return all === 'budget' ? null : all;
 }
 
 const styles = StyleSheet.create({

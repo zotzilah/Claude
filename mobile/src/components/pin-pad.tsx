@@ -5,6 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 
 import { playSfx } from '@/audio/sfx';
 import { PIN_LENGTH } from '@/domain/pin';
+import { useStrings } from '@/state/locale';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
 interface Props {
@@ -19,6 +20,7 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'];
 
 /** Four dots and a chunky keypad. Calls onChange as digits are typed. */
 export function PinPad({ value, onChange, errorCount, disabled = false }: Props) {
+  const t = useStrings();
   const shake = useSharedValue(0);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export function PinPad({ value, onChange, errorCount, disabled = false }: Props)
     <View style={styles.wrap}>
       <Animated.View
         style={[styles.dots, dotsStyle]}
-        accessibilityLabel={`${value.length} of ${PIN_LENGTH} digits entered`}
+        accessibilityLabel={t.pin.enteredA11y(value.length, PIN_LENGTH)}
         accessibilityLiveRegion="polite"
       >
         {Array.from({ length: PIN_LENGTH }, (_, i) => (
@@ -55,7 +57,7 @@ export function PinPad({ value, onChange, errorCount, disabled = false }: Props)
               onPress={() => press(key)}
               disabled={disabled}
               accessibilityRole="button"
-              accessibilityLabel={key === '⌫' ? 'Delete' : key}
+              accessibilityLabel={key === '⌫' ? t.pin.deleteA11y : key}
               style={({ pressed }) => [styles.key, pressed && styles.keyPressed, disabled && styles.keyDisabled]}
             >
               <Text style={styles.keyText}>{key}</Text>

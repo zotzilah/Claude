@@ -5,8 +5,10 @@ import { Platform, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } f
 
 import { playSfx } from '@/audio/sfx';
 import type { ListSideView } from '@/domain/claims';
+import { formatMoney } from '@/domain/money';
 import type { Product, Stars } from '@/domain/types';
-import { formatMoney } from '@/domain/wishlist';
+import type { Strings } from '@/i18n';
+import { deviceLocale, useStrings } from '@/state/locale';
 import { colors, fonts, space } from '@/theme/tokens';
 
 import { BiroRing } from './biro-ring';
@@ -24,17 +26,16 @@ interface Props {
   hidePrice?: boolean;
 }
 
-function stampFor(view: ListSideView | null): { label: string; claimed: boolean } | null {
+function stampFor(view: ListSideView | null, t: Strings): { label: string; claimed: boolean } | null {
   if (!view) return null;
-  if (view.kind === 'covered') return { label: 'TAKEN CARE OF ✓', claimed: false };
-  if (view.kind === 'bought') return { label: `BOUGHT ✓ ${view.by.toUpperCase()}`, claimed: false };
-  return { label: `CLAIMED · ${view.by.toUpperCase()}`, claimed: true };
+  if (view.kind === 'covered') return { label: t.product.takenCareOf, claimed: false };
+  if (view.kind === 'bought') return { label: t.product.boughtBy(view.by), claimed: false };
+  return { label: t.product.claimedBy(view.by), claimed: true };
 }
 
-const STAR_WORDS = { 1: 'would like', 2: 'really want', 3: 'the big one' } as const;
-
 export function ProductCard({ product, stars, onTap, kid = false, listSide = null, hidePrice = false }: Props) {
-  const stamp = stampFor(listSide);
+  const t = useStrings();
+  const stamp = stampFor(listSide, t);
   const [size, setSize] = useState({ width: 0, height: 0 });
   // Only a circle drawn by a tap on this card animates; circles shown on page load just appear.
   const [justCircled, setJustCircled] = useState(false);
@@ -64,11 +65,15 @@ export function ProductCard({ product, stars, onTap, kid = false, listSide = nul
       accessibilityLabel={
         hidePrice
           ? product.title
-          : `${product.title}, ${formatMoney(product.priceMinor, product.currency)}, catalogue number ${product.catalogueNo}`
+          : t.product.a11yLabel(
+              product.title,
+              formatMoney(product.priceMinor, product.currency, deviceLocale.tag),
+              product.catalogueNo,
+            )
       }
       accessibilityState={{ selected: stars !== null }}
       accessibilityValue={stamp ? { text: stamp.label } : undefined}
-      accessibilityHint={stars === null ? 'Circles this item' : `Circled, ${STAR_WORDS[stars]}. Tap to change.`}
+      accessibilityHint={stars === null ? t.product.hintUncircled : t.product.hintCircled(stars)}
     >
       <View style={styles.photo}>
         {product.imageUrl ? (
@@ -78,14 +83,14 @@ export function ProductCard({ product, stars, onTap, kid = false, listSide = nul
         )}
         {stamp && <Text style={[styles.covered, stamp.claimed && styles.claimedStamp]}>{stamp.label}</Text>}
       </View>
-      <Text style={styles.cno}>{product.catalogueNo || 'YOUR FIND'}</Text>
+      <Text style={styles.cno}>{product.catalogueNo || t.product.yourFind}</Text>
       <Text style={styles.title} numberOfLines={2}>
         {product.title}
       </Text>
       {!kid && <Text style={styles.retailer}>{product.retailer}</Text>}
       {!hidePrice && (
         <View style={styles.sticker}>
-          <PriceSticker priceMinor={product.priceMinor} />
+          <PriceSticker priceMinor={product.priceMinor} currency={product.currency} />
         </View>
       )}
       {stars !== null && (

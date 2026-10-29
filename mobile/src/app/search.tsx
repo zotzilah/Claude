@@ -5,15 +5,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ProductCard } from '@/components/product-card';
 import { search } from '@/domain/search';
+import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
-
-const SUGGESTIONS = ['Dinosaurs', 'Lego', 'Bikes', 'Art', 'Games'];
 
 /** Search by name or catalogue number. Bigger and simpler in Kid Mode. */
 export default function SearchScreen() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
   const kid = list.kidMode;
   const [query, setQuery] = useState('');
   const products = useMemo(() => Object.values(list.products), [list.products]);
@@ -24,28 +24,28 @@ export default function SearchScreen() {
   return (
     <View style={styles.screen}>
       <View style={[styles.head, kid && styles.headKid, { paddingTop: insets.top + space.sm }]}>
-        <Pressable onPress={close} accessibilityRole="button" accessibilityLabel="Back" hitSlop={10} style={styles.back}>
+        <Pressable onPress={close} accessibilityRole="button" accessibilityLabel={t.common.backA11y} hitSlop={10} style={styles.back}>
           <Text style={[styles.backText, kid && styles.backTextKid]}>◀</Text>
         </Pressable>
         <TextInput
           value={query}
           onChangeText={setQuery}
           autoFocus
-          placeholder={kid ? 'What do you want?' : 'Search, or type a catalogue number'}
+          placeholder={kid ? t.search.placeholderKid : t.search.placeholder}
           placeholderTextColor={colors.inkSoft}
           returnKeyType="search"
           autoCorrect={false}
           style={[styles.input, kid && styles.inputKid]}
-          accessibilityLabel="Search"
+          accessibilityLabel={t.common.search}
         />
       </View>
 
       <ScrollView contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + space.xl }]} keyboardShouldPersistTaps="handled">
         {outcome.kind === 'empty' && (
           <>
-            <Text style={[styles.message, kid && styles.messageKid]}>{kid ? 'Try one of these!' : 'Popular searches'}</Text>
+            <Text style={[styles.message, kid && styles.messageKid]}>{kid ? t.search.tryThese : t.search.popular}</Text>
             <View style={styles.chips}>
-              {SUGGESTIONS.map((s) => (
+              {t.search.suggestions.map((s) => (
                 <Pressable key={s} onPress={() => setQuery(s)} accessibilityRole="button" style={[styles.chip, kid && styles.chipKid]}>
                   <Text style={[styles.chipText, kid && styles.chipTextKid]}>{s}</Text>
                 </Pressable>
@@ -57,7 +57,7 @@ export default function SearchScreen() {
         {outcome.kind === 'catalogue-number' &&
           (outcome.product ? (
             <>
-              <Text style={styles.message}>Catalogue number {outcome.catalogueNo}</Text>
+              <Text style={styles.message}>{t.search.catalogueNumber(outcome.catalogueNo)}</Text>
               <View style={styles.grid}>
                 <ProductCard
                   product={outcome.product}
@@ -71,14 +71,14 @@ export default function SearchScreen() {
               </View>
             </>
           ) : (
-            <Text style={styles.message}>{`Nothing has the catalogue number ${outcome.catalogueNo}. Check the digits?`}</Text>
+            <Text style={styles.message}>{t.search.noCatalogueNumber(outcome.catalogueNo)}</Text>
           ))}
 
         {outcome.kind === 'results' &&
           (outcome.results.length ? (
             <>
               <Text style={styles.message} accessibilityLiveRegion="polite">
-                {outcome.results.length === 1 ? '1 thing found' : `${outcome.results.length} things found`}
+                {t.search.found(outcome.results.length)}
               </Text>
               <View style={styles.grid}>
                 {outcome.results.map(({ product }) => (
@@ -97,7 +97,7 @@ export default function SearchScreen() {
             </>
           ) : (
             <Text style={[styles.message, kid && styles.messageKid]} accessibilityLiveRegion="polite">
-              {kid ? "Hmm, we couldn't find that. Try another word!" : `Nothing matches "${query.trim()}".`}
+              {kid ? t.search.nothingKid : t.search.nothing(query.trim())}
             </Text>
           ))}
       </ScrollView>

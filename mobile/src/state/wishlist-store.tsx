@@ -9,14 +9,18 @@ import { createContext, useContext, useEffect, useMemo, useReducer, useState, ty
 import { categories, productsById as catalogueById, productsIn, yourFinds } from '@/data/sample-catalogue';
 import { listSideView, pruneExpired } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
+import { formatMoney, formatMoneyShort, moneyParts } from '@/domain/money';
 import { featuresFor } from '@/domain/settings';
 import type { Category, ListSettings, Product } from '@/domain/types';
-import { budgetStatus, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
+import { budgetStatus, otherCurrencyCount, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
 
+import { deviceLocale } from './locale';
 import { loadList, saveList } from './storage';
 
+const newList = () => createList(randomUUID(), deviceLocale.currency);
+
 function useWishlistValue() {
-  const [state, dispatch] = useReducer(listReducer, undefined, () => createList(randomUUID()));
+  const [state, dispatch] = useReducer(listReducer, undefined, newList);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -40,7 +44,8 @@ function useWishlistValue() {
     const products: Record<string, Product> = { ...catalogueById, ...state.customProducts };
     const finds = Object.values(state.customProducts);
     const pages: Category[] = finds.length ? [...categories, yourFinds] : categories;
-    const totalMinor = runningTotalMinor(state.marks, products);
+    const currency = state.settings.currency;
+    const totalMinor = runningTotalMinor(state.marks, products, currency);
     return {
       ready,
       list: state,
@@ -54,6 +59,13 @@ function useWishlistValue() {
       pages,
       productsFor: (categoryKey: string) => (categoryKey === yourFinds.key ? finds : productsIn(categoryKey)),
       budget: budgetStatus(totalMinor, state.settings.budgetMinor),
+      /** Circled items priced in another currency, which the total can't include. */
+      uncountedItems: otherCurrencyCount(state.marks, products, currency),
+      /** Writes an amount in the list's currency (or another), the phone's way: "£39.99", "39,99 €". */
+      money: (minor: number, inCurrency = currency) => formatMoney(minor, inCurrency, deviceLocale.tag),
+      /** Like `money`, without ".00" on round amounts. */
+      moneyShort: (minor: number, inCurrency = currency) => formatMoneyShort(minor, inCurrency, deviceLocale.tag),
+      moneyParts: (minor: number, inCurrency = currency) => moneyParts(minor, inCurrency, deviceLocale.tag),
       wishes: sortedWishes(state.marks, products),
       starsFor: (productId: string) => state.marks[productId]?.stars ?? null,
       /** What the catalogue may show about who's buying a wish (see listSideView). */
@@ -77,7 +89,7 @@ function useWishlistValue() {
         dispatch({ type: 'pledge', productId, giverName, amountMinor }),
       addCustomProduct: (product: Product) => dispatch({ type: 'addCustomProduct', product, now: Date.now() }),
       /** Starts a brand-new list (the old one is replaced). */
-      reset: () => dispatch({ type: 'hydrate', state: createList(randomUUID()) }),
+      reset: () => dispatch({ type: 'hydrate', state: newList() }),
     };
   }, [state, ready]);
 }

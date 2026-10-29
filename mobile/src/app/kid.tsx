@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
+import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -13,6 +14,7 @@ import { colors, fonts, radius, space } from '@/theme/tokens';
 export default function KidHome() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
+  const t = useStrings();
 
   return (
     <ScrollView
@@ -21,26 +23,26 @@ export default function KidHome() {
     >
       <View style={styles.top}>
         <Text style={styles.hello} accessibilityRole="header">
-          Hi {list.settings.circlerName}!{'\n'}What do you want?
+          {t.kid.hello(list.settings.circlerName)}
         </Text>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Grown-ups: leave Kid Mode"
+          accessibilityLabel={t.kid.grownUpsA11y}
           style={styles.grownups}
           onPress={() => router.push('/pin')}
         >
-          <Text style={styles.grownupsText}>🔒 Grown-ups</Text>
+          <Text style={styles.grownupsText}>{t.kid.grownUps}</Text>
         </Pressable>
       </View>
 
       <Pressable
         accessibilityRole="search"
-        accessibilityLabel="Find something"
+        accessibilityLabel={t.kid.findA11y}
         onPress={() => router.navigate('/search')}
         style={({ pressed }) => [styles.searchBar, pressed && { transform: [{ translateY: 3 }] }]}
       >
         <Text style={styles.searchIcon}>🔍</Text>
-        <Text style={styles.searchText}>Find something…</Text>
+        <Text style={styles.searchText}>{t.kid.find}</Text>
       </Pressable>
 
       <View style={styles.tiles}>
@@ -58,7 +60,7 @@ export default function KidHome() {
         ))}
       </View>
 
-      <BigButton label="Send to Mum & Dad" onPress={() => router.navigate('/slip')} />
+      <BigButton label={t.common.sendToParents} onPress={() => router.navigate('/slip')} />
     </ScrollView>
   );
 }

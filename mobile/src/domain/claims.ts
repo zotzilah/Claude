@@ -130,12 +130,15 @@ export interface GiverSummary {
 
 /** The numbers at the top of the Giver page. Expired holds don't count as covered. */
 export function giverSummary(
-  wishes: { product: { id: string; priceMinor: number } }[],
+  wishes: { product: { id: string; priceMinor: number; currency?: string } }[],
   claims: Record<string, Claim>,
   now: number,
+  /** Only items in this currency are added up (overseas finds can't be). */
+  currency?: string,
 ): GiverSummary {
-  const totalMinor = wishes.reduce((sum, w) => sum + w.product.priceMinor, 0);
-  const coveredMinor = wishes
+  const priced = currency ? wishes.filter((w) => (w.product.currency ?? currency) === currency) : wishes;
+  const totalMinor = priced.reduce((sum, w) => sum + w.product.priceMinor, 0);
+  const coveredMinor = priced
     .filter((w) => activeClaim(claims[w.product.id], now))
     .reduce((sum, w) => sum + w.product.priceMinor, 0);
   return { wishCount: wishes.length, totalMinor, coveredMinor, remainingMinor: totalMinor - coveredMinor };

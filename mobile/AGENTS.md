@@ -44,5 +44,6 @@ Docs: https://docs.expo.dev/eas/index.md
 
 - Read `../docs/PRODUCT_BRIEF.md` before building features. It is the source of truth for product decisions.
 - Keep pure logic in `src/domain/` with unit tests in `src/domain/__tests__/` (import `describe`/`it`/`expect` from `@jest/globals`).
-- Money is stored in minor units (pence/cents) as integers. Format it only at the edge with `formatMoney`.
+- Money is stored as integers in the currency's minor unit (pence, cents, whole yen). Use `src/domain/money.ts` for everything money: `formatMoney`, `parseMoneyInput`, `toMinor`, never `/ 100`. In screens, prefer `useWishlist().money(minor)`, which uses the list's currency and the phone's locale.
+- All on-screen text lives in `src/i18n/en-GB.ts` (the master copy). Screens get it with `const t = useStrings()` from `@/state/locale`. Never hard-code UI words in a component. US wording goes in `src/i18n/en-US.ts`.
 - In the cloud dev environment, `docs.expo.dev` and `api.expo.dev` are blocked, so `npx expo install` and `expo lint`'s auto-setup fail. Pick SDK-matched versions from `node_modules/expo/bundledNativeModules.json` and install them with `npm install <pkg>@<version>`. Use the installed packages' `.d.ts` files as the API reference.

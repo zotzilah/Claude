@@ -28,10 +28,14 @@ const sortKey = (label: string) =>
     .replace(/^[^a-z0-9]+/i, '')
     .toLowerCase();
 
-export function buildCatalogueIndex(pages: Category[], productsFor: (categoryKey: string) => Product[]): IndexSection[] {
+export function buildCatalogueIndex(
+  pages: Category[],
+  productsFor: (categoryKey: string) => Product[],
+  pageRef: (familyCode: number) => string = (code) => `PAGE ${code}`,
+): IndexSection[] {
   const entries: IndexEntry[] = [];
   pages.forEach((page, pageIndex) => {
-    entries.push({ label: page.title, ref: `PAGE ${page.familyCode}`, pageIndex, kind: 'page' });
+    entries.push({ label: page.title, ref: pageRef(page.familyCode), pageIndex, kind: 'page' });
     for (const product of productsFor(page.key)) {
       entries.push({
         label: product.title,
