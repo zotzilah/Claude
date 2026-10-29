@@ -1,12 +1,12 @@
 # Biro privacy policy
 
-*Draft. Effective [[EFFECTIVE_DATE]].*
+*Beta version. Effective 29 October 2026.*
 
 Biro is a wish list app styled like an old printed gift catalogue. A grown-up sets up a list, children can circle things they'd like, and family and friends can see the list and agree who buys what.
 
 This policy explains what we collect, why we collect it, and what you can ask us to do with it. It's written to be read, so it's short.
 
-**Who we are:** Biro is run by [[OPERATOR]], [[ADDRESS]]. We're the "controller" of your information under UK and EU data protection law. To reach us about anything here, email [[CONTACT_EMAIL]].
+**Who we are:** Biro is run by Luke Cartwright, in the UK. We're the "controller" of your information under UK and EU data protection law. To reach us about anything here, email zoneflossy@gmail.com.
 
 ## The short version
 
@@ -46,7 +46,7 @@ Biro is designed so that a child can use it under a grown-up's supervision, with
 - getting out of Kid Mode needs the grown-up's PIN or Face ID
 - the child never sees who is buying what
 
-We follow the UK Age Appropriate Design Code (the "Children's Code") and the US Children's Online Privacy Protection Act (COPPA). Under COPPA, the account holder gives consent for their own household. If you believe a child has set up an account themselves, email [[CONTACT_EMAIL]] and we'll delete it.
+We follow the UK Age Appropriate Design Code (the "Children's Code") and the US Children's Online Privacy Protection Act (COPPA). Under COPPA, the account holder gives consent for their own household. If you believe a child has set up an account themselves, email zoneflossy@gmail.com and we'll delete it.
 
 ## Who we share it with
 
@@ -54,8 +54,8 @@ We use a small number of service providers to run Biro. They may only use your i
 
 | Provider | What for | Where |
 |---|---|---|
-| Supabase | Database and sign-in | [[REGION, e.g. London (EU-West-2)]] |
-| An email provider, e.g. Resend or Postmark | Sending order slips and notifications | [[REGION]] |
+| Supabase | Database and sign-in | London, UK |
+| An email provider (to be chosen before Biro sends any email) | Sending order slips and notifications | We'll name it here before it's used |
 | Expo / Apple / Google | Delivering push notifications | US and worldwide |
 
 **People on the list.** Anyone with your list's share link can see the list, so share it with people you trust. You can make a new link at any time, which stops the old one working.
@@ -86,7 +86,7 @@ You can ask us to:
 - send it to you in a portable format
 - stop using it, or restrict how we use it
 
-You can delete your account and every list from **Settings → Delete my account**, or by emailing [[CONTACT_EMAIL]]. We reply within one month.
+You can delete your account and every list from **Settings → Delete my account**, or by emailing zoneflossy@gmail.com. We reply within one month.
 
 If you're unhappy with how we've handled your information, you can complain to the Information Commissioner's Office ([ico.org.uk](https://ico.org.uk)) or your local data protection authority.
 

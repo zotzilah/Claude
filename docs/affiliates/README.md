@@ -7,7 +7,7 @@
 ## Before you apply
 
 1. **The website must be live.** Both networks review your site. Ours is the landing page, published by GitHub Pages (see `site/README.md`).
-2. **Fill in the privacy policy blanks** (`docs/legal/`, then `node site/build-legal.mjs`). A site with `[[OPERATOR]]` on its privacy page looks unfinished to a reviewer.
+2. **The privacy policy must be live** on the site. It's filled in for the beta. Some networks may also ask for a postal address (see `docs/legal/README.md`).
 3. **Have ready:** your name and address, your bank details for payouts, and a two-line description.
 
 > **What to say Biro is:** "Biro is a family wish-list app styled like a 2000s gift catalogue. Children circle what they'd like, and family members buy the items from the retailer through our links. We'll show retailer products on catalogue pages, with links to the retailer's own product pages. No ads, no coupons, no cashback."
