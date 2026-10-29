@@ -7,10 +7,11 @@
 import * as rules from './claims';
 import { defaultSettings } from './settings';
 import type { ListSettings, ListState, Product } from './types';
-import { tapProduct } from './wishlist';
+import { tapProduct, toggleProduct } from './wishlist';
 
 export type ListAction =
   | { type: 'tap'; productId: string; now: number }
+  | { type: 'toggle'; productId: string; now: number }
   | { type: 'setKidMode'; on: boolean }
   | { type: 'updateSettings'; patch: Partial<ListSettings> }
   | { type: 'completeSetup'; settings: ListSettings }
@@ -40,6 +41,9 @@ export function listReducer(state: ListState, action: ListAction): ListState {
   switch (action.type) {
     case 'tap':
       return { ...state, marks: tapProduct(state.marks, action.productId, action.now) };
+
+    case 'toggle':
+      return { ...state, marks: toggleProduct(state.marks, action.productId, action.now) };
 
     case 'setKidMode':
       // Kid Mode needs a child to hand the phone to.

@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { formatBackupCode } from '../backup-code';
+import { defaultSettings, finishSettings, isGrownUpOccasion } from '../settings';
 import { makeFlakes, nextVisitIn, SANTA_FIRST_MS, SANTA_GAP_MS } from '../festive';
 
 describe('Santa', () => {
@@ -33,5 +34,20 @@ describe('backup codes', () => {
   it('are shown the same way however they were typed', () => {
     expect(formatBackupCode('k7pm qx4r-9dwn h3tb')).toBe('K7PM-QX4R-9DWN-H3TB');
     expect(formatBackupCode('K7PMQX4R9DWNH3TB')).toBe('K7PM-QX4R-9DWN-H3TB');
+  });
+});
+
+describe('occasions', () => {
+  it('treats weddings and anniversaries as grown-up lists', () => {
+    expect(isGrownUpOccasion('wedding')).toBe(true);
+    expect(isGrownUpOccasion('anniversary')).toBe(true);
+    expect(isGrownUpOccasion('christmas')).toBe(false);
+    expect(isGrownUpOccasion('birthday')).toBe(false);
+  });
+
+  it('never lets a child circle a wedding list, even if setup said so', () => {
+    const settings = finishSettings({ ...defaultSettings(), template: 'wedding', circler: 'child', circlerName: 'Sam & Alex', ageBand: '6-8' }, 2027, (_t, name) => name);
+    expect(settings.circler).toBe('adult');
+    expect(settings.ageBand).toBeNull();
   });
 });

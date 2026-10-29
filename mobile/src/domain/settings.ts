@@ -5,8 +5,18 @@ import type { AgeBand, Buyers, ListSettings, Template } from './types';
 export const templates: { key: Template; icon: string }[] = [
   { key: 'christmas', icon: '🎄' },
   { key: 'birthday', icon: '🎂' },
+  { key: 'wedding', icon: '💍' },
+  { key: 'anniversary', icon: '🥂' },
   { key: 'custom', icon: '🎁' },
 ];
+
+/**
+ * Weddings and anniversaries are grown-up lists: no child circling, no toy catalogue.
+ * The couple add gifts from any shop, and the app takes on a calmer look and wording.
+ */
+export function isGrownUpOccasion(template: Template): boolean {
+  return template === 'wedding' || template === 'anniversary';
+}
 
 /** Builds a list title, e.g. "Ellie's Christmas Book 2026". Comes from the app's strings. */
 export type TitleFor = (template: Template, name: string, year: number) => string;
@@ -63,10 +73,12 @@ export function featuresFor(buyers: Buyers): Features {
 /** Turns setup answers into list settings, filling in the title from the template. */
 export function finishSettings(draft: ListSettings, year: number, titleFor: TitleFor): ListSettings {
   const name = draft.circlerName.trim();
+  const circler = isGrownUpOccasion(draft.template) ? 'adult' : draft.circler;
   return {
     ...draft,
+    circler,
     circlerName: name,
-    ageBand: draft.circler === 'child' ? draft.ageBand : null,
+    ageBand: circler === 'child' ? draft.ageBand : null,
     title: titleFor(draft.template, name, year),
   };
 }

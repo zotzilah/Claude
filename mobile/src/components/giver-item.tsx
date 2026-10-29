@@ -25,6 +25,8 @@ interface Props {
   /** Off for "just me" lists: show the wishes, nothing to claim. */
   claimingOn: boolean;
   groupGiftsOn: boolean;
+  /** Weddings and anniversaries: gentler wording ("I'll give this"). */
+  grownUp?: boolean;
   onClaim: () => void;
   onBought: () => void;
   onRelease: () => void;
@@ -55,9 +57,12 @@ export function GiverItem(props: Props) {
             <Text style={styles.price}>{money(product.priceMinor, product.currency)}</Text>
           </View>
           <View style={styles.meta}>
-            <Text style={styles.stars} accessibilityLabel={t.common.stars(stars)}>
-              {'★'.repeat(stars)}
-            </Text>
+            {/* Wedding lists have no star levels: every gift is simply on the list. */}
+            {!props.grownUp && (
+              <Text style={styles.stars} accessibilityLabel={t.common.stars(stars)}>
+                {'★'.repeat(stars)}
+              </Text>
+            )}
             {product.catalogueNo ? <Text style={styles.metaText}>{product.catalogueNo}</Text> : null}
             <Pressable onPress={() => WebBrowser.openBrowserAsync(product.url)} accessibilityRole="link" hitSlop={6}>
               <Text style={styles.link}>{t.giver.viewAt(product.retailer || t.common.theShop)}</Text>
@@ -72,9 +77,18 @@ export function GiverItem(props: Props) {
         <View style={styles.actions}>
           {!claim && (
             <>
-              <ActionButton label={props.groupGift ? t.giver.claimToBuy : t.giver.claim} onPress={props.onClaim} disabled={!me} />
+              <ActionButton
+                label={props.groupGift ? t.giver.claimToBuy : props.grownUp ? t.giver.giveThis : t.giver.claim}
+                onPress={props.onClaim}
+                disabled={!me}
+              />
               {canGroup && !props.groupGift && (
-                <ActionButton label={t.giver.makeGroupGift} ghost onPress={props.onStartGroupGift} disabled={!me} />
+                <ActionButton
+                  label={props.grownUp ? t.giver.chipIn : t.giver.makeGroupGift}
+                  ghost
+                  onPress={props.onStartGroupGift}
+                  disabled={!me}
+                />
               )}
               {!props.groupGift && <Text style={styles.hint}>{t.giver.heldFor48}</Text>}
             </>
@@ -194,7 +208,7 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
     info: { flex: 1, gap: 4 },
     titleRow: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
     title: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 18, color: colors.ink, flexShrink: 1 },
-    price: { fontFamily: fonts.display, fontSize: 15, color: colors.red },
+    price: { fontFamily: fonts.display, fontSize: 15, color: colors.red, fontVariant: ['lining-nums'] },
     meta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: space.md, rowGap: 2 },
     metaText: { fontFamily: fonts.body, fontSize: 12.5, color: colors.inkSoft },
     stars: { fontFamily: fonts.hand, fontSize: 18, color: colors.biro },

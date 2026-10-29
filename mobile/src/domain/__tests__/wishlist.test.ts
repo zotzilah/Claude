@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import type { CircleMark, Product } from '../types';
-import { budgetStatus, formatMoney, nextStars, runningTotalMinor, sortedWishes, tapProduct } from '../wishlist';
+import { budgetStatus, formatMoney, nextStars, runningTotalMinor, sortedWishes, tapProduct, toggleProduct } from '../wishlist';
 
 const product = (id: string, priceMinor: number): Product => ({
   id,
@@ -43,6 +43,15 @@ describe('tapProduct', () => {
 
     const gone = tapProduct(tapProduct(two, 'kite', 300), 'kite', 400);
     expect(gone.kite).toBeUndefined();
+  });
+});
+
+describe('toggleProduct (wedding lists)', () => {
+  it('puts a gift on the list with one tap and takes it off with the next', () => {
+    const on = toggleProduct({}, 'mixer', 100);
+    expect(on.mixer).toEqual({ productId: 'mixer', stars: 1, circledAt: 100 });
+    expect(toggleProduct(on, 'mixer', 200).mixer).toBeUndefined();
+    expect(on.mixer).toBeDefined();
   });
 });
 

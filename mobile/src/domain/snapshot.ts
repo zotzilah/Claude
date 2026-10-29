@@ -63,7 +63,7 @@ function parseSettings(raw: unknown): ListSettings {
   const ageBand = oneOf<AgeBand>(raw.ageBand, ['3-5', '6-8', '9-12']);
   return {
     title: str(raw.title) ?? d.title,
-    template: oneOf<Template>(raw.template, ['christmas', 'birthday', 'custom']) ?? d.template,
+    template: oneOf<Template>(raw.template, ['christmas', 'birthday', 'wedding', 'anniversary', 'custom']) ?? d.template,
     circler: oneOf<Circler>(raw.circler, ['child', 'adult']) ?? d.circler,
     circlerName: str(raw.circlerName) ?? d.circlerName,
     ageBand,

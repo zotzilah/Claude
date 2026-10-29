@@ -30,19 +30,38 @@ export const enGB = {
   },
 
   templates: {
-    label: { christmas: 'Christmas', birthday: 'Birthday', custom: 'Something else' } satisfies Record<Template, string>,
+    label: {
+      christmas: 'Christmas',
+      birthday: 'Birthday',
+      wedding: 'Wedding',
+      anniversary: 'Anniversary',
+      custom: 'Something else',
+    } satisfies Record<Template, string>,
     /** The list's title, e.g. "Ellie's Christmas Book 2026". */
     title: (template: Template, name: string, year: number): string => {
       const who = possessive(name);
       if (template === 'christmas') return `${who} Christmas Book ${year}`;
       if (template === 'birthday') return `${who} Birthday Book ${year}`;
+      if (template === 'wedding') return `${who} Wedding List`;
+      if (template === 'anniversary') return `${who} Anniversary List`;
       return `${who} Wish Book`;
     },
     /** The order slip's parody queue line. */
-    waitFor: { christmas: 'PLEASE WAIT FOR CHRISTMAS', birthday: 'PLEASE WAIT FOR YOUR BIRTHDAY', custom: 'PLEASE WAIT PATIENTLY' } satisfies Record<Template, string>,
+    waitFor: {
+      christmas: 'PLEASE WAIT FOR CHRISTMAS',
+      birthday: 'PLEASE WAIT FOR YOUR BIRTHDAY',
+      wedding: 'PLEASE WAIT FOR THE BIG DAY',
+      anniversary: 'PLEASE WAIT FOR THE BIG DAY',
+      custom: 'PLEASE WAIT PATIENTLY',
+    } satisfies Record<Template, string>,
   },
 
   catalogue: {
+    ourList: (template: Template) => (template === 'anniversary' ? 'Our Anniversary List' : 'Our Wedding List'),
+    emptyGrownUp: 'Start your list',
+    emptyGrownUpHint: 'Found something you’d love? Copy the link from any shop’s app or website, and add it here.',
+    addFirst: 'Add your first gift',
+    hintGrownUp: 'Guests see every gift with a ♥. Tap one to take it off the list, or to put it back.',
     hintKid: 'Tap to circle it! Tap again for more stars ★',
     hint: 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page',
     pricesAsOf: (date: string) => `Prices checked ${date}. They can change, so check the shop before buying.`,
@@ -69,6 +88,8 @@ export const enGB = {
     boughtBy: (name: string) => `BOUGHT ✓ ${name.toUpperCase()}`,
     claimedBy: (name: string) => `CLAIMED · ${name.toUpperCase()}`,
     yourFind: 'YOUR FIND',
+    hintFavourite: 'Puts it back on the list for guests.',
+    hintUnfavourite: 'Takes it off the list for guests. You can put it back.',
     a11yLabel: (title: string, price: string, catalogueNo: string) =>
       catalogueNo ? `${title}, ${price}, catalogue number ${catalogueNo}` : `${title}, ${price}`,
     hintUncircled: 'Circles this item',
@@ -78,6 +99,7 @@ export const enGB = {
 
   runningTotal: {
     label: (count: number) => `RUNNING TOTAL · ${count} CIRCLED`,
+    gifts: (count: number) => `LIST TOTAL · ${count === 1 ? '1 GIFT' : `${count} GIFTS`}`,
     over: (by: string, budget: string) => `${by} over the ${budget} budget`,
     left: (left: string, budget: string) => `${left} left in the ${budget} budget`,
     otherCurrency: (n: number) => `${plural(n, 'item', 'items')} in another currency not counted`,
@@ -93,6 +115,8 @@ export const enGB = {
     adultNote: 'For yourself, a partner or a couple',
     childName: "Child's first name",
     listName: 'Name for the list',
+    coupleName: 'Your names',
+    whoseList: 'Whose list is it?',
     childNameExample: 'e.g. Ellie',
     listNameExample: 'e.g. Sam & Alex',
     howOld: 'How old?',
@@ -201,6 +225,7 @@ export const enGB = {
     needName: 'Add a name',
     needPrice: (example: string) => `Add a price, e.g. ${example}`,
     circleIt: 'Circle it! ⭕',
+    addToList: 'Add to our list',
     alreadyOnList: (title: string) => `"${title}" is already on the list.`,
     /** Shown when the automatic checks refuse a link (see domain/moderation.ts). */
     refused: {
@@ -334,6 +359,9 @@ export const enGB = {
     sharedListTitle: 'A wish list for you',
     opening: 'Opening the list…',
     circledBy: (name: string) => `Circled by ${name || 'them'} · no app needed`,
+    inviteToChoose: 'Choose a gift · no app needed',
+    giveThis: "I'll give this",
+    chipIn: 'Chip in together',
     surpriseOn: (name: string) => `🤫 Surprise mode is on. ${name || 'They'} can't see who's buying what.`,
     hello: "Hello! Who's buying?",
     helloHint: "So everyone knows who's claimed what. No account needed.",
@@ -342,6 +370,7 @@ export const enGB = {
     thatsMe: "That's me",
     buyingAs: (name: string) => `Buying as ${name}`,
     wishes: 'wishes',
+    gifts: 'gifts',
     total: 'list total',
     stillToGet: 'still to get',
     empty: 'Nothing circled yet. Check back soon!',

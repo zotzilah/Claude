@@ -27,6 +27,14 @@ export function tapProduct(
   return next;
 }
 
+/** Wedding lists: one tap puts a gift on the list, the next takes it off (no star levels). */
+export function toggleProduct(marks: Record<string, CircleMark>, productId: string, now: number): Record<string, CircleMark> {
+  const next = { ...marks };
+  if (next[productId]) delete next[productId];
+  else next[productId] = { productId, stars: 1, circledAt: now };
+  return next;
+}
+
 /**
  * Sum of circled product prices, in minor units of the list's currency.
  * Items priced in another currency (a link from an overseas shop) can't be

@@ -9,6 +9,7 @@ import { BigButton } from '@/components/big-button';
 import { yourFinds } from '@/data/catalogue';
 import { currencySymbol, moneyInputText, parseMoneyInput, toMinor } from '@/domain/money';
 import { checkLink, checkProduct, findDuplicate } from '@/domain/moderation';
+import { isGrownUpOccasion } from '@/domain/settings';
 import { extractUrl, type ProductDetails } from '@/domain/product-page';
 import { detailsFromUrl, fetchProduct } from '@/state/fetch-product';
 import { deviceLocale, useStrings } from '@/state/locale';
@@ -205,7 +206,7 @@ export default function AddFromLink() {
         {tried && problem && <Text style={styles.problem}>{problem}</Text>}
         <View style={styles.row}>
           <BigButton label={t.common.cancel} tone="yellow" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
-          {showForm && <BigButton label={t.add.circleIt} onPress={add} grow />}
+          {showForm && <BigButton label={isGrownUpOccasion(list.settings.template) ? t.add.addToList : t.add.circleIt} onPress={add} grow />}
         </View>
       </View>
     </KeyboardAvoidingView>

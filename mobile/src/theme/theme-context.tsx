@@ -18,12 +18,8 @@ type StyleFactory<T> = (theme: ThemeParts) => T;
 // One set of styles per theme and screen, made the first time it's needed.
 const made = new WeakMap<Theme, Map<StyleFactory<unknown>, unknown>>();
 
-/**
- * Styles for the current theme. Screens write their StyleSheet as a function of the
- * theme's colours and fonts, and get the same objects back every render.
- */
-export function useThemedStyles<T>(factory: StyleFactory<T>): T {
-  const theme = useTheme();
+/** Styles for a given theme, outside the usual context (e.g. setup previews the occasion being picked). */
+export function stylesFor<T>(theme: Theme, factory: StyleFactory<T>): T {
   let byFactory = made.get(theme);
   if (!byFactory) {
     byFactory = new Map();
@@ -31,4 +27,12 @@ export function useThemedStyles<T>(factory: StyleFactory<T>): T {
   }
   if (!byFactory.has(factory)) byFactory.set(factory, factory(theme));
   return byFactory.get(factory) as T;
+}
+
+/**
+ * Styles for the current theme. Screens write their StyleSheet as a function of the
+ * theme's colours and fonts, and get the same objects back every render.
+ */
+export function useThemedStyles<T>(factory: StyleFactory<T>): T {
+  return stylesFor(useTheme(), factory);
 }

@@ -12,6 +12,7 @@ import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
 import { pricesCheckedOn } from '@/data/catalogue';
+import { isGrownUpOccasion } from '@/domain/settings';
 import { deviceLocale, useStrings } from '@/state/locale';
 import { hasPin } from '@/state/parent-pin';
 import { useWishlist } from '@/state/wishlist-store';
@@ -22,11 +23,13 @@ import { radius, space } from '@/theme/tokens';
 /** The catalogue: one category spread per page. */
 export default function CatalogueScreen() {
   const styles = useThemedStyles(makeStyles);
-  const { colors, decor } = useTheme();
+  const { colors, decor, style } = useTheme();
+  const light = style.header === 'light';
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ page?: string }>();
   // The page lives in the URL (?page=N), so Kid Mode tiles and shared links can open any page.
   const list = useWishlist();
+  const grownUp = isGrownUpOccasion(list.settings.template);
   const t = useStrings();
   const pages = list.pages;
   const page = clampPage(Number(params.page ?? 0), pages.length);
@@ -42,12 +45,19 @@ export default function CatalogueScreen() {
     const onPage = list.productsFor(pages[index].key);
     return (
       <ScrollView key={index} style={styles.page} contentContainerStyle={styles.grid}>
+        {grownUp && onPage.length === 0 && (
+          <View style={styles.empty}>
+            <Text style={styles.emptyTitle}>{t.catalogue.emptyGrownUp}</Text>
+            <Text style={styles.emptyHint}>{t.catalogue.emptyGrownUpHint}</Text>
+            <BigButton label={t.catalogue.addFirst} onPress={() => router.navigate('/add')} />
+          </View>
+        )}
         {onPage.map((p) => (
           <ProductCard
             key={p.id}
             product={p}
             stars={list.starsFor(p.id)}
-            onTap={list.tap}
+            onTap={grownUp ? list.toggle : list.tap}
             kid={kid}
             listSide={list.listSideFor(p.id)}
             hidePrice={list.hidePrices}
@@ -55,31 +65,39 @@ export default function CatalogueScreen() {
         ))}
         {/* Keeps a lone last product at half width instead of stretching across the page. */}
         {onPage.length % 2 === 1 && <View style={styles.spacer} />}
-        <Text style={styles.hint}>
-          {kid ? t.catalogue.hintKid : t.catalogue.hint}
-        </Text>
-        {!kid && <Text style={styles.hint}>{t.catalogue.pricesAsOf(checkedDate)}</Text>}
+        {grownUp ? (
+          onPage.length > 0 && <Text style={styles.hint}>{t.catalogue.hintGrownUp}</Text>
+        ) : (
+          <>
+            <Text style={styles.hint}>{kid ? t.catalogue.hintKid : t.catalogue.hint}</Text>
+            {!kid && <Text style={styles.hint}>{t.catalogue.pricesAsOf(checkedDate)}</Text>}
+          </>
+        )}
       </ScrollView>
     );
   };
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.head, { paddingTop: insets.top + space.sm }]}>
+      <View style={[styles.head, light && styles.headLight, { paddingTop: insets.top + space.sm }]}>
         {decor.santa && <SantaFlyby top={insets.top - 10} />}
         <View style={styles.bookRow}>
-          <Text style={styles.book}>{list.settings.title.toUpperCase()}</Text>
+          <Text style={[styles.book, light && styles.bookLight]}>
+            {(grownUp ? list.settings.circlerName : list.settings.title).toUpperCase()}
+          </Text>
           <View style={styles.headActions}>
             {kid && <Text style={styles.kidChip}>{t.catalogue.kidModeChip}</Text>}
-            <Pressable
-              onPress={() => router.navigate('/catalogue-index')}
-              accessibilityRole="button"
-              accessibilityLabel={t.catalogue.indexA11y}
-              hitSlop={10}
-              style={styles.azButton}
-            >
-              <Text style={styles.azText}>A–Z</Text>
-            </Pressable>
+            {!grownUp && (
+              <Pressable
+                onPress={() => router.navigate('/catalogue-index')}
+                accessibilityRole="button"
+                accessibilityLabel={t.catalogue.indexA11y}
+                hitSlop={10}
+                style={styles.azButton}
+              >
+                <Text style={styles.azText}>A–Z</Text>
+              </Pressable>
+            )}
             <Pressable onPress={() => router.navigate('/search')} accessibilityRole="button" accessibilityLabel={t.common.search} hitSlop={10}>
               <Text style={styles.sound}>🔍</Text>
             </Pressable>
@@ -95,10 +113,10 @@ export default function CatalogueScreen() {
             </Pressable>
           </View>
         </View>
-        <Text style={styles.pageTitle} accessibilityRole="header">
-          {category.title}
+        <Text style={[styles.pageTitle, light && styles.pageTitleLight]} accessibilityRole="header">
+          {grownUp ? t.catalogue.ourList(list.settings.template) : category.title}
         </Text>
-        <Text style={styles.pageNo}>{t.catalogue.page(category.familyCode)}</Text>
+        {!grownUp && <Text style={styles.pageNo}>{t.catalogue.page(category.familyCode)}</Text>}
         {decor.lights && <FairyLights />}
       </View>
 
@@ -110,20 +128,22 @@ export default function CatalogueScreen() {
         onChangePage={setPage}
       />
 
-      <View style={styles.pager}>
-        <PagerButton label="◀" a11y={t.catalogue.previousPage} disabled={page === 0} onPress={() => turner.current?.turn(-1)} />
-        <View style={styles.dots}>
-          {pages.map((c, i) => (
-            <View key={c.key} style={[styles.dot, i === page && styles.dotOn]} />
-          ))}
+      {pages.length > 1 && (
+        <View style={styles.pager}>
+          <PagerButton label="◀" a11y={t.catalogue.previousPage} disabled={page === 0} onPress={() => turner.current?.turn(-1)} />
+          <View style={styles.dots}>
+            {pages.map((c, i) => (
+              <View key={c.key} style={[styles.dot, i === page && styles.dotOn]} />
+            ))}
+          </View>
+          <PagerButton
+            label="▶"
+            a11y={t.catalogue.nextPage}
+            disabled={page === pages.length - 1}
+            onPress={() => turner.current?.turn(1)}
+          />
         </View>
-        <PagerButton
-          label="▶"
-          a11y={t.catalogue.nextPage}
-          disabled={page === pages.length - 1}
-          onPress={() => turner.current?.turn(1)}
-        />
-      </View>
+      )}
 
       <View style={{ paddingBottom: insets.bottom, backgroundColor: kid ? colors.paper : colors.blue }}>
         {kid ? (
@@ -134,7 +154,13 @@ export default function CatalogueScreen() {
         ) : (
           <>
             {list.settings.runningTotalOn && (
-              <RunningTotal budget={list.budget} count={list.wishes.length} money={list.money} uncounted={list.uncountedItems} />
+              <RunningTotal
+                budget={list.budget}
+                count={list.wishes.length}
+                money={list.money}
+                uncounted={list.uncountedItems}
+                grownUp={grownUp}
+              />
             )}
             <View style={styles.devLinks}>
               {list.settings.circler === 'child' && (
@@ -208,6 +234,10 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
     screen: { flex: 1, backgroundColor: colors.paper },
     // Above the page stage, so the yellow page tab can overlap the page.
     head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.md, zIndex: 2 },
+    // The wedding look: a light header with a centred serif title.
+    headLight: { backgroundColor: colors.paper2, paddingBottom: space.lg, borderBottomWidth: 1, borderBottomColor: colors.rule },
+    bookLight: { color: colors.biro, letterSpacing: 3, fontSize: 12 },
+    pageTitleLight: { color: colors.ink, fontSize: 36, textAlign: 'center', marginTop: space.sm },
     bookRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
     headActions: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
     sound: { fontSize: 18 },
@@ -235,6 +265,9 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
     page: { flex: 1, backgroundColor: colors.paper },
     grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingHorizontal: 14, paddingTop: 24, paddingBottom: space.lg },
     spacer: { flexBasis: '47%', flexGrow: 1 },
+    empty: { width: '100%', alignItems: 'stretch', gap: space.md, paddingHorizontal: space.md, paddingVertical: space.xl },
+    emptyTitle: { fontFamily: fonts.display, fontSize: 26, color: colors.ink, textAlign: 'center' },
+    emptyHint: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.inkSoft, textAlign: 'center' },
     hint: { width: '100%', textAlign: 'center', fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
     pager: {
       flexDirection: 'row',

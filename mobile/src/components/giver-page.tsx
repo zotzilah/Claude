@@ -5,7 +5,7 @@ import { FairyLights } from '@/components/festive/fairy-lights';
 import { Snowfall } from '@/components/festive/snowfall';
 import { GiverItem } from '@/components/giver-item';
 import { whatsAppShareUrl } from '@/domain/notifications';
-import type { Features } from '@/domain/settings';
+import { isGrownUpOccasion, type Features } from '@/domain/settings';
 import type { Claim, GroupGift, ListSettings, Product, Stars } from '@/domain/types';
 import { sendFeedback } from '@/state/feedback';
 import { useStrings } from '@/state/locale';
@@ -58,6 +58,7 @@ export function GiverPage(props: Props) {
   const insets = useSafeAreaInsets();
   const t = useStrings();
   const listTitle = t.giver.listTitle(settings.title);
+  const grownUp = isGrownUpOccasion(settings.template);
 
   const shareMessage = props.shareUrl ? t.giver.shareMessage(listTitle, props.shareUrl) : null;
   const share = () => shareMessage && Share.share({ message: shareMessage }).catch(() => undefined);
@@ -75,7 +76,7 @@ export function GiverPage(props: Props) {
           <Text style={styles.title} accessibilityRole="header">
             {listTitle}
           </Text>
-          <Text style={styles.sub}>{t.giver.circledBy(settings.circlerName)}</Text>
+          <Text style={styles.sub}>{grownUp ? t.giver.inviteToChoose : t.giver.circledBy(settings.circlerName)}</Text>
           {decor.lights && <FairyLights />}
         </View>
 
@@ -115,7 +116,7 @@ export function GiverPage(props: Props) {
 
         {!props.hideSummary && (
           <View style={styles.summary}>
-            <Stat value={String(props.summary.wishCount)} label={t.giver.wishes} />
+            <Stat value={String(props.summary.wishCount)} label={grownUp ? t.giver.gifts : t.giver.wishes} />
             <Stat value={props.money(props.summary.totalMinor)} label={t.giver.total} />
             {features.claiming && <Stat value={props.money(props.summary.remainingMinor)} label={t.giver.stillToGet} />}
           </View>
@@ -134,6 +135,7 @@ export function GiverPage(props: Props) {
               now={props.now}
               claimingOn={features.claiming}
               groupGiftsOn={features.groupGifts}
+              grownUp={grownUp}
               onClaim={() => props.actions.claim(product.id)}
               onBought={() => props.actions.markBought(product.id)}
               onRelease={() => props.actions.release(product.id)}
@@ -229,7 +231,7 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
     signedIn: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.inkSoft, marginHorizontal: space.md, marginTop: space.sm },
     summary: { flexDirection: 'row', gap: space.sm, margin: space.md },
     stat: { flex: 1, backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: 1, borderColor: colors.rule, padding: 10 },
-    statValue: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums'] },
+    statValue: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums', 'lining-nums'] },
     statLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft },
     items: { gap: 10, marginHorizontal: space.md },
     feedback: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', marginTop: space.lg },

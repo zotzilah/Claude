@@ -13,16 +13,18 @@ interface Props {
   money: (minor: number) => string;
   /** Circled items in another currency, left out of the total. */
   uncounted?: number;
+  /** Wedding lists count gifts, not circles. */
+  grownUp?: boolean;
 }
 
-export function RunningTotal({ budget, count, money, uncounted = 0 }: Props) {
+export function RunningTotal({ budget, count, money, uncounted = 0, grownUp = false }: Props) {
   const styles = useThemedStyles(makeStyles);
   const t = useStrings();
   const { over, totalMinor, budgetMinor, remainingMinor, progress } = budget;
   return (
     <View style={[styles.bar, over && styles.over]}>
       <View style={styles.row}>
-        <Text style={styles.label}>{t.runningTotal.label(count)}</Text>
+        <Text style={styles.label}>{grownUp ? t.runningTotal.gifts(count) : t.runningTotal.label(count)}</Text>
         <Text style={styles.amount}>{money(totalMinor)}</Text>
       </View>
       <View style={styles.track}>
@@ -44,7 +46,7 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
     over: { backgroundColor: colors.red },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: space.sm },
     label: { fontFamily: fonts.bodyBold, fontSize: 12, letterSpacing: 1.2, color: colors.paper, opacity: 0.85 },
-    amount: { fontFamily: fonts.display, fontSize: 24, color: colors.paper, fontVariant: ['tabular-nums'] },
+    amount: { fontFamily: fonts.display, fontSize: 24, color: colors.paper, fontVariant: ['tabular-nums', 'lining-nums'] },
     track: { height: 8, borderRadius: 4, marginTop: 6, backgroundColor: 'rgba(255,255,255,0.2)', overflow: 'hidden' },
     fill: { height: '100%', borderRadius: 4, backgroundColor: colors.yellow },
     fillOver: { backgroundColor: colors.paper },

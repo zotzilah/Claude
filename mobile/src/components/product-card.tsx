@@ -9,7 +9,7 @@ import { formatMoney } from '@/domain/money';
 import type { Product, Stars } from '@/domain/types';
 import type { Strings } from '@/i18n';
 import { deviceLocale, useStrings } from '@/state/locale';
-import { useThemedStyles } from '@/theme/theme-context';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
 import type { ThemeParts } from '@/theme/themes';
 import { space } from '@/theme/tokens';
 
@@ -37,6 +37,7 @@ function stampFor(view: ListSideView | null, t: Strings): { label: string; claim
 
 export function ProductCard({ product, stars, onTap, kid = false, listSide = null, hidePrice = false }: Props) {
   const styles = useThemedStyles(makeStyles);
+  const rows = useTheme().style.products === 'rows';
   const t = useStrings();
   const stamp = stampFor(listSide, t);
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -47,7 +48,9 @@ export function ProductCard({ product, stars, onTap, kid = false, listSide = nul
     setSize({ width, height });
   };
   const press = () => {
-    if (stars === null) {
+    if (rows) {
+      playSfx('tick');
+    } else if (stars === null) {
       playSfx('scribble');
       setJustCircled(true);
     } else {
@@ -59,21 +62,51 @@ export function ProductCard({ product, stars, onTap, kid = false, listSide = nul
     onTap(product.id);
   };
 
+  const a11yLabel = hidePrice
+    ? product.title
+    : t.product.a11yLabel(product.title, formatMoney(product.priceMinor, product.currency, deviceLocale.tag), product.catalogueNo);
+
+  // The wedding look: a calm row with a photo, the name in serif, and a gold heart for favourites.
+  if (rows) {
+    return (
+      <Pressable
+        onPress={press}
+        style={[styles.row, stars !== null && styles.rowLoved]}
+        accessibilityRole="button"
+        accessibilityLabel={a11yLabel}
+        accessibilityState={{ selected: stars !== null }}
+        accessibilityValue={stamp ? { text: stamp.label } : undefined}
+        accessibilityHint={stars === null ? t.product.hintFavourite : t.product.hintUnfavourite}
+      >
+        <View style={styles.rowPhoto}>
+          {product.imageUrl ? (
+            <Image source={product.imageUrl} style={styles.image} contentFit="cover" accessibilityIgnoresInvertColors />
+          ) : (
+            <Text style={styles.rowEmoji}>{product.emoji}</Text>
+          )}
+        </View>
+        <View style={styles.rowText}>
+          <Text style={styles.rowTitle} numberOfLines={2}>
+            {product.title}
+          </Text>
+          <Text style={styles.retailer}>{product.retailer}</Text>
+          <View style={styles.rowMeta}>
+            <Text style={styles.rowPrice}>{formatMoney(product.priceMinor, product.currency, deviceLocale.tag)}</Text>
+            {stamp && <Text style={styles.rowStamp}>{stamp.label}</Text>}
+          </View>
+        </View>
+        <Text style={[styles.heart, stars !== null && styles.heartOn]}>{stars === null ? '♡' : '♥'}</Text>
+      </Pressable>
+    );
+  }
+
   return (
     <Pressable
       onPress={press}
       onLayout={onLayout}
       style={styles.card}
       accessibilityRole="button"
-      accessibilityLabel={
-        hidePrice
-          ? product.title
-          : t.product.a11yLabel(
-              product.title,
-              formatMoney(product.priceMinor, product.currency, deviceLocale.tag),
-              product.catalogueNo,
-            )
-      }
+      accessibilityLabel={a11yLabel}
       accessibilityState={{ selected: stars !== null }}
       accessibilityValue={stamp ? { text: stamp.label } : undefined}
       accessibilityHint={stars === null ? t.product.hintUncircled : t.product.hintCircled(stars)}
@@ -140,6 +173,45 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
     title: { fontFamily: fonts.bodySemi, fontSize: 14, lineHeight: 16, color: colors.ink, marginTop: 2, minHeight: 32 },
     retailer: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft, marginTop: 1 },
     sticker: { position: 'absolute', right: 0, top: '44%' },
+    row: {
+      flexBasis: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 14,
+      backgroundColor: colors.paper,
+      borderWidth: 1,
+      borderColor: colors.rule,
+      borderRadius: 14,
+      padding: 10,
+    },
+    rowLoved: { borderColor: colors.biro },
+    rowPhoto: {
+      width: 76,
+      height: 76,
+      borderRadius: 10,
+      backgroundColor: colors.yellow,
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+    },
+    rowEmoji: { fontSize: 34 },
+    rowText: { flex: 1, minWidth: 0, gap: 2 },
+    rowTitle: { fontFamily: fonts.display, fontSize: 19, lineHeight: 21, color: colors.ink },
+    rowMeta: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: space.sm, marginTop: 2 },
+    rowPrice: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.ink },
+    rowStamp: {
+      fontFamily: fonts.bodyBold,
+      fontSize: 11,
+      letterSpacing: 1,
+      color: colors.good,
+      backgroundColor: '#eaf1e8',
+      borderRadius: 999,
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      overflow: 'hidden',
+    },
+    heart: { fontSize: 26, color: colors.biro, paddingHorizontal: 6, minWidth: 44, textAlign: 'center' },
+    heartOn: { color: colors.biro },
     stars: {
       position: 'absolute',
       left: 2,
