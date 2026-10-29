@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ProductCard } from '@/components/product-card';
@@ -100,7 +100,7 @@ export default function SearchScreen() {
       </View>
       {voiceError && (
         <Text style={[styles.voiceError, kid && styles.messageKid]} accessibilityLiveRegion="assertive">
-          {voiceError === 'denied' ? t.search.voiceDenied : t.search.voiceFailed}
+          {voiceError === 'denied' ? (Platform.OS === 'web' ? t.search.voiceDenied : t.search.voiceDeniedPhone) : t.search.voiceFailed}
         </Text>
       )}
 

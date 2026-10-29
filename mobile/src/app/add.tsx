@@ -1,7 +1,7 @@
 import { randomUUID } from 'expo-crypto';
 import { Image } from 'expo-image';
-import { Redirect, router } from 'expo-router';
-import { useState } from 'react';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -25,7 +25,9 @@ export default function AddFromLink() {
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
-  const [link, setLink] = useState('');
+  // A page shared from a shop's app or the browser arrives ready to read.
+  const { link: shared } = useLocalSearchParams<{ link?: string }>();
+  const [link, setLink] = useState(shared ?? '');
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string | null>(null);
   const [details, setDetails] = useState<ProductDetails | null>(null);
@@ -34,7 +36,6 @@ export default function AddFromLink() {
   const [retailer, setRetailer] = useState('');
   const [tried, setTried] = useState(false);
 
-  if (list.kidMode) return <Redirect href="/kid" />;
 
   const fill = (d: ProductDetails) => {
     setDetails(d);
@@ -43,8 +44,8 @@ export default function AddFromLink() {
     setRetailer(d.retailer);
   };
 
-  const lookUp = async () => {
-    const url = extractUrl(link);
+  const lookUp = async (typed = link) => {
+    const url = extractUrl(typed);
     if (!url) {
       setMessage(t.add.notALink);
       return;
@@ -75,6 +76,17 @@ export default function AddFromLink() {
       setMessage(t.add.failure[result.ok ? 'blocked' : result.reason]);
     }
   };
+
+  const lookedUpShared = useRef(false);
+  useEffect(() => {
+    if (!shared || lookedUpShared.current) return;
+    lookedUpShared.current = true;
+    lookUp(shared);
+    // Look the shared page up once, on arrival.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shared]);
+
+  if (list.kidMode) return <Redirect href="/kid" />;
 
   const currency = details?.currency ?? list.settings.currency;
   const priceExample = moneyInputText(toMinor(24.99, currency), currency, deviceLocale.tag);
@@ -135,7 +147,7 @@ export default function AddFromLink() {
             setStatus('idle');
             setMessage(null);
           }}
-          onSubmitEditing={lookUp}
+          onSubmitEditing={() => lookUp()}
           placeholder="https://"
           placeholderTextColor={colors.inkSoft}
           autoCapitalize="none"
@@ -145,7 +157,7 @@ export default function AddFromLink() {
           style={styles.input}
           accessibilityLabel={t.add.linkA11y}
         />
-        {status !== 'loading' && !showForm && <BigButton label={t.add.find} onPress={lookUp} />}
+        {status !== 'loading' && !showForm && <BigButton label={t.add.find} onPress={() => lookUp()} />}
         {status === 'loading' && (
           <View style={styles.loading}>
             <ActivityIndicator color={colors.blue} />

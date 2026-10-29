@@ -262,5 +262,88 @@ select tests.eq((select count(*) from auth.users where id in ('00000000-0000-000
 select tests.eq(public.list_event_date('christmas', '2026-12-30'::timestamptz), '2027-12-25'::date,
   'a Christmas list made after Christmas is for next Christmas');
 
+-- ---------- Push notifications to the parent (issue #16) ----------
+reset role;
+-- A stand-in for Supabase's pg_net that records what would be sent.
+create schema net;
+create table net.sent (url text, body jsonb);
+create function net.http_post(url text, body jsonb, headers jsonb) returns bigint language sql as $$
+  insert into net.sent values (url, body) returning 1::bigint;
+$$;
+insert into auth.users (id, is_anonymous) values
+  ('00000000-0000-0000-0000-0000000000f1', false), -- Priya, the parent
+  ('00000000-0000-0000-0000-0000000000f2', true),  -- Grandpa
+  ('00000000-0000-0000-0000-0000000000f3', true);  -- Auntie Jo
+insert into public.lists (id, owner_id, title, settings) values
+  ('30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000000f1', 'Arlo''s Birthday Book', '{"surpriseMode": "off"}');
+insert into public.custom_products (list_id, id, title, price_minor, currency, url) values
+  ('30000000-0000-0000-0000-000000000001', 'a', 'Rocket Lamp', 1500, 'GBP', 'https://toys.example/rocket');
+insert into public.circle_marks (list_id, product_id, stars) values
+  ('30000000-0000-0000-0000-000000000001', 'a', 1), ('30000000-0000-0000-0000-000000000001', 'b', 1),
+  ('30000000-0000-0000-0000-000000000001', 'c', 1), ('30000000-0000-0000-0000-000000000001', 'd', 1);
+select share_token as arlo from public.lists where id = '30000000-0000-0000-0000-000000000001' \gset
+
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000f1');
+insert into public.push_tokens (token) values ('ExponentPushToken[priya-phone-123]');
+select tests.eq((select user_id from public.push_tokens), '00000000-0000-0000-0000-0000000000f1'::uuid,
+  'a parent''s phone can register for pushes');
+select tests.fails($$insert into public.push_tokens (token) values ('https://evil.example')$$,
+  'check constraint', 'only real Expo push tokens are accepted');
+select tests.fails($$insert into public.push_tokens (user_id, token) values ('00000000-0000-0000-0000-0000000000f2', 'ExponentPushToken[sneaky-123]')$$,
+  'row-level security', 'nobody can register a phone for someone else');
+
+select tests.login('00000000-0000-0000-0000-0000000000f2');
+select tests.eq((select count(*) from public.push_tokens)::int, 0, 'a giver can''t see the parent''s phone');
+select public.join_list(:'arlo', 'Grandpa');
+select public.claim_item('30000000-0000-0000-0000-000000000001', 'a');
+select public.mark_bought('30000000-0000-0000-0000-000000000001', 'a');
+select tests.fails($$select * from public.push_outbox$$, 'permission denied', 'nobody can read the push queue through the API');
+
+reset role;
+select tests.eq((select array_agg(title order by id) from public.push_outbox),
+  array['Grandpa is getting the Rocket Lamp', 'Grandpa bought the Rocket Lamp ✓'],
+  'surprise off: the parent hears who reserved it, then that it''s bought');
+
+-- "Taken care of": once it's bought, with no name.
+update public.lists set settings = '{"surpriseMode": "taken-care-of"}' where id = '30000000-0000-0000-0000-000000000001';
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000f3');
+select public.join_list(:'arlo', 'Auntie Jo');
+select public.claim_item('30000000-0000-0000-0000-000000000001', 'b');
+select public.mark_bought('30000000-0000-0000-0000-000000000001', 'b');
+reset role;
+select tests.eq((select array_agg(title || ' ' || body order by id) from public.push_outbox where title not like 'Grandpa%'),
+  array['Another wish is taken care of ✓ We won''t say who.'],
+  'surprise on: nothing when it''s reserved, then one push with no name when it''s bought');
+
+-- "Hide everything": silence.
+update public.lists set settings = '{"surpriseMode": "hide-all"}' where id = '30000000-0000-0000-0000-000000000001';
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000f3');
+select public.claim_item('30000000-0000-0000-0000-000000000001', 'c');
+reset role;
+select tests.eq((select count(*) from public.push_outbox)::int, 3, 'hide everything: no push at all');
+
+-- The parent buying something themselves doesn't notify themselves.
+update public.lists set settings = '{"surpriseMode": "off"}' where id = '30000000-0000-0000-0000-000000000001';
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000f1');
+select public.join_list(:'arlo', 'Mum');
+select public.claim_item('30000000-0000-0000-0000-000000000001', 'd');
+reset role;
+select tests.eq((select count(*) from public.push_outbox)::int, 3, 'no push when the parent claims something themselves');
+
+set role authenticated;
+select tests.fails($$select public.send_push_outbox()$$, 'permission denied', 'nobody can send pushes through the API');
+
+reset role;
+select tests.eq(public.send_push_outbox(), 3, 'the sender sends everything queued');
+select tests.eq((select jsonb_array_length(body) from net.sent), 3, 'in one request to Expo');
+select tests.eq((select url from net.sent), 'https://exp.host/--/api/v2/push/send', 'to Expo''s push service');
+select tests.eq((select body -> 0 ->> 'to' from net.sent), 'ExponentPushToken[priya-phone-123]', 'addressed to the parent''s phone');
+select tests.eq((select body -> 0 ->> 'title' from net.sent), 'Grandpa is getting the Rocket Lamp', 'with the message');
+select tests.eq(public.send_push_outbox(), 0, 'and never sends the same push twice');
+
 reset role;
 select 'ALL RULE TESTS PASSED' as result;

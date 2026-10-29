@@ -172,6 +172,7 @@ export const enGB = {
     listening: 'Listening…',
     voiceFailed: "Sorry, we didn't catch that. Try again, or type it.",
     voiceDenied: "Biro can't hear you yet. Allow the microphone in your browser's settings, or type instead.",
+    voiceDeniedPhone: "Biro can't hear you yet. A grown-up can allow the microphone for Biro in the phone's Settings, or type instead.",
     stopListening: 'Stop listening',
   },
 
@@ -282,6 +283,13 @@ export const enGB = {
       'This deletes your account and every list on it, for everyone you shared it with. It can’t be undone.',
     deleteConfirm: 'Yes, delete everything',
     deleted: 'Your account and lists have been deleted.',
+    pushes: 'Notifications',
+    pushesHint:
+      "Get a message on this phone when someone reserves or buys a gift. With surprise mode on, it only says something's been taken care of, never who or what.",
+    pushesTurnOn: 'Tell me when someone gets a gift',
+    pushesOn: '✓ Notifications are on for this phone.',
+    pushesDenied: "Notifications are off for Biro. You can turn them on in the phone's Settings.",
+    pushesFailed: "We couldn't turn notifications on. Check you're online and try again.",
     errors: {
       'rate-limited': 'Too many tries. Wait a minute, then try again.',
       'wrong-code': "That code didn't work. It may have run out, so ask for a new one.",
