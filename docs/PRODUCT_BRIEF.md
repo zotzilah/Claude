@@ -253,6 +253,7 @@ ModerationItem (product_id, submitted_by, flags[], decision, reviewer)
 - **Affiliate disclosure:** a clear "We may earn a commission" notice in the Giver views.
 - **Trademark:** our own name and branding only.
 - **Moderation:** see section 8.3. Kid catalogues show approved products only.
+- **Drafts:** privacy policy, terms and app store privacy answers are in `docs/legal/`. They need a legal check before launch.
 
 ## 13. Business model (deferred)
 
@@ -300,7 +301,7 @@ Today is **28 Oct 2026**, so Christmas 2026 is about 8 weeks away. App store rev
 - [ ] Beta now vs. full launch for 2027 (see section 14)
 - [ ] Should the child see prices at all in Kid Mode? (Default: hidden for under-8s)
 - [ ] Group gift threshold amount per currency
-- [ ] Data retention: how long lists and slips are kept after the event
+- [ ] Data retention: how long lists and slips are kept after the event. *Proposed in `docs/legal/`: 12 months after the event or the last time the list was opened, whichever is later.*
 
 ## Appendix: interview decisions log (28 Oct 2026)
 
