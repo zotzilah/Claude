@@ -2,14 +2,19 @@
 
 A single static page (`index.html`) with the Christmas beta waitlist.
 
-## Hosting it (free)
+## Hosting it (free, on GitHub Pages)
 
-The page is plain HTML. Any static host serves it:
+`.github/workflows/pages.yml` publishes this folder whenever `main` changes. It needs one setting, once:
 
-- **Netlify** or **Cloudflare Pages:** connect this GitHub repo and set the publish directory to `site`.
-- **GitHub Pages:** in the repo settings, under Pages, publish from the `site` folder. Free for public repos.
+1. On GitHub, open the repo's **Settings**, then **Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Go to the **Actions** tab, choose **Publish landing page**, then **Run workflow**. This is only needed the first time; after that it runs by itself.
 
-A custom domain (e.g. `getbiro.com`) can be added on any of these later.
+The site appears at **https://zotzilah.github.io/Claude/** a minute later. A custom domain (e.g. `getbiro.com`) can be added later under the same Pages settings.
+
+## Privacy and terms pages
+
+`privacy.html` and `terms.html` are generated from `docs/legal/`. After editing those Markdown files, run `node site/build-legal.mjs`.
 
 ## Turning on the waitlist
 
