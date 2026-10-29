@@ -15,8 +15,20 @@ export interface Parent {
   email: string;
 }
 
-/** True when the app has a backend to sign in to. */
+/**
+ * Email codes need our own email service (Supabase's built-in one only reaches the
+ * project's team). Until that's set up, lists are saved online under an anonymous
+ * session on this phone, and email sign-in stays hidden.
+ */
+export const EMAIL_SIGN_IN_READY = false;
+
+/** True when parents can sign in with an emailed code. */
 export function accountsAvailable(): boolean {
+  return remote() !== null && EMAIL_SIGN_IN_READY;
+}
+
+/** True when this phone saves its list online (signed in or not). */
+export function savedOnline(): boolean {
   return remote() !== null;
 }
 

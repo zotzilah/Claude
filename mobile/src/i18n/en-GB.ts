@@ -247,6 +247,8 @@ export const enGB = {
     link: 'Account ▸',
     notSetUp:
       "Accounts aren't switched on yet. Your list is saved on this phone, and nothing leaves it.",
+    savedOnline:
+      'Your list is saved online automatically, so the family link always shows the latest. Signing in with your email, so you can keep the list if you change phones, is coming soon.',
     why: 'Sign in to keep your list safe if you lose your phone, and to share it with family.',
     email: 'Your email',
     emailExample: 'you@example.com',
@@ -280,6 +282,8 @@ export const enGB = {
     /** "Ellie's Christmas Book 2026" reads as a list to the family. */
     listTitle: (bookTitle: string) => bookTitle.replace('Book', 'List'),
     backToCatalogue: '◀ Back to the catalogue',
+    sharedListTitle: 'A wish list for you',
+    opening: 'Opening the list…',
     circledBy: (name: string) => `Circled by ${name || 'them'} · no app needed`,
     surpriseOn: (name: string) => `🤫 Surprise mode is on. ${name || 'They'} can't see who's buying what.`,
     hello: "Hello! Who's buying?",

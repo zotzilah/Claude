@@ -27,8 +27,16 @@ import {
 } from '@/domain/remote-rows';
 import type { ListState } from '@/domain/types';
 
-const url = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
-const anonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
+/**
+ * Biro's Supabase project. The publishable key is designed to be public (it's in every
+ * copy of the app); the database's row-level security does the protecting.
+ * `mobile/.env` can point a build at a different project.
+ */
+const url = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://vrakfvlzsqdxjvxrmkvg.supabase.co';
+const anonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_v9_HGeT1rhr1LBr5R880tw_NZqaUzFn';
+
+/** Where the web version of the app lives, for share links that open without an app. */
+export const WEB_APP_URL = 'https://zotzilah.github.io/Claude/app';
 
 let client: SupabaseClient | null = null;
 
@@ -45,8 +53,13 @@ export type Result<T> = { ok: true; value: T } | { ok: false; error: ServerError
 
 const fail = (message?: string): { ok: false; error: ServerError | 'unknown' } => ({ ok: false, error: serverError(message) });
 
-/** Givers don't need an account: they get an anonymous session the first time. */
-async function ensureSignedIn(db: SupabaseClient): Promise<boolean> {
+/**
+ * Nobody needs an account to start: givers and parents get an anonymous session the
+ * first time. A parent can attach an email later (Settings → Account) to keep the list
+ * if they change phones.
+ */
+export async function ensureSignedIn(db: SupabaseClient | null = remote()): Promise<boolean> {
+  if (!db) return false;
   const { data } = await db.auth.getSession();
   if (data.session) return true;
   const { error } = await db.auth.signInAnonymously();

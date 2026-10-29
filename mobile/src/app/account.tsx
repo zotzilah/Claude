@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
 import { cleanCode, isCode, isEmail, normaliseEmail, resendWaitMs, type SignInError } from '@/domain/sign-in';
-import { accountsAvailable, deleteAccount, sendCode, signOut, useParent, verifyCode } from '@/state/auth';
+import { accountsAvailable, deleteAccount, savedOnline, sendCode, signOut, useParent, verifyCode } from '@/state/auth';
 import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -98,25 +98,32 @@ export default function Account() {
       <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
         {deleted ? (
           <Text style={styles.help}>{t.account.deleted}</Text>
-        ) : !accountsAvailable() ? (
-          <Text style={styles.help}>{t.account.notSetUp}</Text>
-        ) : parent ? (
+        ) : !accountsAvailable() || parent ? (
           <>
-            <Text style={styles.signedIn}>{t.account.signedInAs(parent.email)}</Text>
-            <BigButton label={t.account.signOut} tone="yellow" onPress={() => signOut()} />
-            <View style={styles.danger}>
-              {confirmingDelete ? (
-                <>
-                  <Text style={styles.warning}>{t.account.deleteWarning}</Text>
-                  <View style={styles.row}>
-                    <BigButton label={t.common.cancel} tone="yellow" onPress={() => setConfirmingDelete(false)} />
-                    <BigButton label={t.account.deleteConfirm} onPress={remove} grow />
-                  </View>
-                </>
-              ) : (
-                <TextLink label={t.account.delete} danger onPress={() => setConfirmingDelete(true)} />
-              )}
-            </View>
+            {parent ? (
+              <>
+                <Text style={styles.signedIn}>{t.account.signedInAs(parent.email)}</Text>
+                <BigButton label={t.account.signOut} tone="yellow" onPress={() => signOut()} />
+              </>
+            ) : (
+              <Text style={styles.help}>{savedOnline() ? t.account.savedOnline : t.account.notSetUp}</Text>
+            )}
+            {/* The privacy policy promises this is always here whenever anything is stored online. */}
+            {(parent || savedOnline()) && (
+              <View style={styles.danger}>
+                {confirmingDelete ? (
+                  <>
+                    <Text style={styles.warning}>{t.account.deleteWarning}</Text>
+                    <View style={styles.row}>
+                      <BigButton label={t.common.cancel} tone="yellow" onPress={() => setConfirmingDelete(false)} />
+                      <BigButton label={t.account.deleteConfirm} onPress={remove} grow />
+                    </View>
+                  </>
+                ) : (
+                  <TextLink label={t.account.delete} danger onPress={() => setConfirmingDelete(true)} />
+                )}
+              </View>
+            )}
           </>
         ) : step === 'email' ? (
           <>
