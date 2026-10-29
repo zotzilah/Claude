@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigButton } from '@/components/big-button';
 import { yourFinds } from '@/data/sample-catalogue';
 import { currencySymbol, moneyInputText, parseMoneyInput, toMinor } from '@/domain/money';
+import { checkLink, checkProduct, findDuplicate } from '@/domain/moderation';
 import { extractUrl, type ProductDetails } from '@/domain/product-page';
 import { detailsFromUrl, fetchProduct } from '@/state/fetch-product';
 import { deviceLocale, useStrings } from '@/state/locale';
@@ -48,6 +49,17 @@ export default function AddFromLink() {
       setMessage(t.add.notALink);
       return;
     }
+    // Never even fetch from sites that can't go on a family list.
+    const refused = checkLink(url);
+    if (refused) {
+      setMessage(t.add.refused[refused]);
+      return;
+    }
+    const existing = findDuplicate(url, Object.values(list.products));
+    if (existing) {
+      setMessage(t.add.alreadyOnList(existing.title));
+      return;
+    }
     setStatus('loading');
     setMessage(null);
     const result = await fetchProduct(url);
@@ -76,6 +88,14 @@ export default function AddFromLink() {
   const add = () => {
     setTried(true);
     if (problem || !details || priceMinor === null) return;
+    const check = checkProduct(
+      { url: details.url, title: title.trim(), priceMinor, currency, imageUrl: details.imageUrl },
+      list.settings.circler === 'child',
+    );
+    if (!check.ok) {
+      setMessage(t.add.refused[check.reason]);
+      return;
+    }
     list.addCustomProduct({
       id: `custom-${randomUUID()}`,
       catalogueNo: '',
@@ -87,6 +107,7 @@ export default function AddFromLink() {
       url: details.url,
       emoji: '🎁',
       ...(details.imageUrl ? { imageUrl: details.imageUrl } : {}),
+      ...(check.flags.length ? { reviewFlags: check.flags } : {}),
     });
     // "Your Finds" is always the last page once there's something on it.
     router.dismissTo({ pathname: '/', params: { page: String(list.pages.length - (list.pages.at(-1)?.key === yourFinds.key ? 1 : 0)) } });

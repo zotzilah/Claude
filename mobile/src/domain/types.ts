@@ -2,6 +2,8 @@
  * Core domain types. See docs/PRODUCT_BRIEF.md §11.1 for the data model these follow.
  */
 
+import type { ReviewFlag } from './moderation';
+
 /** How much the Circler wants an item: ★ would like, ★★ really want, ★★★ the big one. */
 export type Stars = 1 | 2 | 3;
 
@@ -35,6 +37,8 @@ export interface Product {
   emoji: string;
   /** Product photo, when we have one (e.g. from a pasted link). */
   imageUrl?: string;
+  /** Added by a family: what the automatic checks want a person to look at before it's shared more widely. */
+  reviewFlags?: ReviewFlag[];
 }
 
 /** A circled product on a list, with its star rating. */

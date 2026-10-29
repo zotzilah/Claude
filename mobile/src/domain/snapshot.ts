@@ -3,6 +3,7 @@
  * a corrupted or unrecognised save gives `null` (start fresh) rather than a crash,
  * and individual bad entries are dropped rather than poisoning the whole list.
  */
+import { REVIEW_FLAGS, type ReviewFlag } from './moderation';
 import { defaultKidPricesShown, defaultSettings } from './settings';
 import type {
   AgeBand,
@@ -97,6 +98,9 @@ function parseProduct(raw: unknown): Product | null {
     url,
     emoji: str(raw.emoji) ?? '🎁',
     ...(str(raw.imageUrl) ? { imageUrl: str(raw.imageUrl)! } : {}),
+    ...(Array.isArray(raw.reviewFlags)
+      ? { reviewFlags: raw.reviewFlags.filter((f): f is ReviewFlag => REVIEW_FLAGS.includes(f as ReviewFlag)) }
+      : {}),
   };
 }
 

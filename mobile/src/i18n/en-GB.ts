@@ -190,6 +190,7 @@ export const enGB = {
     needName: 'Add a name',
     needPrice: (example: string) => `Add a price, e.g. ${example}`,
     circleIt: 'Circle it! ⭕',
+    alreadyOnList: (title: string) => `"${title}" is already on the list.`,
     /** Shown when the automatic checks refuse a link (see domain/moderation.ts). */
     refused: {
       'adult-site': "Sorry, that shop can't be added to a Biro list.",
