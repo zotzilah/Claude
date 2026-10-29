@@ -8,7 +8,11 @@
     "scheme": "biro",
     "userInterfaceStyle": "light",
     "ios": {
-      "bundleIdentifier": "com.projectbiro.app"
+      "bundleIdentifier": "com.projectbiro.app",
+      "supportsTablet": false,
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
