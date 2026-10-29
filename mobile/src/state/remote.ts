@@ -164,11 +164,19 @@ export const startGroupGift = (listId: string, productId: string) =>
 export const pledge = (listId: string, productId: string, amountMinor: number) =>
   call('pledge', { p_list: listId, p_product: productId, p_amount_minor: amountMinor });
 
-/** Calls `onChange` whenever circles, claims or pledges on the list change (live updates). */
+let watchers = 0;
+
+/**
+ * Calls `onChange` whenever circles, claims or pledges on the list change (live updates).
+ * Each call gets its own channel: the parent's catalogue and the family page can both
+ * watch the same list on one phone, and Supabase won't add listeners to a channel that's
+ * already subscribed.
+ */
 export function watchList(listId: string, onChange: () => void): () => void {
   const db = remote();
   if (!db) return () => undefined;
-  const channel = db.channel(`list-${listId}`);
+  watchers += 1;
+  const channel = db.channel(`list-${listId}-${watchers}`);
   for (const table of ['circle_marks', 'custom_products', 'claims', 'group_gifts', 'pledges']) {
     channel.on('postgres_changes', { event: '*', schema: 'public', table, filter: `list_id=eq.${listId}` }, onChange);
   }
