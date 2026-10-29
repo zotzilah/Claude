@@ -6,7 +6,9 @@ import { BigButton } from '@/components/big-button';
 import { useStrings } from '@/state/locale';
 import { voiceAvailable } from '@/state/voice';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 /**
  * Kid Mode home: search, a big "say it" mic, picture tiles and one big button.
@@ -14,6 +16,7 @@ import { colors, fonts, radius, space } from '@/theme/tokens';
  * available: web browsers today, phones once the development build adds it.
  */
 export default function KidHome() {
+  const styles = useThemedStyles(makeStyles);
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -78,54 +81,55 @@ export default function KidHome() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.yellow },
-  content: { paddingHorizontal: space.lg, gap: space.lg },
-  top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
-  hello: { fontFamily: fonts.display, fontSize: 30, lineHeight: 32, color: colors.ink, flexShrink: 1 },
-  grownups: { backgroundColor: colors.ink, borderRadius: radius.pill, paddingVertical: 6, paddingHorizontal: space.md },
-  grownupsText: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.yellow },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    backgroundColor: colors.paper,
-    borderWidth: 3,
-    borderColor: colors.ink,
-    borderRadius: 18,
-    paddingVertical: space.lg,
-    paddingHorizontal: space.lg,
-    boxShadow: `0 4px 0 ${colors.ink}`,
-  },
-  bigMic: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.md,
-    backgroundColor: colors.yellow,
-    borderWidth: 3,
-    borderColor: colors.ink,
-    borderRadius: 18,
-    paddingVertical: space.lg,
-    boxShadow: `0 4px 0 ${colors.ink}`,
-  },
-  bigMicIcon: { fontSize: 34 },
-  bigMicText: { fontFamily: fonts.display, fontSize: 24, color: colors.ink },
-  searchIcon: { fontSize: 28 },
-  searchText: { fontFamily: fonts.display, fontSize: 22, color: colors.inkSoft },
-  tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
-  tile: {
-    flexBasis: '46%',
-    flexGrow: 1,
-    backgroundColor: colors.paper,
-    borderWidth: 3,
-    borderColor: colors.ink,
-    borderRadius: 18,
-    paddingVertical: space.md,
-    alignItems: 'center',
-    gap: space.xs,
-    boxShadow: `0 4px 0 ${colors.ink}`,
-  },
-  tileIcon: { fontSize: 50 },
-  tileLabel: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.yellow },
+    content: { paddingHorizontal: space.lg, gap: space.lg },
+    top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
+    hello: { fontFamily: fonts.display, fontSize: 30, lineHeight: 32, color: colors.ink, flexShrink: 1 },
+    grownups: { backgroundColor: colors.ink, borderRadius: radius.pill, paddingVertical: 6, paddingHorizontal: space.md },
+    grownupsText: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.yellow },
+    searchBar: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: space.md,
+      backgroundColor: colors.paper,
+      borderWidth: 3,
+      borderColor: colors.ink,
+      borderRadius: 18,
+      paddingVertical: space.lg,
+      paddingHorizontal: space.lg,
+      boxShadow: `0 4px 0 ${colors.ink}`,
+    },
+    bigMic: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: space.md,
+      backgroundColor: colors.yellow,
+      borderWidth: 3,
+      borderColor: colors.ink,
+      borderRadius: 18,
+      paddingVertical: space.lg,
+      boxShadow: `0 4px 0 ${colors.ink}`,
+    },
+    bigMicIcon: { fontSize: 34 },
+    bigMicText: { fontFamily: fonts.display, fontSize: 24, color: colors.ink },
+    searchIcon: { fontSize: 28 },
+    searchText: { fontFamily: fonts.display, fontSize: 22, color: colors.inkSoft },
+    tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
+    tile: {
+      flexBasis: '46%',
+      flexGrow: 1,
+      backgroundColor: colors.paper,
+      borderWidth: 3,
+      borderColor: colors.ink,
+      borderRadius: 18,
+      paddingVertical: space.md,
+      alignItems: 'center',
+      gap: space.xs,
+      boxShadow: `0 4px 0 ${colors.ink}`,
+    },
+    tileIcon: { fontSize: 50 },
+    tileLabel: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
+  });

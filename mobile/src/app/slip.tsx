@@ -11,7 +11,9 @@ import { BigButton } from '@/components/big-button';
 import { moneyInputText } from '@/domain/money';
 import { deviceLocale, useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { space } from '@/theme/tokens';
 
 /** Matches the printer chatter in the till sound. */
 const PRINT_MS = 2400;
@@ -26,6 +28,7 @@ const printed = () => {
  * receipt printer. The emailed copy to the account holder arrives in week 5.
  */
 export default function OrderSlip() {
+  const styles = useThemedStyles(makeStyles);
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -110,33 +113,34 @@ export default function OrderSlip() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.blueDeep, paddingHorizontal: space.lg, gap: space.md },
-  till: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#20242e',
-    borderRadius: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-  },
-  counter: { fontFamily: fonts.bodyBold, color: '#cfd6e6', letterSpacing: 1 },
-  lcd: { fontFamily: fonts.tillBold, fontSize: 18, color: '#17310a', backgroundColor: '#9fd36b', paddingHorizontal: 10, paddingVertical: 2 },
-  slot: { height: 8, marginHorizontal: space.sm, marginTop: -space.md, backgroundColor: '#000', borderBottomLeftRadius: 6, borderBottomRightRadius: 6 },
-  receiptWrap: { flex: 1, marginHorizontal: space.lg, marginTop: -space.md, overflow: 'hidden' },
-  paper: { maxHeight: '100%' },
-  actions: { flexDirection: 'row', gap: space.sm },
-  receipt: { backgroundColor: colors.slip, padding: 14, gap: 4 },
-  title: { fontFamily: fonts.display, fontSize: 18, color: colors.red, textAlign: 'center', letterSpacing: 1 },
-  mono: { fontFamily: fonts.till, fontSize: 13.5, color: '#222' },
-  bold: { fontFamily: fonts.tillBold, fontSize: 15 },
-  center: { textAlign: 'center' },
-  rule: { fontFamily: fonts.till, color: colors.inkSoft, textAlign: 'center' },
-  line: { flexDirection: 'row', justifyContent: 'space-between', gap: 6 },
-  no: { width: 74 },
-  name: { flex: 1 },
-  stars: { fontFamily: fonts.hand, fontSize: 16, color: colors.biro },
-  queue: { borderWidth: 3, borderColor: colors.ink, padding: space.sm, marginTop: space.sm },
-  queueNo: { fontFamily: fonts.display, fontSize: 40, color: colors.red, textAlign: 'center' },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.blueDeep, paddingHorizontal: space.lg, gap: space.md },
+    till: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: '#20242e',
+      borderRadius: 14,
+      paddingVertical: 10,
+      paddingHorizontal: 14,
+    },
+    counter: { fontFamily: fonts.bodyBold, color: '#cfd6e6', letterSpacing: 1 },
+    lcd: { fontFamily: fonts.tillBold, fontSize: 18, color: '#17310a', backgroundColor: '#9fd36b', paddingHorizontal: 10, paddingVertical: 2 },
+    slot: { height: 8, marginHorizontal: space.sm, marginTop: -space.md, backgroundColor: '#000', borderBottomLeftRadius: 6, borderBottomRightRadius: 6 },
+    receiptWrap: { flex: 1, marginHorizontal: space.lg, marginTop: -space.md, overflow: 'hidden' },
+    paper: { maxHeight: '100%' },
+    actions: { flexDirection: 'row', gap: space.sm },
+    receipt: { backgroundColor: colors.slip, padding: 14, gap: 4 },
+    title: { fontFamily: fonts.display, fontSize: 18, color: colors.red, textAlign: 'center', letterSpacing: 1 },
+    mono: { fontFamily: fonts.till, fontSize: 13.5, color: '#222' },
+    bold: { fontFamily: fonts.tillBold, fontSize: 15 },
+    center: { textAlign: 'center' },
+    rule: { fontFamily: fonts.till, color: colors.inkSoft, textAlign: 'center' },
+    line: { flexDirection: 'row', justifyContent: 'space-between', gap: 6 },
+    no: { width: 74 },
+    name: { flex: 1 },
+    stars: { fontFamily: fonts.hand, fontSize: 16, color: colors.biro },
+    queue: { borderWidth: 3, borderColor: colors.ink, padding: space.sm, marginTop: space.sm },
+    queueNo: { fontFamily: fonts.display, fontSize: 40, color: colors.red, textAlign: 'center' },
+  });

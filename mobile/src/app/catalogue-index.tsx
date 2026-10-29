@@ -6,10 +6,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { buildCatalogueIndex, type IndexEntry } from '@/domain/catalogue-index';
 import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 /** The A–Z index at the back of the catalogue. Tap an entry to turn to its page. */
 export default function CatalogueIndex() {
+  const styles = useThemedStyles(makeStyles);
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -80,29 +83,30 @@ export default function CatalogueIndex() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper },
-  head: { backgroundColor: colors.red, paddingBottom: space.sm },
-  headRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg },
-  back: { fontSize: 22, color: colors.paper },
-  title: { fontFamily: fonts.display, fontSize: 30, color: colors.paper },
-  letters: { paddingHorizontal: space.md, paddingTop: space.sm, gap: 6 },
-  letter: { minWidth: 34, height: 34, borderRadius: radius.sm, backgroundColor: colors.yellow, alignItems: 'center', justifyContent: 'center' },
-  letterText: { fontFamily: fonts.display, fontSize: 16, color: colors.ink },
-  sectionHead: {
-    fontFamily: fonts.display,
-    fontSize: 22,
-    color: colors.paper,
-    backgroundColor: colors.blue,
-    paddingHorizontal: space.lg,
-    paddingVertical: 4,
-  },
-  row: { flexDirection: 'row', alignItems: 'flex-end', gap: 6, paddingHorizontal: space.lg, paddingVertical: 9 },
-  rowPressed: { backgroundColor: colors.paper2 },
-  label: { fontFamily: fonts.bodySemi, fontSize: 16, color: colors.ink, flexShrink: 1 },
-  pageLabel: { fontFamily: fonts.display, fontSize: 15, color: colors.red },
-  stars: { fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
-  leader: { flex: 1, minWidth: 12, borderBottomWidth: 2, borderStyle: 'dotted', borderColor: colors.rule, marginBottom: 5 },
-  ref: { fontFamily: fonts.display, fontSize: 14, color: colors.blue, fontVariant: ['tabular-nums'] },
-  pageRef: { color: colors.red },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper },
+    head: { backgroundColor: colors.red, paddingBottom: space.sm },
+    headRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg },
+    back: { fontSize: 22, color: colors.paper },
+    title: { fontFamily: fonts.display, fontSize: 30, color: colors.paper },
+    letters: { paddingHorizontal: space.md, paddingTop: space.sm, gap: 6 },
+    letter: { minWidth: 34, height: 34, borderRadius: radius.sm, backgroundColor: colors.yellow, alignItems: 'center', justifyContent: 'center' },
+    letterText: { fontFamily: fonts.display, fontSize: 16, color: colors.ink },
+    sectionHead: {
+      fontFamily: fonts.display,
+      fontSize: 22,
+      color: colors.paper,
+      backgroundColor: colors.blue,
+      paddingHorizontal: space.lg,
+      paddingVertical: 4,
+    },
+    row: { flexDirection: 'row', alignItems: 'flex-end', gap: 6, paddingHorizontal: space.lg, paddingVertical: 9 },
+    rowPressed: { backgroundColor: colors.paper2 },
+    label: { fontFamily: fonts.bodySemi, fontSize: 16, color: colors.ink, flexShrink: 1 },
+    pageLabel: { fontFamily: fonts.display, fontSize: 15, color: colors.red },
+    stars: { fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
+    leader: { flex: 1, minWidth: 12, borderBottomWidth: 2, borderStyle: 'dotted', borderColor: colors.rule, marginBottom: 5 },
+    ref: { fontFamily: fonts.display, fontSize: 14, color: colors.blue, fontVariant: ['tabular-nums'] },
+    pageRef: { color: colors.red },
+  });

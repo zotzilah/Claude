@@ -9,13 +9,17 @@ import { saveBackupCode } from '@/state/backup-code';
 import { useStrings } from '@/state/locale';
 import { restoreWithBackupCode } from '@/state/remote';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 /**
  * A new phone brings back a list with the backup code made on the old one
  * (Settings → Account). Reached from the first step of setup.
  */
 export default function Restore() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -91,28 +95,29 @@ export default function Restore() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper2 },
-  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
-  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
-  heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
-  body: { padding: space.lg, gap: space.md },
-  help: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.ink },
-  label: { fontFamily: fonts.display, fontSize: 15, color: colors.ink, marginTop: space.sm },
-  input: {
-    backgroundColor: colors.paper,
-    borderWidth: 2,
-    borderColor: colors.ink,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.md,
-    fontFamily: fonts.tillBold,
-    fontSize: 20,
-    letterSpacing: 2,
-    color: colors.ink,
-    minWidth: 0,
-  },
-  note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
-  error: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red },
-  footer: { paddingHorizontal: space.lg, paddingTop: space.md, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper2 },
+    head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
+    kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
+    heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
+    body: { padding: space.lg, gap: space.md },
+    help: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.ink },
+    label: { fontFamily: fonts.display, fontSize: 15, color: colors.ink, marginTop: space.sm },
+    input: {
+      backgroundColor: colors.paper,
+      borderWidth: 2,
+      borderColor: colors.ink,
+      borderRadius: radius.md,
+      paddingHorizontal: space.md,
+      paddingVertical: space.md,
+      fontFamily: fonts.tillBold,
+      fontSize: 20,
+      letterSpacing: 2,
+      color: colors.ink,
+      minWidth: 0,
+    },
+    note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
+    error: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red },
+    footer: { paddingHorizontal: space.lg, paddingTop: space.md, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
+  });

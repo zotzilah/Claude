@@ -7,7 +7,9 @@ import type { Features } from '@/domain/settings';
 import type { Claim, GroupGift, ListSettings, Product, Stars } from '@/domain/types';
 import { sendFeedback } from '@/state/feedback';
 import { useStrings } from '@/state/locale';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 export interface GiverActions {
   claim: (productId: string) => void;
@@ -48,6 +50,8 @@ interface Props {
  * real shared link.
  */
 export function GiverPage(props: Props) {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const { settings, features, me } = props;
   const insets = useSafeAreaInsets();
   const t = useStrings();
@@ -160,6 +164,7 @@ export function GiverPage(props: Props) {
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.stat}>
       <Text style={styles.statValue}>{value}</Text>
@@ -168,71 +173,72 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper2 },
-  head: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingBottom: 14 },
-  back: { alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center', marginBottom: space.xs },
-  backText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow },
-  title: { fontFamily: fonts.display, fontSize: 23, color: colors.paper },
-  sub: { fontFamily: fonts.body, fontSize: 14, color: colors.paper, marginTop: 4 },
-  surprise: {
-    marginHorizontal: space.md,
-    marginTop: space.md,
-    backgroundColor: colors.yellow,
-    borderRadius: radius.md,
-    paddingVertical: space.sm,
-    paddingHorizontal: space.md,
-    fontFamily: fonts.bodySemi,
-    fontSize: 14,
-    color: colors.ink,
-    overflow: 'hidden',
-  },
-  nameCard: {
-    margin: space.md,
-    marginBottom: 0,
-    backgroundColor: colors.paper,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: colors.blue,
-    padding: space.md,
-    gap: 6,
-  },
-  nameTitle: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
-  nameHint: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
-  nameRow: { flexDirection: 'row', gap: space.sm, marginTop: 4 },
-  nameInput: {
-    flex: 1,
-    minWidth: 0,
-    borderWidth: 2,
-    borderColor: colors.ink,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-    fontFamily: fonts.bodySemi,
-    fontSize: 16,
-    color: colors.ink,
-  },
-  nameButton: { backgroundColor: colors.blue, borderRadius: radius.md, paddingHorizontal: space.lg, justifyContent: 'center' },
-  nameButtonText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.paper },
-  signedIn: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.inkSoft, marginHorizontal: space.md, marginTop: space.sm },
-  summary: { flexDirection: 'row', gap: space.sm, margin: space.md },
-  stat: { flex: 1, backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: 1, borderColor: colors.rule, padding: 10 },
-  statValue: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums'] },
-  statLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft },
-  items: { gap: 10, marginHorizontal: space.md },
-  feedback: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', marginTop: space.lg },
-  feedbackText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.blue, textDecorationLine: 'underline' },
-  empty: { fontFamily: fonts.body, fontSize: 15, color: colors.inkSoft, textAlign: 'center', padding: space.lg },
-  shareBar: { backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule, paddingHorizontal: space.md, paddingTop: space.md, gap: space.sm },
-  shareOther: { backgroundColor: colors.paper, borderWidth: 2, borderColor: colors.blue },
-  shareOtherText: { color: colors.blue },
-  shareButton: { backgroundColor: colors.good, borderRadius: radius.md, paddingVertical: space.md, alignItems: 'center' },
-  shareText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.paper },
-  error: {
-    marginHorizontal: space.md,
-    marginTop: space.md,
-    fontFamily: fonts.bodyBold,
-    fontSize: 15,
-    color: colors.redDeep,
-  },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper2 },
+    head: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingBottom: 14 },
+    back: { alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center', marginBottom: space.xs },
+    backText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow },
+    title: { fontFamily: fonts.display, fontSize: 23, color: colors.paper },
+    sub: { fontFamily: fonts.body, fontSize: 14, color: colors.paper, marginTop: 4 },
+    surprise: {
+      marginHorizontal: space.md,
+      marginTop: space.md,
+      backgroundColor: colors.yellow,
+      borderRadius: radius.md,
+      paddingVertical: space.sm,
+      paddingHorizontal: space.md,
+      fontFamily: fonts.bodySemi,
+      fontSize: 14,
+      color: colors.ink,
+      overflow: 'hidden',
+    },
+    nameCard: {
+      margin: space.md,
+      marginBottom: 0,
+      backgroundColor: colors.paper,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: colors.blue,
+      padding: space.md,
+      gap: 6,
+    },
+    nameTitle: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
+    nameHint: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
+    nameRow: { flexDirection: 'row', gap: space.sm, marginTop: 4 },
+    nameInput: {
+      flex: 1,
+      minWidth: 0,
+      borderWidth: 2,
+      borderColor: colors.ink,
+      borderRadius: radius.md,
+      paddingHorizontal: space.md,
+      paddingVertical: space.sm,
+      fontFamily: fonts.bodySemi,
+      fontSize: 16,
+      color: colors.ink,
+    },
+    nameButton: { backgroundColor: colors.blue, borderRadius: radius.md, paddingHorizontal: space.lg, justifyContent: 'center' },
+    nameButtonText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.paper },
+    signedIn: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.inkSoft, marginHorizontal: space.md, marginTop: space.sm },
+    summary: { flexDirection: 'row', gap: space.sm, margin: space.md },
+    stat: { flex: 1, backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: 1, borderColor: colors.rule, padding: 10 },
+    statValue: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums'] },
+    statLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft },
+    items: { gap: 10, marginHorizontal: space.md },
+    feedback: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', marginTop: space.lg },
+    feedbackText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.blue, textDecorationLine: 'underline' },
+    empty: { fontFamily: fonts.body, fontSize: 15, color: colors.inkSoft, textAlign: 'center', padding: space.lg },
+    shareBar: { backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule, paddingHorizontal: space.md, paddingTop: space.md, gap: space.sm },
+    shareOther: { backgroundColor: colors.paper, borderWidth: 2, borderColor: colors.blue },
+    shareOtherText: { color: colors.blue },
+    shareButton: { backgroundColor: colors.good, borderRadius: radius.md, paddingVertical: space.md, alignItems: 'center' },
+    shareText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.paper },
+    error: {
+      marginHorizontal: space.md,
+      marginTop: space.md,
+      fontFamily: fonts.bodyBold,
+      fontSize: 15,
+      color: colors.redDeep,
+    },
+  });

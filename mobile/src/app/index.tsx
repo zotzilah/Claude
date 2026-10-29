@@ -12,10 +12,14 @@ import { pricesCheckedOn } from '@/data/catalogue';
 import { deviceLocale, useStrings } from '@/state/locale';
 import { hasPin } from '@/state/parent-pin';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 /** The catalogue: one category spread per page. */
 export default function CatalogueScreen() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ page?: string }>();
   // The page lives in the URL (?page=N), so Kid Mode tiles and shared links can open any page.
@@ -170,6 +174,7 @@ function clampPage(n: number, count: number) {
 }
 
 function PagerButton(props: { label: string; a11y: string; disabled: boolean; onPress: () => void }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable
       onPress={props.onPress}
@@ -184,6 +189,7 @@ function PagerButton(props: { label: string; a11y: string; disabled: boolean; on
 }
 
 function DevLink({ label, onPress }: { label: string; onPress: () => void }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable onPress={onPress} accessibilityRole="link" style={styles.devLink}>
       <Text style={styles.devLinkText}>{label} ▸</Text>
@@ -191,56 +197,57 @@ function DevLink({ label, onPress }: { label: string; onPress: () => void }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper },
-  // Above the page stage, so the yellow page tab can overlap the page.
-  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.md, zIndex: 2 },
-  bookRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
-  headActions: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  sound: { fontSize: 18 },
-  azButton: { backgroundColor: colors.yellow, borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 1 },
-  azText: { fontFamily: fonts.display, fontSize: 12, color: colors.ink },
-  book: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, flexShrink: 1 },
-  kidChip: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.yellow, backgroundColor: colors.ink, paddingHorizontal: 6, borderRadius: radius.sm, overflow: 'hidden' },
-  pageTitle: { fontFamily: fonts.display, fontSize: 27, color: colors.paper, marginTop: 6 },
-  pageNo: {
-    position: 'absolute',
-    right: 0,
-    bottom: -14,
-    zIndex: 3,
-    backgroundColor: colors.yellow,
-    color: colors.ink,
-    fontFamily: fonts.display,
-    fontSize: 13,
-    paddingVertical: 4,
-    paddingLeft: 12,
-    paddingRight: 10,
-    borderTopLeftRadius: 6,
-    borderBottomLeftRadius: 6,
-    overflow: 'hidden',
-  },
-  page: { flex: 1, backgroundColor: colors.paper },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingHorizontal: 14, paddingTop: 24, paddingBottom: space.lg },
-  spacer: { flexBasis: '47%', flexGrow: 1 },
-  hint: { width: '100%', textAlign: 'center', fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
-  pager: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    paddingVertical: space.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.rule,
-  },
-  pagerBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.blue, alignItems: 'center', justifyContent: 'center' },
-  pagerBtnOff: { opacity: 0.3 },
-  pagerBtnText: { color: colors.paper, fontSize: 18, fontWeight: '700' },
-  dots: { flexDirection: 'row', gap: 6 },
-  dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.rule },
-  dotOn: { backgroundColor: colors.red },
-  sendBar: { flexDirection: 'row', gap: space.sm, padding: 14, borderTopWidth: 1, borderTopColor: colors.rule },
-  devLinks: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: space.lg, paddingHorizontal: space.lg, paddingBottom: space.sm },
-  devLink: { paddingVertical: 6 },
-  syncNote: { fontFamily: fonts.body, fontSize: 13, color: colors.paper, paddingHorizontal: space.lg, paddingBottom: space.sm },
-  devLinkText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.yellow },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper },
+    // Above the page stage, so the yellow page tab can overlap the page.
+    head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.md, zIndex: 2 },
+    bookRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm },
+    headActions: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+    sound: { fontSize: 18 },
+    azButton: { backgroundColor: colors.yellow, borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 1 },
+    azText: { fontFamily: fonts.display, fontSize: 12, color: colors.ink },
+    book: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper, flexShrink: 1 },
+    kidChip: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.yellow, backgroundColor: colors.ink, paddingHorizontal: 6, borderRadius: radius.sm, overflow: 'hidden' },
+    pageTitle: { fontFamily: fonts.display, fontSize: 27, color: colors.paper, marginTop: 6 },
+    pageNo: {
+      position: 'absolute',
+      right: 0,
+      bottom: -14,
+      zIndex: 3,
+      backgroundColor: colors.yellow,
+      color: colors.ink,
+      fontFamily: fonts.display,
+      fontSize: 13,
+      paddingVertical: 4,
+      paddingLeft: 12,
+      paddingRight: 10,
+      borderTopLeftRadius: 6,
+      borderBottomLeftRadius: 6,
+      overflow: 'hidden',
+    },
+    page: { flex: 1, backgroundColor: colors.paper },
+    grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingHorizontal: 14, paddingTop: 24, paddingBottom: space.lg },
+    spacer: { flexBasis: '47%', flexGrow: 1 },
+    hint: { width: '100%', textAlign: 'center', fontFamily: fonts.hand, fontSize: 17, color: colors.biro },
+    pager: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: 14,
+      paddingVertical: space.sm,
+      borderTopWidth: 1,
+      borderTopColor: colors.rule,
+    },
+    pagerBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.blue, alignItems: 'center', justifyContent: 'center' },
+    pagerBtnOff: { opacity: 0.3 },
+    pagerBtnText: { color: colors.paper, fontSize: 18, fontWeight: '700' },
+    dots: { flexDirection: 'row', gap: 6 },
+    dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.rule },
+    dotOn: { backgroundColor: colors.red },
+    sendBar: { flexDirection: 'row', gap: space.sm, padding: 14, borderTopWidth: 1, borderTopColor: colors.rule },
+    devLinks: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: space.lg, paddingHorizontal: space.lg, paddingBottom: space.sm },
+    devLink: { paddingVertical: 6 },
+    syncNote: { fontFamily: fonts.body, fontSize: 13, color: colors.paper, paddingHorizontal: space.lg, paddingBottom: space.sm },
+    devLinkText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.yellow },
+  });

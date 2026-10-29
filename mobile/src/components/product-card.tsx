@@ -9,7 +9,9 @@ import { formatMoney } from '@/domain/money';
 import type { Product, Stars } from '@/domain/types';
 import type { Strings } from '@/i18n';
 import { deviceLocale, useStrings } from '@/state/locale';
-import { colors, fonts, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { space } from '@/theme/tokens';
 
 import { BiroRing } from './biro-ring';
 import { PriceSticker } from './price-sticker';
@@ -34,6 +36,7 @@ function stampFor(view: ListSideView | null, t: Strings): { label: string; claim
 }
 
 export function ProductCard({ product, stars, onTap, kid = false, listSide = null, hidePrice = false }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const t = useStrings();
   const stamp = stampFor(listSide, t);
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -103,46 +106,47 @@ export function ProductCard({ product, stars, onTap, kid = false, listSide = nul
   );
 }
 
-const styles = StyleSheet.create({
-  card: { flexBasis: '47%', flexGrow: 1, padding: 6, paddingBottom: space.sm },
-  photo: {
-    aspectRatio: 1 / 0.82,
-    backgroundColor: colors.paper,
-    borderWidth: 1,
-    borderColor: colors.rule,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emoji: { fontSize: 52 },
-  image: { width: '90%', height: '90%' },
-  covered: {
-    position: 'absolute',
-    top: 8,
-    left: 6,
-    transform: [{ rotate: '-6deg' }],
-    borderWidth: 2,
-    borderColor: colors.good,
-    color: colors.good,
-    backgroundColor: 'rgba(255,255,255,0.85)',
-    fontFamily: fonts.display,
-    fontSize: 10,
-    letterSpacing: 0.5,
-    paddingHorizontal: 4,
-    paddingVertical: 1,
-    maxWidth: '92%',
-  },
-  claimedStamp: { borderColor: '#b07d00', color: '#8a6200' },
-  cno: { fontFamily: fonts.display, fontSize: 12.5, color: colors.blue, marginTop: 6, letterSpacing: 0.4 },
-  title: { fontFamily: fonts.bodySemi, fontSize: 14, lineHeight: 16, color: colors.ink, marginTop: 2, minHeight: 32 },
-  retailer: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft, marginTop: 1 },
-  sticker: { position: 'absolute', right: 0, top: '44%' },
-  stars: {
-    position: 'absolute',
-    left: 2,
-    top: -10,
-    fontFamily: fonts.hand,
-    fontSize: 26,
-    color: colors.biro,
-    transform: [{ rotate: '-9deg' }],
-  },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    card: { flexBasis: '47%', flexGrow: 1, padding: 6, paddingBottom: space.sm },
+    photo: {
+      aspectRatio: 1 / 0.82,
+      backgroundColor: colors.paper,
+      borderWidth: 1,
+      borderColor: colors.rule,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    emoji: { fontSize: 52 },
+    image: { width: '90%', height: '90%' },
+    covered: {
+      position: 'absolute',
+      top: 8,
+      left: 6,
+      transform: [{ rotate: '-6deg' }],
+      borderWidth: 2,
+      borderColor: colors.good,
+      color: colors.good,
+      backgroundColor: 'rgba(255,255,255,0.85)',
+      fontFamily: fonts.display,
+      fontSize: 10,
+      letterSpacing: 0.5,
+      paddingHorizontal: 4,
+      paddingVertical: 1,
+      maxWidth: '92%',
+    },
+    claimedStamp: { borderColor: '#b07d00', color: '#8a6200' },
+    cno: { fontFamily: fonts.display, fontSize: 12.5, color: colors.blue, marginTop: 6, letterSpacing: 0.4 },
+    title: { fontFamily: fonts.bodySemi, fontSize: 14, lineHeight: 16, color: colors.ink, marginTop: 2, minHeight: 32 },
+    retailer: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft, marginTop: 1 },
+    sticker: { position: 'absolute', right: 0, top: '44%' },
+    stars: {
+      position: 'absolute',
+      left: 2,
+      top: -10,
+      fontFamily: fonts.hand,
+      fontSize: 26,
+      color: colors.biro,
+      transform: [{ rotate: '-9deg' }],
+    },
+  });

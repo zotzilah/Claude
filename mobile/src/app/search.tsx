@@ -9,7 +9,9 @@ import { bestGuess } from '@/domain/voice';
 import { deviceLocale, useStrings } from '@/state/locale';
 import { listen, voiceAvailable, type Listening, type VoiceError } from '@/state/voice';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 const found = (outcome: SearchOutcome) =>
   outcome.kind === 'results' ? outcome.results.length : outcome.kind === 'catalogue-number' && outcome.product ? 1 : 0;
@@ -20,6 +22,8 @@ const found = (outcome: SearchOutcome) =>
  * straight away, for the mic on the Kid Mode home screen.
  */
 export default function SearchScreen() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -169,46 +173,47 @@ export default function SearchScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper },
-  head: { flexDirection: 'row', alignItems: 'center', gap: space.sm, backgroundColor: colors.red, paddingHorizontal: space.md, paddingBottom: space.md },
-  headKid: { backgroundColor: colors.yellow },
-  back: { padding: space.xs },
-  backText: { fontSize: 22, color: colors.paper },
-  backTextKid: { color: colors.ink, fontSize: 28 },
-  input: {
-    flex: 1,
-    minWidth: 0,
-    backgroundColor: colors.paper,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm + 2,
-    fontFamily: fonts.bodySemi,
-    fontSize: 17,
-    color: colors.ink,
-  },
-  mic: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.paper,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  micKid: { width: 64, height: 64, borderRadius: 32, borderWidth: 3, borderColor: colors.ink },
-  micOn: { backgroundColor: colors.yellow, borderWidth: 3, borderColor: colors.red },
-  micIcon: { fontSize: 22 },
-  micIconKid: { fontSize: 32 },
-  voiceError: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.redDeep, paddingHorizontal: 14, paddingTop: space.sm },
-  inputKid: { fontFamily: fonts.display, fontSize: 22, paddingVertical: space.md, borderWidth: 3, borderColor: colors.ink, borderRadius: radius.lg },
-  body: { padding: 14, gap: space.md },
-  message: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.inkSoft },
-  messageKid: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
-  chip: { borderWidth: 2, borderColor: colors.ink, borderRadius: radius.pill, paddingVertical: space.sm, paddingHorizontal: space.lg },
-  chipKid: { backgroundColor: colors.yellow, paddingVertical: space.md },
-  chipText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.ink },
-  chipTextKid: { fontFamily: fonts.display, fontSize: 20 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingTop: space.sm },
-  gridSpacer: { flexBasis: '47%', flexGrow: 1 },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper },
+    head: { flexDirection: 'row', alignItems: 'center', gap: space.sm, backgroundColor: colors.red, paddingHorizontal: space.md, paddingBottom: space.md },
+    headKid: { backgroundColor: colors.yellow },
+    back: { padding: space.xs },
+    backText: { fontSize: 22, color: colors.paper },
+    backTextKid: { color: colors.ink, fontSize: 28 },
+    input: {
+      flex: 1,
+      minWidth: 0,
+      backgroundColor: colors.paper,
+      borderRadius: radius.md,
+      paddingHorizontal: space.md,
+      paddingVertical: space.sm + 2,
+      fontFamily: fonts.bodySemi,
+      fontSize: 17,
+      color: colors.ink,
+    },
+    mic: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: colors.paper,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    micKid: { width: 64, height: 64, borderRadius: 32, borderWidth: 3, borderColor: colors.ink },
+    micOn: { backgroundColor: colors.yellow, borderWidth: 3, borderColor: colors.red },
+    micIcon: { fontSize: 22 },
+    micIconKid: { fontSize: 32 },
+    voiceError: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.redDeep, paddingHorizontal: 14, paddingTop: space.sm },
+    inputKid: { fontFamily: fonts.display, fontSize: 22, paddingVertical: space.md, borderWidth: 3, borderColor: colors.ink, borderRadius: radius.lg },
+    body: { padding: 14, gap: space.md },
+    message: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.inkSoft },
+    messageKid: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
+    chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+    chip: { borderWidth: 2, borderColor: colors.ink, borderRadius: radius.pill, paddingVertical: space.sm, paddingHorizontal: space.lg },
+    chipKid: { backgroundColor: colors.yellow, paddingVertical: space.md },
+    chipText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.ink },
+    chipTextKid: { fontFamily: fonts.display, fontSize: 20 },
+    grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, paddingTop: space.sm },
+    gridSpacer: { flexBasis: '47%', flexGrow: 1 },
+  });

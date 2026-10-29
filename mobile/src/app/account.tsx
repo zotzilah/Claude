@@ -12,7 +12,9 @@ import { useStrings } from '@/state/locale';
 import { newBackupCode } from '@/state/remote';
 import { pushAllowed, pushAvailable, turnOnPushes, type PushResult } from '@/state/push';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 type Step = 'email' | 'code';
 
@@ -21,6 +23,8 @@ type Step = 'email' | 'code';
  * (the privacy policy promises the last one is always in Settings).
  */
 export default function Account() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -343,6 +347,7 @@ export default function Account() {
 }
 
 function TextLink(props: { label: string; onPress: () => void; disabled?: boolean; danger?: boolean }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable
       onPress={props.onPress}
@@ -359,52 +364,53 @@ function TextLink(props: { label: string; onPress: () => void; disabled?: boolea
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper2 },
-  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
-  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
-  heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
-  body: { padding: space.lg, gap: space.md },
-  help: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.ink },
-  label: { fontFamily: fonts.display, fontSize: 15, color: colors.ink, marginTop: space.sm },
-  input: {
-    backgroundColor: colors.paper,
-    borderWidth: 2,
-    borderColor: colors.ink,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.md,
-    fontFamily: fonts.bodySemi,
-    fontSize: 18,
-    color: colors.ink,
-    minWidth: 0,
-  },
-  code: { fontFamily: fonts.display, fontSize: 28, letterSpacing: 8, textAlign: 'center' },
-  signedIn: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.ink },
-  linkBox: { gap: space.sm, marginTop: space.md },
-  link: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.blue },
-  backupCode: {
-    fontFamily: fonts.tillBold,
-    fontSize: 24,
-    letterSpacing: 2,
-    color: colors.ink,
-    textAlign: 'center',
-    backgroundColor: colors.paper,
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: colors.ink,
-    borderRadius: radius.md,
-    paddingVertical: space.md,
-  },
-  note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
-  danger: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: 1, borderTopColor: colors.rule, gap: space.md },
-  warning: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 21, color: colors.redDeep },
-  error: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red },
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, alignItems: 'center' },
-  textLink: { minHeight: 44, justifyContent: 'center' },
-  textLinkLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
-  dangerText: { color: colors.red },
-  feedback: { marginTop: space.lg, alignItems: 'center' },
-  disabled: { opacity: 0.45 },
-  footer: { paddingHorizontal: space.lg, paddingTop: space.md, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: colors.paper2 },
+    head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
+    kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
+    heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
+    body: { padding: space.lg, gap: space.md },
+    help: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.ink },
+    label: { fontFamily: fonts.display, fontSize: 15, color: colors.ink, marginTop: space.sm },
+    input: {
+      backgroundColor: colors.paper,
+      borderWidth: 2,
+      borderColor: colors.ink,
+      borderRadius: radius.md,
+      paddingHorizontal: space.md,
+      paddingVertical: space.md,
+      fontFamily: fonts.bodySemi,
+      fontSize: 18,
+      color: colors.ink,
+      minWidth: 0,
+    },
+    code: { fontFamily: fonts.display, fontSize: 28, letterSpacing: 8, textAlign: 'center' },
+    signedIn: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.ink },
+    linkBox: { gap: space.sm, marginTop: space.md },
+    link: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.blue },
+    backupCode: {
+      fontFamily: fonts.tillBold,
+      fontSize: 24,
+      letterSpacing: 2,
+      color: colors.ink,
+      textAlign: 'center',
+      backgroundColor: colors.paper,
+      borderWidth: 2,
+      borderStyle: 'dashed',
+      borderColor: colors.ink,
+      borderRadius: radius.md,
+      paddingVertical: space.md,
+    },
+    note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
+    danger: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: 1, borderTopColor: colors.rule, gap: space.md },
+    warning: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 21, color: colors.redDeep },
+    error: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red },
+    row: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md, alignItems: 'center' },
+    textLink: { minHeight: 44, justifyContent: 'center' },
+    textLinkLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
+    dangerText: { color: colors.red },
+    feedback: { marginTop: space.lg, alignItems: 'center' },
+    disabled: { opacity: 0.45 },
+    footer: { paddingHorizontal: space.lg, paddingTop: space.md, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
+  });

@@ -2,7 +2,9 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import type { BudgetStatus } from '@/domain/wishlist';
 import { useStrings } from '@/state/locale';
-import { colors, fonts, space } from '@/theme/tokens';
+import { useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { space } from '@/theme/tokens';
 
 interface Props {
   budget: BudgetStatus;
@@ -14,6 +16,7 @@ interface Props {
 }
 
 export function RunningTotal({ budget, count, money, uncounted = 0 }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const t = useStrings();
   const { over, totalMinor, budgetMinor, remainingMinor, progress } = budget;
   return (
@@ -35,14 +38,15 @@ export function RunningTotal({ budget, count, money, uncounted = 0 }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  bar: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingTop: 10, paddingBottom: 14 },
-  over: { backgroundColor: colors.red },
-  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: space.sm },
-  label: { fontFamily: fonts.bodyBold, fontSize: 12, letterSpacing: 1.2, color: colors.paper, opacity: 0.85 },
-  amount: { fontFamily: fonts.display, fontSize: 24, color: colors.paper, fontVariant: ['tabular-nums'] },
-  track: { height: 8, borderRadius: 4, marginTop: 6, backgroundColor: 'rgba(255,255,255,0.2)', overflow: 'hidden' },
-  fill: { height: '100%', borderRadius: 4, backgroundColor: colors.yellow },
-  fillOver: { backgroundColor: colors.paper },
-  msg: { fontFamily: fonts.body, fontSize: 13, color: colors.paper, marginTop: 5 },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    bar: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingTop: 10, paddingBottom: 14 },
+    over: { backgroundColor: colors.red },
+    row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: space.sm },
+    label: { fontFamily: fonts.bodyBold, fontSize: 12, letterSpacing: 1.2, color: colors.paper, opacity: 0.85 },
+    amount: { fontFamily: fonts.display, fontSize: 24, color: colors.paper, fontVariant: ['tabular-nums'] },
+    track: { height: 8, borderRadius: 4, marginTop: 6, backgroundColor: 'rgba(255,255,255,0.2)', overflow: 'hidden' },
+    fill: { height: '100%', borderRadius: 4, backgroundColor: colors.yellow },
+    fillOver: { backgroundColor: colors.paper },
+    msg: { fontFamily: fonts.body, fontSize: 13, color: colors.paper, marginTop: 5 },
+  });

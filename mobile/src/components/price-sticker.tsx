@@ -3,7 +3,8 @@ import Svg, { Polygon } from 'react-native-svg';
 
 import { moneyParts } from '@/domain/money';
 import { deviceLocale } from '@/state/locale';
-import { colors, fonts } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
 
 const WIDTH = 74;
 const HEIGHT = 40;
@@ -18,6 +19,8 @@ const points = BURST.map(([x, y]) => `${x * WIDTH},${y * HEIGHT}`).join(' ');
 
 /** The loud yellow starburst price sticker: big "£39", small ".99" (or "39,99 €", "￥1,200"). */
 export function PriceSticker({ priceMinor, currency }: { priceMinor: number; currency: string }) {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const { main, fraction, after } = moneyParts(priceMinor, currency, deviceLocale.tag);
   return (
     <View style={styles.wrap} accessible={false} importantForAccessibility="no-hide-descendants">
@@ -35,14 +38,15 @@ export function PriceSticker({ priceMinor, currency }: { priceMinor: number; cur
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: {
-    width: WIDTH,
-    height: HEIGHT,
-    alignItems: 'center',
-    justifyContent: 'center',
-    transform: [{ rotate: '-8deg' }],
-  },
-  pounds: { fontFamily: fonts.display, fontSize: 15, color: colors.redDeep },
-  pence: { fontSize: 10 },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    wrap: {
+      width: WIDTH,
+      height: HEIGHT,
+      alignItems: 'center',
+      justifyContent: 'center',
+      transform: [{ rotate: '-8deg' }],
+    },
+    pounds: { fontFamily: fonts.display, fontSize: 15, color: colors.redDeep },
+    pence: { fontSize: 10 },
+  });

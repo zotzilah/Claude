@@ -9,15 +9,16 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { preloadSfx } from '@/audio/sfx';
 import { SharedLinkOpener } from '@/components/shared-link-opener';
 import { pushAllowed, showPushesInApp, turnOnPushes } from '@/state/push';
-import { WishlistProvider } from '@/state/wishlist-store';
-import { colors } from '@/theme/tokens';
+import { useWishlist, WishlistProvider } from '@/state/wishlist-store';
+import { ThemeProvider, useTheme, useThemedStyles } from '@/theme/theme-context';
+import { themeFor, type ThemeParts } from '@/theme/themes';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,15 +51,31 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
+    <WishlistProvider>
+      <ListTheme>
+        <Desk />
+      </ListTheme>
+    </WishlistProvider>
+  );
+}
+
+/** The list's occasion decides how everything looks (Christmas, classic…). */
+function ListTheme({ children }: { children: ReactNode }) {
+  const list = useWishlist();
+  return <ThemeProvider theme={themeFor(list.settings.template)}>{children}</ThemeProvider>;
+}
+
+function Desk() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
+  return (
     // role="main" gives screen readers on the web a landmark to jump to.
     <GestureHandlerRootView style={styles.desk} role="main">
       {/* On a computer, the app sits in a phone-width column like an open catalogue on a desk. */}
       <View style={styles.page}>
-        <WishlistProvider>
-          <StatusBar style="light" />
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />
-          <SharedLinkOpener />
-        </WishlistProvider>
+        <StatusBar style="light" />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />
+        <SharedLinkOpener />
       </View>
     </GestureHandlerRootView>
   );
@@ -67,13 +84,14 @@ export default function RootLayout() {
 /** Widest the app gets on a computer screen: a large phone. */
 const MAX_WIDTH = 480;
 
-const styles = StyleSheet.create({
-  desk: { flex: 1, backgroundColor: Platform.OS === 'web' ? colors.blue : colors.paper, alignItems: 'center' },
-  page: {
-    flex: 1,
-    width: '100%',
-    maxWidth: Platform.OS === 'web' ? MAX_WIDTH : undefined,
-    overflow: 'hidden',
-    ...(Platform.OS === 'web' ? { boxShadow: '0 0 40px rgba(0, 0, 0, 0.35)' } : {}),
-  },
-});
+const makeStyles = ({ colors }: ThemeParts) =>
+  StyleSheet.create({
+    desk: { flex: 1, backgroundColor: Platform.OS === 'web' ? colors.blue : colors.paper, alignItems: 'center' },
+    page: {
+      flex: 1,
+      width: '100%',
+      maxWidth: Platform.OS === 'web' ? MAX_WIDTH : undefined,
+      overflow: 'hidden',
+      ...(Platform.OS === 'web' ? { boxShadow: '0 0 40px rgba(0, 0, 0, 0.35)' } : {}),
+    },
+  });

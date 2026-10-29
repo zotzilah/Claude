@@ -14,7 +14,9 @@ import { loadGiverName, saveGiverName } from '@/state/giver-name';
 import { deviceLocale, useStrings } from '@/state/locale';
 import * as server from '@/state/remote';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, space } from '@/theme/tokens';
+import { ThemeProvider, useTheme, useThemedStyles } from '@/theme/theme-context';
+import { themeFor, type ThemeParts } from '@/theme/themes';
+import { space } from '@/theme/tokens';
 
 type Shared = Pick<ListState, 'settings' | 'marks' | 'customProducts' | 'claims' | 'groupGifts'>;
 
@@ -27,6 +29,8 @@ const errorText = (error: ServerError | 'unknown' | 'offline') =>
  * Everything they do goes through the database's checked functions.
  */
 export default function SharedList() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const { token } = useLocalSearchParams<{ token: string }>();
   const t = useStrings();
   const local = useWishlist();
@@ -155,50 +159,54 @@ export default function SharedList() {
   const currency = view.settings.currency;
 
   return (
-    <GiverPage
-      settings={view.settings}
-      features={features}
-      wishes={wishes}
-      claims={view.claims}
-      groupGifts={view.groupGifts}
-      summary={giverSummary(wishes, view.claims, now, currency)}
-      money={(m) => formatMoney(m, currency, deviceLocale.tag)}
-      me={me}
-      now={now}
-      nameDraft={nameDraft}
-      onNameDraft={setNameDraft}
-      onRememberName={async () => {
-        const name = nameDraft.trim();
-        if (!name) return;
-        await saveGiverName(name);
-        setMe(name);
-        join(name);
-      }}
-      actions={{
-        claim: (id) => act((list) => server.claimItem(list, id))(),
-        markBought: (id) => act((list) => server.markBought(list, id))(),
-        release: (id) => act((list) => server.releaseClaim(list, id))(),
-        startGroupGift: (id) => act((list) => server.startGroupGift(list, id))(),
-        pledge: (id, amount) => act((list) => server.pledge(list, id, amount))(),
-      }}
-      shareUrl={`${server.WEB_APP_URL}/g/${token}`}
-      onBack={onBack}
-      error={error}
-    />
+    // The family see the list in its occasion's look, whatever their own phone's list is.
+    <ThemeProvider theme={themeFor(view.settings.template)}>
+      <GiverPage
+        settings={view.settings}
+        features={features}
+        wishes={wishes}
+        claims={view.claims}
+        groupGifts={view.groupGifts}
+        summary={giverSummary(wishes, view.claims, now, currency)}
+        money={(m) => formatMoney(m, currency, deviceLocale.tag)}
+        me={me}
+        now={now}
+        nameDraft={nameDraft}
+        onNameDraft={setNameDraft}
+        onRememberName={async () => {
+          const name = nameDraft.trim();
+          if (!name) return;
+          await saveGiverName(name);
+          setMe(name);
+          join(name);
+        }}
+        actions={{
+          claim: (id) => act((list) => server.claimItem(list, id))(),
+          markBought: (id) => act((list) => server.markBought(list, id))(),
+          release: (id) => act((list) => server.releaseClaim(list, id))(),
+          startGroupGift: (id) => act((list) => server.startGroupGift(list, id))(),
+          pledge: (id, amount) => act((list) => server.pledge(list, id, amount))(),
+        }}
+        shareUrl={`${server.WEB_APP_URL}/g/${token}`}
+        onBack={onBack}
+        error={error}
+      />
+    </ThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  waiting: {
-    flex: 1,
-    backgroundColor: colors.paper2,
-    justifyContent: 'center',
-  },
-  waitingText: {
-    fontFamily: fonts.bodySemi,
-    fontSize: 15,
-    color: colors.inkSoft,
-    textAlign: 'center',
-    marginTop: space.md,
-  },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    waiting: {
+      flex: 1,
+      backgroundColor: colors.paper2,
+      justifyContent: 'center',
+    },
+    waitingText: {
+      fontFamily: fonts.bodySemi,
+      fontSize: 15,
+      color: colors.inkSoft,
+      textAlign: 'center',
+      marginTop: space.md,
+    },
+  });

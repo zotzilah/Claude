@@ -11,7 +11,9 @@ import type { AgeBand, ListSettings } from '@/domain/types';
 import { deviceLocale, useStrings } from '@/state/locale';
 import { remote } from '@/state/remote';
 import { useWishlist } from '@/state/wishlist-store';
-import { colors, fonts, radius, space } from '@/theme/tokens';
+import { useTheme, useThemedStyles } from '@/theme/theme-context';
+import type { ThemeParts } from '@/theme/themes';
+import { radius, space } from '@/theme/tokens';
 
 const STEPS = ['Occasion', 'Circler', 'Buyers', 'Budget'] as const;
 const AGE_BANDS: AgeBand[] = ['3-5', '6-8', '9-12'];
@@ -21,6 +23,8 @@ const AGE_BANDS: AgeBand[] = ['3-5', '6-8', '9-12'];
  * Also used later to edit the list's settings.
  */
 export default function Setup() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const list = useWishlist();
   const t = useStrings();
@@ -289,38 +293,39 @@ function stepProblem(step: number, draft: ListSettings): SetupProblem | null {
   return all === 'budget' ? null : all;
 }
 
-const styles = StyleSheet.create({
-  accountLink: { alignSelf: 'flex-end', minHeight: 44, justifyContent: 'center' },
-  accountLinkText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
-  screen: { flex: 1, backgroundColor: colors.paper2 },
-  head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
-  kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
-  heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
-  progress: { flexDirection: 'row', gap: 6, marginTop: space.md },
-  progressBar: { flex: 1, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.3)' },
-  progressOn: { backgroundColor: colors.yellow },
-  body: { padding: space.lg, gap: space.md },
-  label: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, marginTop: space.sm },
-  input: {
-    backgroundColor: colors.paper,
-    borderWidth: 2,
-    borderColor: colors.ink,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-    paddingVertical: space.md,
-    fontFamily: fonts.bodySemi,
-    fontSize: 18,
-    color: colors.ink,
-  },
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
-  note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
-  moneyRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  currency: { fontFamily: fonts.display, fontSize: 26, color: colors.ink },
-  moneyInput: { flex: 1, minWidth: 0, fontFamily: fonts.display, fontSize: 24 },
-  switchRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, marginTop: space.sm },
-  switchText: { flex: 1 },
-  switchLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.ink },
-  summary: { fontFamily: fonts.hand, fontSize: 22, color: colors.biro, textAlign: 'center', marginTop: space.md },
-  footer: { paddingHorizontal: space.lg, paddingTop: space.md, gap: space.sm, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
-  problem: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red, textAlign: 'center' },
-});
+const makeStyles = ({ colors, fonts }: ThemeParts) =>
+  StyleSheet.create({
+    accountLink: { alignSelf: 'flex-end', minHeight: 44, justifyContent: 'center' },
+    accountLinkText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
+    screen: { flex: 1, backgroundColor: colors.paper2 },
+    head: { backgroundColor: colors.red, paddingHorizontal: space.lg, paddingBottom: space.lg },
+    kicker: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 1.4, color: colors.paper },
+    heading: { fontFamily: fonts.display, fontSize: 28, color: colors.paper, marginTop: 4 },
+    progress: { flexDirection: 'row', gap: 6, marginTop: space.md },
+    progressBar: { flex: 1, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.3)' },
+    progressOn: { backgroundColor: colors.yellow },
+    body: { padding: space.lg, gap: space.md },
+    label: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, marginTop: space.sm },
+    input: {
+      backgroundColor: colors.paper,
+      borderWidth: 2,
+      borderColor: colors.ink,
+      borderRadius: radius.md,
+      paddingHorizontal: space.md,
+      paddingVertical: space.md,
+      fontFamily: fonts.bodySemi,
+      fontSize: 18,
+      color: colors.ink,
+    },
+    row: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+    note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
+    moneyRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+    currency: { fontFamily: fonts.display, fontSize: 26, color: colors.ink },
+    moneyInput: { flex: 1, minWidth: 0, fontFamily: fonts.display, fontSize: 24 },
+    switchRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, marginTop: space.sm },
+    switchText: { flex: 1 },
+    switchLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.ink },
+    summary: { fontFamily: fonts.hand, fontSize: 22, color: colors.biro, textAlign: 'center', marginTop: space.md },
+    footer: { paddingHorizontal: space.lg, paddingTop: space.md, gap: space.sm, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
+    problem: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red, textAlign: 'center' },
+  });
