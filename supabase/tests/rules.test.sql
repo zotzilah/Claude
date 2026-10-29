@@ -252,7 +252,7 @@ select tests.fails($$select public.purge_expired_lists()$$, 'permission denied',
 
 reset role;
 select tests.eq(public.purge_expired_lists(), 2, 'the clean-up deletes exactly the two expired lists');
-select tests.eq((select array_agg(title order by title) from public.lists where owner_id = '00000000-0000-0000-0000-0000000000e1'),
+select tests.eq((select array_agg(title order by title collate "C") from public.lists where owner_id = '00000000-0000-0000-0000-0000000000e1'),
   array['Recent Christmas', 'Recent birthday', 'Reopened Christmas'],
   'kept: this Christmas, a recent birthday, and an old list that was opened again');
 select tests.eq((select count(*) from auth.users where id = '00000000-0000-0000-0000-0000000000e2')::int, 0,
