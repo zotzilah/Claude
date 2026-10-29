@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { redirectSystemPath } from '../../app/+native-intent';
+import { FEEDBACK_EMAIL, feedbackUrl } from '../feedback';
 import { toVoiceError } from '../voice';
 
 describe('voice search on phones', () => {
@@ -26,5 +27,15 @@ describe('opening Biro from the share sheet', () => {
 
   it('leaves every other link alone', () => {
     expect(redirectSystemPath({ path: '/g/abc123', initial: true })).toBe('/g/abc123');
+  });
+});
+
+describe('telling Luke something is wrong', () => {
+  it('opens an email to the beta organiser with the details filled in', () => {
+    const url = feedbackUrl('Biro beta: something not right', 'What happened?', 'Family link');
+    expect(url.startsWith(`mailto:${FEEDBACK_EMAIL}?subject=Biro%20beta`)).toBe(true);
+    const body = decodeURIComponent(url.split('&body=')[1]);
+    expect(body).toContain('What happened?');
+    expect(body).toContain('Family link · Biro ');
   });
 });

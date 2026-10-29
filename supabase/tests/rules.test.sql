@@ -345,5 +345,46 @@ select tests.eq((select body -> 0 ->> 'to' from net.sent), 'ExponentPushToken[pr
 select tests.eq((select body -> 0 ->> 'title' from net.sent), 'Grandpa is getting the Rocket Lamp', 'with the message');
 select tests.eq(public.send_push_outbox(), 0, 'and never sends the same push twice');
 
+-- ---------- Backup codes: moving a list to a new phone ----------
+reset role;
+insert into auth.users (id, is_anonymous) values
+  ('00000000-0000-0000-0000-0000000000a1', true),  -- Priya's new phone
+  ('00000000-0000-0000-0000-0000000000a2', true);  -- someone guessing
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000f2');
+select tests.fails($$select public.new_backup_code('30000000-0000-0000-0000-000000000001')$$,
+  'not-your-list', 'a giver can''t make a backup code for someone else''s list');
+select tests.login('00000000-0000-0000-0000-0000000000f1');
+select public.new_backup_code('30000000-0000-0000-0000-000000000001') as old_code \gset
+select public.new_backup_code('30000000-0000-0000-0000-000000000001') as code \gset
+select tests.eq((:'code')::text ~ '^[A-HJKMNP-Z2-9]{4}(-[A-HJKMNP-Z2-9]{4}){3}$', true, 'backup codes are 16 easy-to-read characters');
+select tests.fails($$select * from public.list_backup_codes$$, 'permission denied', 'nobody can read backup codes through the API');
+
+reset role;
+select tests.eq((select count(*) from public.list_backup_codes where code_hash = :'code')::int, 0, 'only a hash of the code is stored');
+
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000a2');
+select tests.fails($$select public.restore_with_backup_code('AAAA-BBBB-CCCC-DDDD')$$, 'bad-backup-code', 'a made-up code doesn''t work');
+select tests.fails(format('select public.restore_with_backup_code(%L)', :'old_code'), 'bad-backup-code', 'making a new code retires the old one');
+
+select tests.login('00000000-0000-0000-0000-0000000000a1');
+select tests.eq(public.restore_with_backup_code(lower(replace(:'code', '-', ' '))), '30000000-0000-0000-0000-000000000001'::uuid,
+  'the new phone gets the list back, however the code is typed');
+select tests.eq((select count(*) from public.circle_marks where list_id = '30000000-0000-0000-0000-000000000001')::int, 4,
+  'with all its circles');
+select tests.login('00000000-0000-0000-0000-0000000000f1');
+select tests.eq(public.is_list_owner('30000000-0000-0000-0000-000000000001'), false,
+  'and the old phone no longer owns it');
+select tests.fails($$select public.new_share_token('30000000-0000-0000-0000-000000000001')$$, 'not-your-list',
+  'so it can''t change it any more');
+select tests.login('00000000-0000-0000-0000-0000000000f2');
+select tests.eq((select count(*) from public.circle_marks where list_id = '30000000-0000-0000-0000-000000000001')::int, 4,
+  'the family still sees the list');
+
+set role anon;
+select set_config('request.jwt.claims', '', false);
+select tests.fails(format('select public.restore_with_backup_code(%L)', :'code'), 'permission denied', 'signed-out visitors can''t use codes');
+
 reset role;
 select 'ALL RULE TESTS PASSED' as result;

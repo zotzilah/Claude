@@ -13,6 +13,7 @@ import {
   claimsFromRows,
   groupGiftsFromRows,
   marksFromRows,
+  ownerListFromRows,
   ownerRows,
   productsFromRows,
   serverError,
@@ -120,6 +121,35 @@ export async function newShareToken(listId: string): Promise<Result<string>> {
   const { data, error } = await db.rpc('new_share_token', { p_list: listId });
   if (error) return fail(error.message);
   return { ok: true, value: data as string };
+}
+
+/** Makes (or replaces) the list's backup code, e.g. "K7PM-QX4R-9DWN-H3TB". */
+export async function newBackupCode(listId: string): Promise<Result<string>> {
+  const db = remote();
+  if (!db) return { ok: false, error: 'offline' };
+  const { data, error } = await db.rpc('new_backup_code', { p_list: listId });
+  if (error) return fail(error.message);
+  return { ok: true, value: data as string };
+}
+
+/** On a new phone: moves the list with this backup code here, and downloads it. */
+export async function restoreWithBackupCode(code: string): Promise<Result<ListState>> {
+  const db = remote();
+  if (!db) return { ok: false, error: 'offline' };
+  if (!(await ensureSignedIn(db))) return { ok: false, error: 'offline' };
+  const { data: listId, error } = await db.rpc('restore_with_backup_code', { p_code: code });
+  if (error) return fail(error.message);
+  const [list, marks, products] = await Promise.all([
+    db.from('lists').select('id,title,settings').eq('id', listId).single(),
+    db.from('circle_marks').select('*').eq('list_id', listId),
+    db.from('custom_products').select('*').eq('list_id', listId),
+  ]);
+  const firstError = [list, marks, products].find((r) => r.error)?.error;
+  if (firstError) return fail(firstError.message);
+  return {
+    ok: true,
+    value: ownerListFromRows(list.data as ListRow, marks.data as MarkRow[], products.data as CustomProductRow[], yourFinds.key),
+  };
 }
 
 // ---------- Giver side ----------

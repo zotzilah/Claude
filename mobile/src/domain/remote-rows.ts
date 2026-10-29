@@ -84,6 +84,20 @@ export function ownerRows(list: ListState): { list: ListRow; marks: MarkRow[]; p
   };
 }
 
+/** A list as its owner downloads it, e.g. on a new phone. Claims arrive separately (surprise mode). */
+export function ownerListFromRows(list: ListRow, marks: MarkRow[], products: CustomProductRow[], findsKey: string): ListState {
+  return {
+    id: list.id,
+    settings: list.settings,
+    setupComplete: true,
+    kidMode: false,
+    marks: marksFromRows(marks),
+    customProducts: productsFromRows(products, findsKey),
+    claims: {},
+    groupGifts: {},
+  };
+}
+
 export function marksFromRows(rows: MarkRow[]): Record<string, CircleMark> {
   return Object.fromEntries(
     rows.map((r) => [r.product_id, { productId: r.product_id, stars: r.stars, circledAt: ms(r.circled_at) }]),
@@ -159,12 +173,13 @@ export type ServerError =
   | 'not-on-list'
   | 'no-group-gift'
   | 'bad-amount'
-  | 'not-your-list';
+  | 'not-your-list'
+  | 'bad-backup-code';
 
 const SERVER_ERRORS: readonly ServerError[] = [
   'already-claimed', 'not-yours', 'not-claimed', 'not-signed-in', 'list-not-found', 'owner-cannot-give',
   'name-taken', 'not-a-giver', 'not-on-list', 'no-group-gift', 'bad-amount',
-  'not-your-list',
+  'not-your-list', 'bad-backup-code',
 ];
 
 /** Reads our error code out of a database error message; anything else is 'unknown'. */
@@ -187,5 +202,6 @@ export const SERVER_ERROR_TEXT: Record<ServerError | 'unknown', string> = {
   'no-group-gift': "That isn't a group gift yet.",
   'bad-amount': 'That amount needs to be a positive number.',
   'not-your-list': 'Only the person who made this list can change that.',
+  'bad-backup-code': "That code didn't work. Check it against what you wrote down. Only the newest code works.",
   unknown: 'Something went wrong. Please try again.',
 };
