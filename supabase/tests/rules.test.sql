@@ -229,5 +229,38 @@ set role anon;
 select set_config('request.jwt.claims', '', false);
 select tests.fails($$select public.delete_my_account()$$, 'permission denied', 'signed-out visitors can''t call it');
 
+-- ---------- Data retention (privacy policy: 12 months after the event or last open) ----------
+reset role;
+insert into auth.users (id, is_anonymous, created_at) values
+  ('00000000-0000-0000-0000-0000000000e1', false, now() - interval '900 days'), -- a parent with lists
+  ('00000000-0000-0000-0000-0000000000e2', true,  now() - interval '40 days'),  -- anonymous, nothing left
+  ('00000000-0000-0000-0000-0000000000e3', true,  now() - interval '40 days'),  -- anonymous, giving on a kept list
+  ('00000000-0000-0000-0000-0000000000e4', true,  now() - interval '5 days'),   -- anonymous, brand new
+  ('00000000-0000-0000-0000-0000000000e5', false, now() - interval '400 days'); -- a parent with no lists
+insert into public.lists (id, owner_id, title, settings, created_at, updated_at) values
+  ('20000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000000e1', 'Recent Christmas',  '{"template":"christmas"}', now() - interval '60 days',  now() - interval '60 days'),
+  ('20000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-0000000000e1', 'Old Christmas',     '{"template":"christmas"}', now() - interval '800 days', now() - interval '790 days'),
+  ('20000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-0000000000e1', 'Old birthday',      '{"template":"birthday"}',  now() - interval '500 days', now() - interval '400 days'),
+  ('20000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-0000000000e1', 'Recent birthday',   '{"template":"birthday"}',  now() - interval '150 days', now() - interval '100 days'),
+  ('20000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-0000000000e1', 'Reopened Christmas','{"template":"christmas"}', now() - interval '800 days', now() - interval '30 days');
+insert into public.givers (list_id, user_id, display_name) values
+  ('20000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000000e3', 'Granddad');
+
+set role authenticated;
+select tests.login('00000000-0000-0000-0000-0000000000e1');
+select tests.fails($$select public.purge_expired_lists()$$, 'permission denied', 'nobody can run the clean-up through the API');
+
+reset role;
+select tests.eq(public.purge_expired_lists(), 2, 'the clean-up deletes exactly the two expired lists');
+select tests.eq((select array_agg(title order by title) from public.lists where owner_id = '00000000-0000-0000-0000-0000000000e1'),
+  array['Recent Christmas', 'Recent birthday', 'Reopened Christmas'],
+  'kept: this Christmas, a recent birthday, and an old list that was opened again');
+select tests.eq((select count(*) from auth.users where id = '00000000-0000-0000-0000-0000000000e2')::int, 0,
+  'an old anonymous sign-in with nothing left is removed');
+select tests.eq((select count(*) from auth.users where id in ('00000000-0000-0000-0000-0000000000e3', '00000000-0000-0000-0000-0000000000e4', '00000000-0000-0000-0000-0000000000e5'))::int, 3,
+  'kept: an anonymous giver on a live list, a brand-new visitor, and every real account');
+select tests.eq(public.list_event_date('christmas', '2026-12-30'::timestamptz), '2027-12-25'::date,
+  'a Christmas list made after Christmas is for next Christmas');
+
 reset role;
 select 'ALL RULE TESTS PASSED' as result;

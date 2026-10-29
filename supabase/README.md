@@ -5,7 +5,7 @@ The database behind shared lists, live claims and the waitlist. Issue #13.
 ## What's here
 
 - `migrations/`: the schema, its security rules and the Giver functions
-- `tests/`: 63 checks that sign in as the parent, Nan, Dave, a stranger and a signed-out visitor, and prove each can only do what they should. They also cover **delete my account** and **make a new share link** (both promised in the privacy policy), and **optional surprise mode**: when it's on, the list owner can't read claims, givers or pledges, and when it's off they can see everything and claim too.
+- `tests/`: 69 checks that sign in as the parent, Nan, Dave, a stranger and a signed-out visitor, and prove each can only do what they should. They also cover **delete my account**, **make a new share link** and the **12-month clean-up** (all promised in the privacy policy), and **optional surprise mode**: when it's on, the list owner can't read claims, givers or pledges, and when it's off they can see everything and claim too.
 
 ## How it fits together
 
@@ -20,7 +20,7 @@ The rules mirror the app's own tested logic in `mobile/src/domain/claims.ts`: 48
 ## Setting it up (about 15 minutes, free)
 
 1. Create a free project at [supabase.com](https://supabase.com). Pick the region closest to most families (for example London).
-2. In the dashboard, under **SQL Editor**, paste and run each file in `migrations/`, oldest first: `20261029120000_init.sql`, then `20261030090000_account_controls.sql`.
+2. In the dashboard, under **SQL Editor**, paste and run each file in `migrations/`, oldest first: `20261029120000_init.sql`, then `20261030090000_account_controls.sql`, then `20261030120000_retention.sql`. The last one switches on Supabase's scheduler (pg_cron) and runs the clean-up every night at 03:17.
 3. Under **Authentication → Sign In / Providers**, turn on **Anonymous sign-ins** (for Givers) and **Email** (for parents). Then under **Authentication → Emails → Magic Link**, make sure the email includes `{{ .Token }}`, so parents get a 6-digit code to type into the app.
 4. Under **Database → Publications**, check that `supabase_realtime` exists. The migration adds the live-update tables to it if it does.
 5. Under **Settings → API**, copy the **Project URL** and the **anon public** key into:

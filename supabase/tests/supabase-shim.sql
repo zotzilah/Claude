@@ -8,7 +8,11 @@ grant usage on schema public to anon, authenticated, service_role;
 
 create schema auth;
 grant usage on schema auth to anon, authenticated, service_role;
-create table auth.users (id uuid primary key, is_anonymous boolean not null default false);
+create table auth.users (
+  id uuid primary key,
+  is_anonymous boolean not null default false,
+  created_at timestamptz not null default now()
+);
 
 -- Supabase reads the signed-in user from the request's JWT claims.
 create function auth.uid() returns uuid language sql stable as $$
