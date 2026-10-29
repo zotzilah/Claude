@@ -14,6 +14,8 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { preloadSfx } from '@/audio/sfx';
+import { SharedLinkOpener } from '@/components/shared-link-opener';
+import { pushAllowed, showPushesInApp, turnOnPushes } from '@/state/push';
 import { WishlistProvider } from '@/state/wishlist-store';
 import { colors } from '@/theme/tokens';
 
@@ -36,6 +38,12 @@ export default function RootLayout() {
 
   useEffect(() => {
     preloadSfx();
+    // Pushes show while Biro is open too, and a phone that allowed them re-registers each
+    // launch, since push tokens can change.
+    showPushesInApp();
+    pushAllowed().then((allowed) => {
+      if (allowed) turnOnPushes();
+    });
   }, []);
 
   // If fonts fail, carry on with system fonts rather than leaving a blank screen.
@@ -49,6 +57,7 @@ export default function RootLayout() {
         <WishlistProvider>
           <StatusBar style="light" />
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />
+          <SharedLinkOpener />
         </WishlistProvider>
       </View>
     </GestureHandlerRootView>

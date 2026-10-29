@@ -7,6 +7,7 @@ import { BigButton } from '@/components/big-button';
 import { cleanCode, isCode, isEmail, normaliseEmail, resendWaitMs, type SignInError } from '@/domain/sign-in';
 import { accountsAvailable, deleteAccount, savedOnline, sendCode, signOut, useParent, verifyCode } from '@/state/auth';
 import { useStrings } from '@/state/locale';
+import { pushAllowed, pushAvailable, turnOnPushes, type PushResult } from '@/state/push';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -32,6 +33,7 @@ export default function Account() {
   const [confirmingNewLink, setConfirmingNewLink] = useState(false);
   const [linkMessage, setLinkMessage] = useState<string | null>(null);
   const [deleted, setDeleted] = useState(false);
+  const [pushes, setPushes] = useState<PushResult | 'off' | 'asking'>('off');
   const wait = resendWaitMs(sentAt, now);
 
   // Count down to "Send a new code".
@@ -40,6 +42,11 @@ export default function Account() {
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
   }, [wait]);
+
+  // Notifications already allowed on this phone show as on.
+  useEffect(() => {
+    pushAllowed().then((allowed) => allowed && setPushes('on'));
+  }, []);
 
   if (list.kidMode) return <Redirect href="/kid" />;
 
@@ -145,6 +152,30 @@ export default function Account() {
                 {linkMessage && (
                   <Text style={styles.note} accessibilityLiveRegion="polite">
                     {linkMessage}
+                  </Text>
+                )}
+              </View>
+            )}
+            {pushAvailable() && savedOnline() && (
+              <View style={styles.linkBox}>
+                <Text style={styles.label}>{t.account.pushes}</Text>
+                <Text style={styles.note}>{t.account.pushesHint}</Text>
+                {pushes === 'on' ? (
+                  <Text style={styles.signedIn}>{t.account.pushesOn}</Text>
+                ) : (
+                  <BigButton
+                    label={t.account.pushesTurnOn}
+                    tone="yellow"
+                    onPress={async () => {
+                      if (pushes === 'asking') return;
+                      setPushes('asking');
+                      setPushes(await turnOnPushes());
+                    }}
+                  />
+                )}
+                {(pushes === 'denied' || pushes === 'failed') && (
+                  <Text style={styles.warning} accessibilityLiveRegion="polite">
+                    {pushes === 'denied' ? t.account.pushesDenied : t.account.pushesFailed}
                   </Text>
                 )}
               </View>

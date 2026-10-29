@@ -1,6 +1,6 @@
 # Beta catalogue research: Christmas 2026 (draft)
 
-**Status:** first pass, 29 October 2026. **36 products** with a reported price and a source, out of a target of about 150 (issue #17). The same products, with sources and suggested pages, are in [`beta-catalogue-2026.json`](beta-catalogue-2026.json).
+**Status:** 29 October 2026, after three rounds. **140 products** with a price and a source, out of a target of about 150 (issue #17). This page records the first round in detail. Rounds two and three (Argos category pages, checked through search results) are listed in the JSON file with their sources. Every page now has 10 to 15 products. The same products, with sources and suggested pages, are in [`beta-catalogue-2026.json`](beta-catalogue-2026.json).
 
 ## How this was gathered, and its limits
 
@@ -94,6 +94,14 @@ Reported by Hamleys (official page), Time Out, The Toy Book and MadeForMums. Wit
 | Product | Price | Retailer | Page | Note |
 |---|---|---|---|---|
 | Bigjigs Wooden Balance Bike | £61.99 | Bigjigs Toys | Outdoor | Ages 3+, from the brand's own blog |
+
+## Round three (29 October 2026)
+
+73 more Argos products, found through search results for Argos's own category pages (LEGO and DUPLO, play food and kitchens, figures, robots and remote-control toys, soft toys, walkie-talkies and cameras, craft kits, scooters and garden play, board games, baby toys). Each product records the category page it was seen on.
+
+- Prices are the current listing price in the snapshot, which is sometimes a sale price. Where listings disagreed (the KidiZoom 5MP camera, Monopoly Junior, Trivial Pursuit), the product was left out.
+- The Fisher-Price Sit & Steer Driver (105/0003) was seen at £40 this round, against £10 in round two, so round two probably caught a sale. It needs checking against the live page.
+- Games (12) and Music, Stories & Gadgets (10) are still the thinnest pages.
 
 ## Next steps to reach about 150
 

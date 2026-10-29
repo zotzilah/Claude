@@ -44,7 +44,35 @@
           "faceIDPermission": "Biro uses Face ID so grown-ups can leave Kid Mode."
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Biro uses the microphone so children can say what they're looking for, like \"dinosaurs!\". Nothing is recorded.",
+          "speechRecognitionPermission": "Biro turns what your child says into a search. Only the words are used, never the recording."
+        }
+      ],
+      [
+        "expo-share-intent",
+        {
+          "iosActivationRules": {
+            "NSExtensionActivationSupportsWebURLWithMaxCount": 1,
+            "NSExtensionActivationSupportsWebPageWithMaxCount": 1,
+            "NSExtensionActivationSupportsText": true
+          },
+          "iosShareExtensionName": "Biro",
+          "androidIntentFilters": [
+            "text/*"
+          ]
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#D8141C"
+        }
+      ],
+      "expo-dev-client"
     ],
     "experiments": {
       "typedRoutes": true,
