@@ -110,6 +110,18 @@ export async function fetchShareToken(listId: string): Promise<Result<string>> {
   return { ok: true, value: (data as { share_token: string }).share_token };
 }
 
+/**
+ * Replaces the list's family link: the old link stops working for anyone new, and
+ * people who already joined keep their access (see `new_share_token` in the database).
+ */
+export async function newShareToken(listId: string): Promise<Result<string>> {
+  const db = remote();
+  if (!db) return { ok: false, error: 'offline' };
+  const { data, error } = await db.rpc('new_share_token', { p_list: listId });
+  if (error) return fail(error.message);
+  return { ok: true, value: data as string };
+}
+
 // ---------- Giver side ----------
 
 export async function joinList(shareToken: string, displayName: string): Promise<Result<string>> {

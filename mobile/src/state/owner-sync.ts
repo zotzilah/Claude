@@ -10,7 +10,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { Claim, GroupGift, ListState } from '@/domain/types';
 
-import { ensureSignedIn, fetchCovered, fetchGiverView, fetchShareToken, pushOwnerList, remote, watchList } from './remote';
+import {
+  ensureSignedIn,
+  fetchCovered,
+  fetchGiverView,
+  fetchShareToken,
+  newShareToken,
+  pushOwnerList,
+  remote,
+  watchList,
+} from './remote';
 
 export type SyncStatus = 'off' | 'saving' | 'saved' | 'offline';
 
@@ -80,5 +89,18 @@ export function useOwnerSync(list: ListState, ready: boolean) {
         ? buying
         : null;
 
-  return { enabled, status: enabled ? status : ('off' as const), shareToken, buying: enabled ? shown : null };
+  /** Makes a new family link and retires the old one. Returns false if it couldn't. */
+  const renewShareLink = useCallback(async () => {
+    const result = await newShareToken(listRef.current.id);
+    if (result.ok) setShareToken(result.value);
+    return result.ok;
+  }, []);
+
+  return {
+    enabled,
+    status: enabled ? status : ('off' as const),
+    shareToken,
+    buying: enabled ? shown : null,
+    renewShareLink,
+  };
 }

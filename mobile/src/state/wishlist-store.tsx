@@ -90,6 +90,8 @@ function useWishlistValue() {
       /** The link the family opens to claim gifts (web, no app needed), once the list is saved online. */
       shareUrl: sync.shareToken ? `${WEB_APP_URL}/g/${sync.shareToken}` : null,
       shareToken: sync.shareToken,
+      /** Replaces the family link (the old one stops working for anyone new). */
+      renewShareLink: sync.renewShareLink,
 
       tap: (productId: string) => dispatch({ type: 'tap', productId, now: Date.now() }),
       setKidMode: (on: boolean) => dispatch({ type: 'setKidMode', on }),

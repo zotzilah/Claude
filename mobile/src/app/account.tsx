@@ -29,6 +29,8 @@ export default function Account() {
   const [sentAt, setSentAt] = useState<number | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [confirmingNewLink, setConfirmingNewLink] = useState(false);
+  const [linkMessage, setLinkMessage] = useState<string | null>(null);
   const [deleted, setDeleted] = useState(false);
   const wait = resendWaitMs(sentAt, now);
 
@@ -107,6 +109,45 @@ export default function Account() {
               </>
             ) : (
               <Text style={styles.help}>{savedOnline() ? t.account.savedOnline : t.account.notSetUp}</Text>
+            )}
+            {list.shareUrl && (
+              <View style={styles.linkBox}>
+                <Text style={styles.label}>{t.account.familyLink}</Text>
+                <Text style={styles.link} selectable>
+                  {list.shareUrl}
+                </Text>
+                <Text style={styles.note}>{t.account.familyLinkHint}</Text>
+                {confirmingNewLink ? (
+                  <>
+                    <Text style={styles.warning}>{t.account.newLinkWarning}</Text>
+                    <View style={styles.row}>
+                      <BigButton label={t.common.cancel} tone="yellow" onPress={() => setConfirmingNewLink(false)} />
+                      <BigButton
+                        label={t.account.newLinkConfirm}
+                        grow
+                        onPress={async () => {
+                          const ok = await list.renewShareLink();
+                          setConfirmingNewLink(false);
+                          setLinkMessage(ok ? t.account.newLinkDone : t.account.newLinkFailed);
+                        }}
+                      />
+                    </View>
+                  </>
+                ) : (
+                  <TextLink
+                    label={t.account.newLink}
+                    onPress={() => {
+                      setLinkMessage(null);
+                      setConfirmingNewLink(true);
+                    }}
+                  />
+                )}
+                {linkMessage && (
+                  <Text style={styles.note} accessibilityLiveRegion="polite">
+                    {linkMessage}
+                  </Text>
+                )}
+              </View>
             )}
             {/* The privacy policy promises this is always here whenever anything is stored online. */}
             {(parent || savedOnline()) && (
@@ -247,6 +288,9 @@ const styles = StyleSheet.create({
   },
   code: { fontFamily: fonts.display, fontSize: 28, letterSpacing: 8, textAlign: 'center' },
   signedIn: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.ink },
+  linkBox: { gap: space.sm, marginTop: space.md },
+  link: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.blue },
+  note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
   danger: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: 1, borderTopColor: colors.rule, gap: space.md },
   warning: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 21, color: colors.redDeep },
   error: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.red },
