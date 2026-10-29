@@ -58,7 +58,8 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "sounds": "node scripts/generate-sounds.mjs",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "catalogue": "node scripts/build-catalogue.mjs"
   },
   "private": true,
   "jest": {

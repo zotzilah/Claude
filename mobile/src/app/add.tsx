@@ -6,7 +6,7 @@ import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleShe
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
-import { yourFinds } from '@/data/sample-catalogue';
+import { yourFinds } from '@/data/catalogue';
 import { currencySymbol, moneyInputText, parseMoneyInput, toMinor } from '@/domain/money';
 import { checkLink, checkProduct, findDuplicate } from '@/domain/moderation';
 import { extractUrl, type ProductDetails } from '@/domain/product-page';

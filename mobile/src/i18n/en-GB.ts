@@ -45,6 +45,7 @@ export const enGB = {
   catalogue: {
     hintKid: 'Tap to circle it! Tap again for more stars ★',
     hint: 'Tap to circle · again for ★★ · ★★★ · 4th tap rubs it out · swipe to turn the page',
+    pricesAsOf: (date: string) => `Prices checked ${date}. They can change, so check the shop before buying.`,
     kidModeChip: '🔒 KID MODE',
     indexA11y: 'A to Z index',
     soundA11y: 'Sound effects',
@@ -143,6 +144,7 @@ export const enGB = {
     wait: (seconds: number) => `Too many tries. Wait ${seconds} seconds.`,
     wrong: 'Not quite. Try again.',
     biometrics: 'Use Face ID or fingerprint',
+    biometricsFailed: "That didn't work. Type your PIN instead.",
     backToCircling: '◀ Back to circling',
     forgot: 'Forgot PIN?',
     deleteA11y: 'Delete',
@@ -277,6 +279,7 @@ export const enGB = {
   giver: {
     /** "Ellie's Christmas Book 2026" reads as a list to the family. */
     listTitle: (bookTitle: string) => bookTitle.replace('Book', 'List'),
+    backToCatalogue: '◀ Back to the catalogue',
     circledBy: (name: string) => `Circled by ${name || 'them'} · no app needed`,
     surpriseOn: (name: string) => `🤫 Surprise mode is on. ${name || 'They'} can't see who's buying what.`,
     hello: "Hello! Who's buying?",

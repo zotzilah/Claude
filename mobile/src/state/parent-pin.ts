@@ -8,6 +8,7 @@
  * fine, because the web build is only for development and the Giver link.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { CryptoDigestAlgorithm, digestStringAsync, getRandomBytes } from 'expo-crypto';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -72,8 +73,11 @@ async function saveAttempts(attempts: AttemptState): Promise<void> {
 
 // ---------- Face ID / fingerprint ----------
 
+/** Expo Go on iPhone can't use Face ID (Expo's docs: it needs a development build). */
+const faceIdBlocked = Platform.OS === 'ios' && Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+
 export async function canUseBiometrics(): Promise<boolean> {
-  if (!secure) return false;
+  if (!secure || faceIdBlocked) return false;
   try {
     return (await LocalAuthentication.hasHardwareAsync()) && (await LocalAuthentication.isEnrolledAsync());
   } catch {
@@ -85,15 +89,18 @@ export async function canUseBiometrics(): Promise<boolean> {
  * Face ID or fingerprint. `allowPhonePasscode` is for "Forgot PIN?": the phone's own
  * passcode is a fair recovery route, but not the everyday one, as kids often know it.
  */
-export async function authenticateParent(allowPhonePasscode = false): Promise<boolean> {
+export async function authenticateParent(allowPhonePasscode = false): Promise<'ok' | 'cancelled' | 'failed'> {
   try {
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Leave Kid Mode',
       cancelLabel: 'Cancel',
       disableDeviceFallback: !allowPhonePasscode,
     });
-    return result.success;
+    if (result.success) return 'ok';
+    return result.error === 'user_cancel' || result.error === 'system_cancel' || result.error === 'app_cancel'
+      ? 'cancelled'
+      : 'failed';
   } catch {
-    return false;
+    return 'failed';
   }
 }

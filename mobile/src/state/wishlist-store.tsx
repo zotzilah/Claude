@@ -6,7 +6,7 @@
 import { randomUUID } from 'expo-crypto';
 import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
 
-import { categories, productsById as catalogueById, productsIn, yourFinds } from '@/data/sample-catalogue';
+import { categories, productsById as catalogueById, productsIn, yourFinds } from '@/data/catalogue';
 import { listSideView, pruneExpired } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
 import { formatMoney, formatMoneyShort, moneyParts } from '@/domain/money';

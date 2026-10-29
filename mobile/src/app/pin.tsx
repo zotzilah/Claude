@@ -117,15 +117,28 @@ function UnlockPin() {
     setValue('');
   };
 
+  const [biometricsFailed, setBiometricsFailed] = useState(false);
   const tryBiometrics = async (allowPhonePasscode: boolean) => {
-    if (await authenticateParent(allowPhonePasscode)) leave();
+    setBiometricsFailed(false);
+    const result = await authenticateParent(allowPhonePasscode);
+    if (result === 'ok') leave();
+    // Never fail silently: say so, and point back to the PIN.
+    else if (result === 'failed') setBiometricsFailed(true);
   };
 
   return (
     <Gate
       title={t.pin.unlockTitle}
       subtitle={t.pin.unlockSubtitle}
-      message={lockedMs > 0 ? t.pin.wait(Math.ceil(lockedMs / 1000)) : errors ? t.pin.wrong : null}
+      message={
+        lockedMs > 0
+          ? t.pin.wait(Math.ceil(lockedMs / 1000))
+          : biometricsFailed
+            ? t.pin.biometricsFailed
+            : errors
+              ? t.pin.wrong
+              : null
+      }
     >
       <PinPad value={value} onChange={onChange} errorCount={errors} disabled={lockedMs > 0} />
       {biometrics && <TextButton label={t.pin.biometrics} onPress={() => tryBiometrics(false)} />}
