@@ -9,6 +9,7 @@ import { currencyChoices, currencySymbol, moneyInputText, parseMoneyInput } from
 import { defaultKidPricesShown, featuresFor, finishSettings, setupProblem, templates, type SetupProblem } from '@/domain/settings';
 import type { AgeBand, ListSettings } from '@/domain/types';
 import { deviceLocale, useStrings } from '@/state/locale';
+import { remote } from '@/state/remote';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -77,6 +78,11 @@ export default function Setup() {
           templates.map((tpl) => (
             <ChoiceCard key={tpl.key} icon={tpl.icon} label={t.templates.label[tpl.key]} selected={draft.template === tpl.key} onPress={() => set({ template: tpl.key })} />
           ))}
+        {!editing && step === 0 && remote() && (
+          <Pressable onPress={() => router.push('/restore')} accessibilityRole="link" hitSlop={8} style={styles.accountLink}>
+            <Text style={styles.accountLinkText}>{t.restore.link}</Text>
+          </Pressable>
+        )}
 
         {step === 1 && (
           <>

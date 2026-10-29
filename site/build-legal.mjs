@@ -1,5 +1,6 @@
-// Turns docs/legal/privacy-policy.md and terms.md into site/privacy.html and
-// site/terms.html, styled like the landing page. Run after editing either file:
+// Turns docs/legal/privacy-policy.md, terms.md and docs/beta/tester-guide.md into
+// site/privacy.html, terms.html and beta.html, styled like the landing page.
+// Run after editing any of them:
 //   node site/build-legal.mjs
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -8,6 +9,7 @@ const root = new URL('..', import.meta.url);
 const pages = [
   { md: 'docs/legal/privacy-policy.md', out: 'site/privacy.html', title: 'Privacy policy' },
   { md: 'docs/legal/terms.md', out: 'site/terms.html', title: 'Terms of use' },
+  { md: 'docs/beta/tester-guide.md', out: 'site/beta.html', title: 'Testing Biro' },
 ];
 
 const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';

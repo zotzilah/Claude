@@ -5,8 +5,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
 import { cleanCode, isCode, isEmail, normaliseEmail, resendWaitMs, type SignInError } from '@/domain/sign-in';
+import { loadBackupCode, saveBackupCode } from '@/state/backup-code';
 import { accountsAvailable, deleteAccount, savedOnline, sendCode, signOut, useParent, verifyCode } from '@/state/auth';
+import { sendFeedback } from '@/state/feedback';
 import { useStrings } from '@/state/locale';
+import { newBackupCode } from '@/state/remote';
 import { pushAllowed, pushAvailable, turnOnPushes, type PushResult } from '@/state/push';
 import { useWishlist } from '@/state/wishlist-store';
 import { colors, fonts, radius, space } from '@/theme/tokens';
@@ -34,6 +37,10 @@ export default function Account() {
   const [linkMessage, setLinkMessage] = useState<string | null>(null);
   const [deleted, setDeleted] = useState(false);
   const [pushes, setPushes] = useState<PushResult | 'off' | 'asking'>('off');
+  const [backupCode, setBackupCode] = useState<string | null>(null);
+  const [backupBusy, setBackupBusy] = useState(false);
+  const [backupFailed, setBackupFailed] = useState(false);
+  const [confirmingNewCode, setConfirmingNewCode] = useState(false);
   const wait = resendWaitMs(sentAt, now);
 
   // Count down to "Send a new code".
@@ -47,6 +54,27 @@ export default function Account() {
   useEffect(() => {
     pushAllowed().then((allowed) => allowed && setPushes('on'));
   }, []);
+
+  // A backup code made earlier on this phone is shown again.
+  const listId = list.list.id;
+  useEffect(() => {
+    loadBackupCode(listId).then(setBackupCode);
+  }, [listId]);
+
+  const makeBackupCode = async () => {
+    if (backupBusy) return;
+    setBackupBusy(true);
+    setBackupFailed(false);
+    const result = await newBackupCode(listId);
+    setBackupBusy(false);
+    setConfirmingNewCode(false);
+    if (!result.ok) {
+      setBackupFailed(true);
+      return;
+    }
+    setBackupCode(result.value);
+    await saveBackupCode(listId, result.value);
+  };
 
   if (list.kidMode) return <Redirect href="/kid" />;
 
@@ -152,6 +180,36 @@ export default function Account() {
                 {linkMessage && (
                   <Text style={styles.note} accessibilityLiveRegion="polite">
                     {linkMessage}
+                  </Text>
+                )}
+              </View>
+            )}
+            {savedOnline() && list.shareUrl && (
+              <View style={styles.linkBox}>
+                <Text style={styles.label}>{t.account.backup}</Text>
+                <Text style={styles.note}>{t.account.backupHint}</Text>
+                {backupCode ? (
+                  <Text style={styles.backupCode} selectable accessibilityLabel={t.account.backupA11y(backupCode)}>
+                    {backupCode}
+                  </Text>
+                ) : (
+                  <BigButton label={backupBusy ? t.account.backupMaking : t.account.backupShow} tone="yellow" onPress={makeBackupCode} />
+                )}
+                {backupCode &&
+                  (confirmingNewCode ? (
+                    <>
+                      <Text style={styles.warning}>{t.account.backupNewWarning}</Text>
+                      <View style={styles.row}>
+                        <BigButton label={t.common.cancel} tone="yellow" onPress={() => setConfirmingNewCode(false)} />
+                        <BigButton label={t.account.backupNewConfirm} grow onPress={makeBackupCode} />
+                      </View>
+                    </>
+                  ) : (
+                    <TextLink label={t.account.backupNew} onPress={() => setConfirmingNewCode(true)} />
+                  ))}
+                {backupFailed && (
+                  <Text style={styles.warning} accessibilityLiveRegion="polite">
+                    {t.account.backupFailed}
                   </Text>
                 )}
               </View>
@@ -266,6 +324,10 @@ export default function Account() {
           </>
         )}
 
+        <View style={styles.feedback}>
+          <TextLink label={t.feedback.link} onPress={() => sendFeedback(t.feedback.subject, t.feedback.prompt, 'App')} />
+        </View>
+
         {errorText && (
           <Text style={styles.error} accessibilityLiveRegion="assertive">
             {errorText}
@@ -321,6 +383,19 @@ const styles = StyleSheet.create({
   signedIn: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.ink },
   linkBox: { gap: space.sm, marginTop: space.md },
   link: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.blue },
+  backupCode: {
+    fontFamily: fonts.tillBold,
+    fontSize: 24,
+    letterSpacing: 2,
+    color: colors.ink,
+    textAlign: 'center',
+    backgroundColor: colors.paper,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderColor: colors.ink,
+    borderRadius: radius.md,
+    paddingVertical: space.md,
+  },
   note: { fontFamily: fonts.body, fontSize: 14, color: colors.inkSoft },
   danger: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: 1, borderTopColor: colors.rule, gap: space.md },
   warning: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 21, color: colors.redDeep },
@@ -329,6 +404,7 @@ const styles = StyleSheet.create({
   textLink: { minHeight: 44, justifyContent: 'center' },
   textLinkLabel: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.blue, textDecorationLine: 'underline' },
   dangerText: { color: colors.red },
+  feedback: { marginTop: space.lg, alignItems: 'center' },
   disabled: { opacity: 0.45 },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule },
 });

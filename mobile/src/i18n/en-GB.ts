@@ -262,7 +262,7 @@ export const enGB = {
     newLinkDone: 'Done. Share the new link with the family.',
     newLinkFailed: "We couldn't make a new link. Check you're online and try again.",
     savedOnline:
-      'Your list is saved online automatically, so the family link always shows the latest. Signing in with your email, so you can keep the list if you change phones, is coming soon.',
+      'Your list is saved online automatically, so the family link always shows the latest. If you change phones, your backup code below brings it back.',
     why: 'Sign in to keep your list safe if you lose your phone, and to share it with family.',
     email: 'Your email',
     emailExample: 'you@example.com',
@@ -283,6 +283,16 @@ export const enGB = {
       'This deletes your account and every list on it, for everyone you shared it with. It can’t be undone.',
     deleteConfirm: 'Yes, delete everything',
     deleted: 'Your account and lists have been deleted.',
+    backup: 'Backup code',
+    backupHint:
+      "If you lose or change this phone, this code brings your list back, with everything the family has claimed. Write it down or take a screenshot. Anyone with the code can take the list over, so keep it private.",
+    backupShow: 'Show my backup code',
+    backupMaking: 'Making your code…',
+    backupNew: 'Make a new code',
+    backupNewWarning: 'The old code will stop working. Write the new one down.',
+    backupNewConfirm: 'Yes, make a new code',
+    backupFailed: "We couldn't make a code. Check you're online and try again.",
+    backupA11y: (code: string) => `Backup code: ${code.split('').join(' ')}`,
     pushes: 'Notifications',
     pushesHint:
       "Get a message on this phone when someone reserves or buys a gift. With surprise mode on, it only says something's been taken care of, never who or what.",
@@ -297,6 +307,24 @@ export const enGB = {
       'not-set-up': "Accounts aren't switched on yet.",
       unknown: 'Something went wrong. Please try again.',
     } satisfies Record<SignInError, string>,
+  },
+
+  feedback: {
+    link: 'Something not right? Tell Luke',
+    subject: 'Biro beta: something not right',
+    prompt: 'What did you tap, what did you expect, and what happened instead? (A screenshot helps!)',
+  },
+
+  restore: {
+    kicker: 'MOVING PHONES',
+    heading: 'Bring your list back',
+    link: 'Moving from another phone? Use your backup code',
+    help: 'Type the backup code from your old phone (Settings → Account). Capitals and dashes don’t matter.',
+    label: 'Backup code',
+    example: 'K7PM-QX4R-9DWN-H3TB',
+    go: 'Bring my list back',
+    working: 'Finding your list…',
+    note: 'Your list moves to this phone. The old phone keeps a copy, but can’t change the list any more.',
   },
 
   giver: {

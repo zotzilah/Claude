@@ -5,6 +5,7 @@ import { GiverItem } from '@/components/giver-item';
 import { whatsAppShareUrl } from '@/domain/notifications';
 import type { Features } from '@/domain/settings';
 import type { Claim, GroupGift, ListSettings, Product, Stars } from '@/domain/types';
+import { sendFeedback } from '@/state/feedback';
 import { useStrings } from '@/state/locale';
 import { colors, fonts, radius, space } from '@/theme/tokens';
 
@@ -134,6 +135,14 @@ export function GiverPage(props: Props) {
             />
           ))}
         </View>
+        <Pressable
+          onPress={() => sendFeedback(t.feedback.subject, t.feedback.prompt, 'Family link')}
+          accessibilityRole="link"
+          hitSlop={8}
+          style={styles.feedback}
+        >
+          <Text style={styles.feedbackText}>{t.feedback.link}</Text>
+        </Pressable>
       </ScrollView>
 
       {features.giverLink && shareMessage && (
@@ -211,6 +220,8 @@ const styles = StyleSheet.create({
   statValue: { fontFamily: fonts.display, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums'] },
   statLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft },
   items: { gap: 10, marginHorizontal: space.md },
+  feedback: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', marginTop: space.lg },
+  feedbackText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.blue, textDecorationLine: 'underline' },
   empty: { fontFamily: fonts.body, fontSize: 15, color: colors.inkSoft, textAlign: 'center', padding: space.lg },
   shareBar: { backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule, paddingHorizontal: space.md, paddingTop: space.md, gap: space.sm },
   shareOther: { backgroundColor: colors.paper, borderWidth: 2, borderColor: colors.blue },

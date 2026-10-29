@@ -11,7 +11,7 @@ import { listSideView, pruneExpired, type ListSideView } from '@/domain/claims';
 import { createList, listReducer } from '@/domain/list-reducer';
 import { formatMoney, formatMoneyShort, moneyParts } from '@/domain/money';
 import { featuresFor } from '@/domain/settings';
-import type { Category, ListSettings, Product } from '@/domain/types';
+import type { Category, ListSettings, ListState, Product } from '@/domain/types';
 import { budgetStatus, otherCurrencyCount, runningTotalMinor, sortedWishes } from '@/domain/wishlist';
 
 import { deviceLocale } from './locale';
@@ -109,6 +109,8 @@ function useWishlistValue() {
       addCustomProduct: (product: Product) => dispatch({ type: 'addCustomProduct', product, now: Date.now() }),
       /** Starts a brand-new list (the old one is replaced). */
       reset: () => dispatch({ type: 'hydrate', state: newList() }),
+      /** Replaces this phone's list with one brought back by a backup code. */
+      replaceList: (restored: ListState) => dispatch({ type: 'hydrate', state: restored }),
     };
   }, [state, ready, sync]);
 }
