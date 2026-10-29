@@ -189,6 +189,11 @@ User-shared items make the public catalogue grow, but only safely:
 - v1.5: when Givers accept an invite to a list, offer an **optional group chat** for that list (e.g. "Ellie's Christmas 2026: Givers") to coordinate group gifts. The List Owner and Circler are never in it, to protect the surprise.
 - Technical note: creating groups automatically needs the WhatsApp Business Platform through a provider, which has eligibility rules and limits. The fallback is for the Organiser to create the group and the app to share its invite link.
 
+**Built so far (30 Oct 2026)**
+- The rules and wording are in `mobile/src/domain/notifications.ts`, with tests. They cover who hears about each event, surprise mode (the owner only ever gets "another wish is taken care of", and only once it's bought), no messages about your own actions, 24h and 6h hold reminders, and pushes held back overnight (21:00 to 08:00 on the recipient's clock).
+- The Giver page has a **Send to the family on WhatsApp** button (a `wa.me` link, so no WhatsApp Business account is needed).
+- Still to do: sending them. Pushes need `expo-notifications` and a development build. Emails need the email provider. Both are triggered from the database by a Supabase Edge Function that calls these rules.
+
 ## 10. Visual identity: the year 2000, loud and primary
 
 - **Palette:** catalogue red, royal blue and price-sticker yellow on glossy white page stock, with black body text.

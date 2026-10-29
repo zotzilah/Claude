@@ -1,10 +1,11 @@
 import { Redirect, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Linking, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GiverItem } from '@/components/giver-item';
 import { giverSummary } from '@/domain/claims';
+import { whatsAppShareUrl } from '@/domain/notifications';
 import { loadGiverName, saveGiverName } from '@/state/giver-name';
 import { useStrings } from '@/state/locale';
 import { useWishlist } from '@/state/wishlist-store';
@@ -57,8 +58,9 @@ export default function GiverList() {
     setMe(name);
   };
 
-  const share = () =>
-    Share.share({ message: t.giver.shareMessage(listTitle, `https://biro.example/l/${listId}`) }).catch(() => undefined);
+  const shareMessage = t.giver.shareMessage(listTitle, `https://biro.example/l/${listId}`);
+  const share = () => Share.share({ message: shareMessage }).catch(() => undefined);
+  const shareOnWhatsApp = () => Linking.openURL(whatsAppShareUrl(shareMessage)).catch(() => undefined);
 
   return (
     <View style={styles.screen}>
@@ -133,8 +135,11 @@ export default function GiverList() {
 
       {features.giverLink && (
         <View style={[styles.shareBar, { paddingBottom: insets.bottom + space.md }]}>
-          <Pressable onPress={share} accessibilityRole="button" style={styles.shareButton}>
-            <Text style={styles.shareText}>{t.giver.share}</Text>
+          <Pressable onPress={shareOnWhatsApp} accessibilityRole="link" style={styles.shareButton}>
+            <Text style={styles.shareText}>{t.giver.shareOnWhatsApp}</Text>
+          </Pressable>
+          <Pressable onPress={share} accessibilityRole="button" style={[styles.shareButton, styles.shareOther]}>
+            <Text style={[styles.shareText, styles.shareOtherText]}>{t.giver.share}</Text>
           </Pressable>
         </View>
       )}
@@ -202,7 +207,9 @@ const styles = StyleSheet.create({
   statLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.inkSoft },
   items: { gap: 10, marginHorizontal: space.md },
   empty: { fontFamily: fonts.body, fontSize: 15, color: colors.inkSoft, textAlign: 'center', padding: space.lg },
-  shareBar: { backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule, paddingHorizontal: space.md, paddingTop: space.md },
+  shareBar: { backgroundColor: colors.paper, borderTopWidth: 1, borderTopColor: colors.rule, paddingHorizontal: space.md, paddingTop: space.md, gap: space.sm },
+  shareOther: { backgroundColor: colors.paper, borderWidth: 2, borderColor: colors.blue },
+  shareOtherText: { color: colors.blue },
   shareButton: { backgroundColor: colors.good, borderRadius: radius.md, paddingVertical: space.md, alignItems: 'center' },
   shareText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.paper },
 });

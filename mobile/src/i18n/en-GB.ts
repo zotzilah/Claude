@@ -217,6 +217,24 @@ export const enGB = {
       `${label}, ${ref}${stars ? `, circled with ${plural(stars, 'star', 'stars')}` : ''}`,
   },
 
+  /** Push and email wording (see domain/notifications.ts). Short: phones cut long pushes off. */
+  notify: {
+    listSent: (child: string, n: number) => ({
+      title: `${child}'s list is in! 🧾`,
+      body: `${n === 1 ? '1 thing' : `${n} things`} circled. Your order slip is in your email.`,
+    }),
+    claimed: (title: string, by: string) => ({ title: `${by} is getting the ${title}`, body: 'Held for 48 hours while they buy it.' }),
+    bought: (title: string, by: string) => ({ title: `${by} bought the ${title} ✓`, body: 'One less to think about.' }),
+    takenCareOf: (title: string) => ({ title: 'Another wish is taken care of ✓', body: `${title}: sorted. We won't say who.` }),
+    released: (title: string, by: string) => ({ title: `The ${title} is free again`, body: `${by} let it go, so anyone can claim it.` }),
+    pledged: (title: string, by: string, amount: string) => ({ title: `${by} pledged ${amount}`, body: `Towards the ${title}. Collect it from them directly.` }),
+    expiring: (title: string, hours: number) => ({
+      title: `${hours} hours left on the ${title}`,
+      body: "Tap \"I've bought it\" once it's ordered, or release it for someone else.",
+    }),
+    finalised: (listTitle: string) => ({ title: `${listTitle} is finished`, body: 'No more changes. Happy wrapping!' }),
+  },
+
   account: {
     kicker: 'YOUR ACCOUNT',
     heading: 'Back up and share',
