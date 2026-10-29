@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEY = 'biro.backupCode';
 
+
 export async function loadBackupCode(listId: string): Promise<string | null> {
   try {
     const saved = JSON.parse((await AsyncStorage.getItem(KEY)) ?? 'null') as { listId: string; code: string } | null;

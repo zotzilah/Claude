@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BigButton } from '@/components/big-button';
+import { formatBackupCode } from '@/domain/backup-code';
 import { SERVER_ERROR_TEXT } from '@/domain/remote-rows';
 import { saveBackupCode } from '@/state/backup-code';
 import { useStrings } from '@/state/locale';
@@ -43,7 +44,7 @@ export default function Restore() {
       return;
     }
     // The code still works, so keep it where Settings → Account can show it.
-    await saveBackupCode(result.value.id, code.trim().toUpperCase());
+    await saveBackupCode(result.value.id, formatBackupCode(code));
     list.replaceList(result.value);
     router.replace('/');
   };

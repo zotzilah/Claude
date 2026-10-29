@@ -1,6 +1,8 @@
 import { Linking, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { FairyLights } from '@/components/festive/fairy-lights';
+import { Snowfall } from '@/components/festive/snowfall';
 import { GiverItem } from '@/components/giver-item';
 import { whatsAppShareUrl } from '@/domain/notifications';
 import type { Features } from '@/domain/settings';
@@ -51,7 +53,7 @@ interface Props {
  */
 export function GiverPage(props: Props) {
   const styles = useThemedStyles(makeStyles);
-  const { colors } = useTheme();
+  const { colors, decor } = useTheme();
   const { settings, features, me } = props;
   const insets = useSafeAreaInsets();
   const t = useStrings();
@@ -64,7 +66,7 @@ export function GiverPage(props: Props) {
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={{ paddingBottom: space.lg }} keyboardShouldPersistTaps="handled">
-        <View style={[styles.head, { paddingTop: insets.top + space.md }]}>
+        <View style={[styles.head, { paddingTop: insets.top + space.md }, decor.lights && styles.headLit]}>
           {props.onBack && (
             <Pressable onPress={props.onBack} accessibilityRole="button" hitSlop={10} style={styles.back}>
               <Text style={styles.backText}>{t.giver.backToCatalogue}</Text>
@@ -74,6 +76,7 @@ export function GiverPage(props: Props) {
             {listTitle}
           </Text>
           <Text style={styles.sub}>{t.giver.circledBy(settings.circlerName)}</Text>
+          {decor.lights && <FairyLights />}
         </View>
 
         {features.claiming && settings.surpriseMode !== 'off' && (
@@ -159,6 +162,7 @@ export function GiverPage(props: Props) {
           </Pressable>
         </View>
       )}
+      {decor.snow && <Snowfall count={28} seed={13} />}
     </View>
   );
 }
@@ -177,6 +181,8 @@ const makeStyles = ({ colors, fonts }: ThemeParts) =>
   StyleSheet.create({
     screen: { flex: 1, backgroundColor: colors.paper2 },
     head: { backgroundColor: colors.blue, paddingHorizontal: space.lg, paddingBottom: 14 },
+    // Room for the fairy lights under the title.
+    headLit: { paddingBottom: 28 },
     back: { alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center', marginBottom: space.xs },
     backText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.yellow },
     title: { fontFamily: fonts.display, fontSize: 23, color: colors.paper },

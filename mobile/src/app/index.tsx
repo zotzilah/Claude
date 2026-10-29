@@ -5,6 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { setSoundEnabled, useSoundEnabled } from '@/audio/sfx';
 import { BigButton } from '@/components/big-button';
+import { FairyLights } from '@/components/festive/fairy-lights';
+import { SantaFlyby } from '@/components/festive/santa';
+import { Snowfall } from '@/components/festive/snowfall';
 import { PageTurner, type PageTurnerHandle } from '@/components/page-turner';
 import { ProductCard } from '@/components/product-card';
 import { RunningTotal } from '@/components/running-total';
@@ -19,7 +22,7 @@ import { radius, space } from '@/theme/tokens';
 /** The catalogue: one category spread per page. */
 export default function CatalogueScreen() {
   const styles = useThemedStyles(makeStyles);
-  const { colors } = useTheme();
+  const { colors, decor } = useTheme();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ page?: string }>();
   // The page lives in the URL (?page=N), so Kid Mode tiles and shared links can open any page.
@@ -63,6 +66,7 @@ export default function CatalogueScreen() {
   return (
     <View style={styles.screen}>
       <View style={[styles.head, { paddingTop: insets.top + space.sm }]}>
+        {decor.santa && <SantaFlyby top={insets.top - 10} />}
         <View style={styles.bookRow}>
           <Text style={styles.book}>{list.settings.title.toUpperCase()}</Text>
           <View style={styles.headActions}>
@@ -95,6 +99,7 @@ export default function CatalogueScreen() {
           {category.title}
         </Text>
         <Text style={styles.pageNo}>{t.catalogue.page(category.familyCode)}</Text>
+        {decor.lights && <FairyLights />}
       </View>
 
       <PageTurner
@@ -160,6 +165,7 @@ export default function CatalogueScreen() {
           </>
         )}
       </View>
+      {decor.snow && <Snowfall />}
     </View>
   );
 }

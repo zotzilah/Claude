@@ -68,7 +68,8 @@ export async function deleteAccount(): Promise<AuthResult> {
   if (!db) return { ok: false, error: 'not-set-up' };
   const { error } = await db.rpc('delete_my_account');
   if (error) return { ok: false, error: signInError(error) };
-  await db.auth.signOut();
+  // The account no longer exists, so only forget it on this phone (asking the server fails).
+  await db.auth.signOut({ scope: 'local' });
   return { ok: true };
 }
 
