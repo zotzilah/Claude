@@ -143,6 +143,7 @@ export const enGB = {
     wait: (seconds: number) => `Too many tries. Wait ${seconds} seconds.`,
     wrong: 'Not quite. Try again.',
     biometrics: 'Use Face ID or fingerprint',
+    biometricsFailed: "That didn't work. Type your PIN instead.",
     backToCircling: '◀ Back to circling',
     forgot: 'Forgot PIN?',
     deleteA11y: 'Delete',
