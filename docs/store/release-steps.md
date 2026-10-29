@@ -48,7 +48,7 @@ For when the Apple and Google developer accounts are ready. Everything runs from
 
 ## Before sending to anyone
 
-- [ ] Fill in the `[[placeholders]]` in `docs/legal/` and publish the privacy policy page
+- [ ] Add a postal address to `docs/legal/` (see its README), rebuild with `node site/build-legal.mjs`, and check the privacy page is live
 - [ ] Fill in the store forms using `docs/store/listing.md` and `docs/legal/store-privacy-answers.md`
 - [ ] Supabase project set up (`supabase/README.md`), with keys in `mobile/.env`
 - [ ] Test on one real iPhone and one real Android phone: circling, sounds, Kid Mode PIN, Face ID or fingerprint, and adding from a link

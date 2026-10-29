@@ -11,7 +11,7 @@ Everything the App Store and Google Play ask for, ready to paste. "Biro" is the 
 
 **Privacy policy URL:** the hosted `docs/legal/privacy-policy.md` page on the landing site.
 
-**Support email:** [[CONTACT_EMAIL]]
+**Support email:** zoneflossy@gmail.com (switch to an address on our own domain once we have one)
 
 ## Apple App Store
 

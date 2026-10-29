@@ -10,12 +10,19 @@
 
 ## Placeholders to fill in
 
-Search for `[[` in each file. You'll need:
+Filled in on 29 Oct 2026 for the beta:
 
-- `[[OPERATOR]]`: the legal name of whoever runs Biro (you as a sole trader, or a company if you set one up)
-- `[[ADDRESS]]`: a postal address for privacy requests (a virtual office address is fine)
-- `[[CONTACT_EMAIL]]`: a mailbox for privacy and support, e.g. `hello@` on your domain
-- `[[EFFECTIVE_DATE]]`: the day you publish it
+- **Operator:** Luke Cartwright (sole trader)
+- **Contact email:** zoneflossy@gmail.com. Switch to an address on our own domain once we have one.
+- **Effective date:** 29 October 2026
+- **Database region:** London, UK (Supabase "West EU (London)")
+
+**Still to do before the public launch and the app stores:**
+- [ ] A postal address for privacy requests. A virtual office address is fine, but don't use a home address, because it's published.
+- [ ] Name the email provider (and where it stores data) once one is chosen
+- [ ] A solicitor's check
+
+After any edit, rebuild the website copies with `node site/build-legal.mjs`.
 
 ## Decisions these drafts make for you
 

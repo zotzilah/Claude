@@ -1,12 +1,12 @@
 # Biro terms of use (beta)
 
-*Draft. Effective [[EFFECTIVE_DATE]].*
+*Beta version. Effective 29 October 2026.*
 
-These terms are an agreement between you and [[OPERATOR]] ("we"). By using Biro you agree to them. Please also read the [privacy policy](privacy-policy.md).
+These terms are an agreement between you and Luke Cartwright ("we"). By using Biro you agree to them. Please also read the [privacy policy](privacy-policy.md).
 
 ## 1. It's a beta
 
-Biro is an early test version shared with friends and family. Expect bugs, and things may change or stop working. Please tell us when something goes wrong: [[CONTACT_EMAIL]]. We'll do our best to keep your lists safe, but please don't rely on Biro as the only record of anything important.
+Biro is an early test version shared with friends and family. Expect bugs, and things may change or stop working. Please tell us when something goes wrong: zoneflossy@gmail.com. We'll do our best to keep your lists safe, but please don't rely on Biro as the only record of anything important.
 
 ## 2. Who can use it
 
